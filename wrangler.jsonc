@@ -1,7 +1,16 @@
 {
   "name": "zmd-charge-plus-for-linux",
+  "main": "./src/worker.js",
   "compatibility_date": "2026-10-01",
   "assets": {
-    "directory": "./apt-repo"
-  }
+    "directory": "./apt-repo",
+    "binding": "ASSETS",
+    "run_worker_first": ["/pool/*"]
+  },
+  "r2_buckets": [
+    {
+      "binding": "APT_PACKAGES",
+      "bucket_name": "zmd-charge-plus-linux-packages"
+    }
+  ]
 }
