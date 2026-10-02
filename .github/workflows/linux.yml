@@ -1,0 +1,42 @@
+name: Linux packages
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main, master]
+    tags: ['v*']
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  linux-x64:
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.0.x
+      - name: Install packaging and GUI test tools
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y rpm cpio squashfs-tools desktop-file-utils xvfb xdotool libice6 libsm6 libfontconfig1 libx11-6 libxext6 libxrender1 libxcb1 libxrandr2 libxi6 libxcursor1 fonts-noto-cjk iputils-ping
+      - name: Test Linux collectors and integration
+        run: dotnet run --project Tests/EndfieldChargePlus.PlatformTests.csproj -c Release
+      - name: Audit every advertised variable in a real Linux GUI
+        run: bash scripts/audit-linux-variables.sh
+      - name: Build all four packages
+        run: bash scripts/package-linux.sh
+      - name: Inspect and smoke-test packages
+        run: bash scripts/verify-linux-packages.sh dist/linux-x64
+      - uses: actions/upload-artifact@v4
+        with:
+          name: EndfieldChargePlusForLinux-linux-x64
+          path: dist/linux-x64/*
+          if-no-files-found: error
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: Linux-variable-audit
+          path: artifacts/linux-audit/*

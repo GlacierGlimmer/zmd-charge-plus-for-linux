@@ -1,0 +1,41 @@
+# Build output
+[Bb]in/
+[Oo]bj/
+publish/
+dist/
+artifacts/
+.avalonia-build-tasks/
+TestResults/
+
+# IDE and local state
+.vs/
+.idea/
+*.user
+*.suo
+*.userosscache
+*.rsuser
+
+# Logs and temporary files
+*.log
+*.tmp
+*.bak
+*.dmp
+*.mdmp
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# Local settings and signing secrets
+settings.json
+settings.*.json
+.env
+.env.*
+!.env.example
+*.pfx
+*.p12
+*.key
+*.pem
+*.snk
+*.cer
+*.crt
+*.pubxml.user

@@ -1,0 +1,47 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <LangVersion>latest</LangVersion>
+    <RuntimeIdentifiers>win-x64;win-x86;linux-x64</RuntimeIdentifiers>
+    <RootNamespace>EndfieldChargePlus</RootNamespace>
+    <AssemblyName>EndfieldChargePlus</AssemblyName>
+    <Product>Endfield Charge Plus</Product>
+    <Title>Endfield Charge Plus</Title>
+    <Company>GlacierGlimmer_冰川雪貓</Company>
+    <Authors>GlacierGlimmer_冰川雪貓</Authors>
+    <Copyright>© 2026 GlacierGlimmer_冰川雪貓</Copyright>
+    <Description>Configurable Endfield-style HUD for Windows and Linux</Description>
+    <Version>0.1.0</Version>
+    <AssemblyVersion>0.1.0.0</AssemblyVersion>
+    <FileVersion>0.1.0.0</FileVersion>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+    <ApplicationIcon>Assets\tray_bolt.ico</ApplicationIcon>
+    <NoWarn>$(NoWarn);AVLN3001</NoWarn>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(RuntimeIdentifier)' == 'linux-x64' Or $([MSBuild]::IsOSPlatform('Linux'))">
+    <Product>Endfield Charge Plus For Linux</Product>
+    <Title>Endfield Charge Plus For Linux</Title>
+    <Description>Configurable Endfield-style HUD for Linux</Description>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Avalonia" Version="11.2.1" />
+    <PackageReference Include="Avalonia.Desktop" Version="11.2.1" />
+    <PackageReference Include="Avalonia.Themes.Fluent" Version="11.2.1" />
+    <PackageReference Include="Avalonia.Fonts.Inter" Version="11.2.1" />
+    <PackageReference Include="System.Management" Version="10.0.2" />
+    <PackageReference Include="System.Security.Cryptography.ProtectedData" Version="8.0.0" />
+    <PackageReference Include="LibreHardwareMonitorLib" Version="0.9.6" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <AvaloniaResource Include="Assets\tray_bolt.png" />
+    <Compile Remove="Tests\**\*.cs" />
+    <Compile Remove="artifacts\**\*.cs" />
+  </ItemGroup>
+
+</Project>
