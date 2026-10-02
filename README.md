@@ -8,7 +8,33 @@
 
 ## 下载
 
-前往 [Releases](https://github.com/GlacierGlimmer/zmd-charge-plus-for-linux/releases) 下载。四种格式都包含 .NET 运行时，无需另装 .NET。
+### APT 软件源（推荐：Debian / Ubuntu / Kali 等）
+
+已提供官方 APT 软件源：**https://apt.x-neko.com**
+
+首次安装只需要两条命令：
+
+```bash
+curl -fsSL https://apt.x-neko.com/install.sh | sudo bash
+sudo apt-get install endfield-charge-plus-for-linux
+```
+
+添加软件源后，后续可直接通过系统包管理器更新：
+
+```bash
+sudo apt update
+sudo apt upgrade
+```
+
+APT 软件源使用独立 GPG 密钥签名，目前提供 **amd64 / x86_64** 软件包。卸载可使用：
+
+```bash
+sudo apt-get remove endfield-charge-plus-for-linux
+```
+
+### 直接下载
+
+也可以前往 [Releases](https://github.com/GlacierGlimmer/zmd-charge-plus-for-linux/releases) 手动下载。四种格式都包含 .NET 运行时，无需另装 .NET。
 
 | 格式 | v0.1.0 下载 | 适用方式 |
 | --- | --- | --- |
@@ -21,10 +47,10 @@
 
 ## 安装与启动
 
-在下载目录执行对应命令：
+Debian / Ubuntu / Kali 等发行版推荐优先使用上面的 APT 软件源；如果使用 Releases 中的安装包，则在下载目录执行对应命令：
 
 ```bash
-# Ubuntu / Debian
+# Ubuntu / Debian / Kali（手动安装 .deb）
 sudo apt install ./EndfieldChargePlusForLinux-v0.1.0-linux-x64.deb
 
 # Fedora
