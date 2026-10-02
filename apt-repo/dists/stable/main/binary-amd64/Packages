@@ -1,0 +1,19 @@
+Package: endfield-charge-plus-for-linux
+Version: 0.1.0
+Architecture: amd64
+Maintainer: GlacierGlimmer <glacierglimmer@users.noreply.github.com>
+Installed-Size: 96892
+Depends: libc6 (>= 2.35), libgcc-s1, libstdc++6, zlib1g, libssl3, libicu70 | libicu72 | libicu74 | libicu76 | libicu78, libx11-6, libice6, libsm6, libfontconfig1, libxext6, libxrender1, libxcb1, libxrandr2, libxi6, libxcursor1, iputils-ping
+Recommends: fonts-noto-cjk, xdg-utils
+Filename: pool/main/e/endfield-charge-plus/EndfieldChargePlusForLinux-v0.1.0-linux-x64.deb
+Size: 34316830
+MD5sum: be82a92bcbb685a250b4664d34c40ca8
+SHA1: a7ad738807d254dd7d892b6d25a0a2908e01bf33
+SHA256: 65ed5619bf690f6f7d0ae0d03afc8faa723427a1b749d38cd9873dd56eeeca59
+Section: utils
+Priority: optional
+Homepage: https://github.com/GlacierGlimmer/zmd-charge-plus
+Description: Endfield Charge Plus For Linux - customizable system HUD
+ Displays Linux system metrics with customizable animated HUD profiles.
+ Includes the .NET runtime. Requires an X11 or XWayland desktop session.
+

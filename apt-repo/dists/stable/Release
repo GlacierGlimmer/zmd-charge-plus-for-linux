@@ -1,24 +1,24 @@
 Architectures: amd64
 Codename: stable
 Components: main
-Date: Fri, 02 Oct 2026 10:29:41 +0000
+Date: Fri, 02 Oct 2026 10:51:25 +0000
 Description: Official APT repository for Endfield Charge Plus for Linux
 Label: Endfield Charge Plus
 Origin: Endfield Charge Plus
 Suite: stable
 MD5Sum:
- 98efb9ea82dbf85142a3dd3d5df2273f              236 Release
- d41d8cd98f00b204e9800998ecf8427e                0 main/binary-amd64/Packages
- d38a3d7212ae8343e943b40b8e17cf53               29 main/binary-amd64/Packages.gz
+ a41f5de4817a8fb7a81ca33bc0d030f9              236 Release
+ 02c7d1e1a76b8c3f1ff150b70e3f5668             1022 main/binary-amd64/Packages
+ dfe8667abb18d432b66b53cac339bf76              654 main/binary-amd64/Packages.gz
 SHA1:
- 60802152c03c02e265689d161dd7dc4e8f7e0d66              236 Release
- da39a3ee5e6b4b0d3255bfef95601890afd80709                0 main/binary-amd64/Packages
- 03ed3dcc53e08434593ae011b00f62248708da3b               29 main/binary-amd64/Packages.gz
+ aab854fb7fcf9e6b391cdad54fd7c35e2937b408              236 Release
+ e79a13e77398756336950e706441b1ad5e5e8186             1022 main/binary-amd64/Packages
+ 23297991ef03501586d8b6a0bc401c28f26eca9c              654 main/binary-amd64/Packages.gz
 SHA256:
- 70adf3edeef6e47ecde428a56b3e043871ecc9f802a71ee41b711f37f2a1a840              236 Release
- e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855                0 main/binary-amd64/Packages
- 5e2660cd3ab8779a43c91cdc007577d5538f0a2cf3b075e4a6d3472f67e7f44a               29 main/binary-amd64/Packages.gz
+ 53bb470f4ea0570c6e74d80145f7cae489ca3042954739ea1c859d0609341691              236 Release
+ 0a1f613e0cddee5ea855b7f1e5e4a2b864be4fd41a55c908023df0cf1910e354             1022 main/binary-amd64/Packages
+ c1de41736781cc10e1dd0d5c949b8ae761411aa0ee7fda87a98f0ea7a4889ef7              654 main/binary-amd64/Packages.gz
 SHA512:
- c01755ebb7c71672f1af83e4fe5dafe81a2a307566f9ebff2900c22e775b44abe2c0547b58cf85bed94d9c722a33896ea1997e40513912b5915b9ac816da449b              236 Release
- cf83e1357eefb8bdf1542850d66d8007d620e4050b5715dc83f4a921d36ce9ce47d0d13c5d85f2b0ff8318d2877eec2f63b931bd47417a81a538327af927da3e                0 main/binary-amd64/Packages
- 5fac2f5d45e37bf4ce7dc812f32fbf52553f1ab07ba3c5e30b82878cf3ef1fcd4613fb814ac4df6ceeb3b3659069f1005bafc65fbbf6f48e58c474cf7fa31b95               29 main/binary-amd64/Packages.gz
+ dca043fefa37aeba71218573ba3f5366ee2a9f442b11b0017e5117255ddebd07818e03935d1e9b7356b5aceabe8510d9cc3e2f5f04ebe478c14aa302198ece0e              236 Release
+ d381981029b56a2a874cb1d8dcb0b95a66001294fe92ee410229ffb89b4c0b2f7c97b26b93b1ea4160febac092dfa27c71d1089215cb8e19c637b40ccddf86bb             1022 main/binary-amd64/Packages
+ 2541bd98cb48bca475bd382517c81c9067472b8ad59cc359c24fc06951b7e1cec27652f186365c8ba25e9e57737c5933b9a18bafde90155798d26060158783c6              654 main/binary-amd64/Packages.gz
