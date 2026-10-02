@@ -36,7 +36,7 @@ jobs:
           mkdir -p apt-repo/pool/main/e/endfield-charge-plus
 
           cd apt-repo
-          dpkg-scanpackages --arch amd64 pool/ /dev/null > dists/stable/main/binary-amd64/Packages
+          dpkg-scanpackages pool/ /dev/null > dists/stable/main/binary-amd64/Packages
           gzip -9 -c dists/stable/main/binary-amd64/Packages > dists/stable/main/binary-amd64/Packages.gz
 
       - name: Build Release metadata
