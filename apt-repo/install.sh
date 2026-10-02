@@ -29,4 +29,4 @@ apt-get update
 echo
 echo "Endfield Charge Plus APT repository has been added successfully."
 echo "Install ECP with:"
-echo "  sudo apt-get install endfield-charge-plus"
+echo "  sudo apt-get install endfield-charge-plus-for-linux"
