@@ -1,0 +1,43 @@
+-----BEGIN PGP SIGNED MESSAGE-----
+Hash: SHA512
+
+Architectures: amd64
+Codename: stable
+Components: main
+Date: Fri, 02 Oct 2026 10:06:35 +0000
+Description: Official APT repository for Endfield Charge Plus for Linux
+Label: Endfield Charge Plus
+Origin: Endfield Charge Plus
+Suite: stable
+MD5Sum:
+ 54a24e3a55c1c39811e39314159fa027              236 Release
+ d41d8cd98f00b204e9800998ecf8427e                0 main/binary-amd64/Packages
+ a7327885ce517b18a10eec60d62f1ba1               29 main/binary-amd64/Packages.gz
+SHA1:
+ 2b0b3c901ef4a188ce0b3dbdb045f01a73ea517e              236 Release
+ da39a3ee5e6b4b0d3255bfef95601890afd80709                0 main/binary-amd64/Packages
+ f556e7a6d6bed7d55cff6c0658e15a0a2e59cd4d               29 main/binary-amd64/Packages.gz
+SHA256:
+ 6caa746b6815a999300d89a2690674f61781b63990e8a3b68c2b7af4afd1f0dd              236 Release
+ e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855                0 main/binary-amd64/Packages
+ d3d960fcd26defa94346c9cacba3bb76ab49d78b07f7a89ad85ad1ddfd93ef59               29 main/binary-amd64/Packages.gz
+SHA512:
+ 748bf2e653d3b89e20f89557c712e6d72a975f5f5ca31e7b82623a3cc901c5161521de84d31411088b3097ded324ffb995b609b058e800d0b39a2bf39ff51fbf              236 Release
+ cf83e1357eefb8bdf1542850d66d8007d620e4050b5715dc83f4a921d36ce9ce47d0d13c5d85f2b0ff8318d2877eec2f63b931bd47417a81a538327af927da3e                0 main/binary-amd64/Packages
+ 33847e2be563bb0974e90d2377af86f29022f68b95454e74ab460b1b6bdcf52d002fd9e6bfc62ac0a41577f96e77c0bf41b90407ad0aa470c7fee9c256c41f31               29 main/binary-amd64/Packages.gz
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAEBCgAdFiEEkHBQbB0H2Ex/z0XJWLk1DZ7QpPgFAmq/gisACgkQWLk1DZ7Q
+pPjFqxAAuzBvJikKpKKn3u80cPMs2D+hjVLe/tFFfHTV4wX3r2BQztyWGzvlWTcN
+b7H4mQwAUd7ZCb8mcAk5A/dJZYnNCvsi1FUTGj5qOWPhZuvlfZiaJ7MFK8Ke1wGs
+PxLMxDF+pxt7LGloBllWL5opP4K0b1LBgwjGfZSuuK+mVKgJCXGa2yt/OFgkw3re
+XGGYsj1hBUEjbHCUcIlkDcr9MraNNMvaojtWw27WNGYDpogrW6KIJgghr3y8afs0
++Ux2HtsYd27za67ickaWz0woh6Ejyqbt4hxy3tCAc1jBCoZK7PVXB1/qXWr/fzyx
+NR8GYR2JxLOnVdaqDoBHe11TDFlhWlVqOIsnza4uuMw7rB5rXYy4E+pduFQAmIOi
+NAIdRbtwzRbAFd2VhCPtZcKmvxo1UmEgfiXFZNnTGVnPHZ8hWIs2vtzEzlGsgIDI
+OY/Ave6BfUrEQiRTr2clBO5iJBix+asxNvP5EIe47P/R5TjucXwHaspOxiwUwtJW
+EXLp+4TIfELS1RyOJ/gJ0H1+cTLk9FsDC2VpC/Ct7HAQatVx0m83oUpKqbKlBikb
+N4BTpNRJTKHbvZpRQWTXV/j/sJyWPcNf1HVDq1zeKSNOPpbLbM2GoFEnjD3CGZZd
+qqg+DBllNPe+xdn0PLd+mG+nhETaYuJ7xye/ymWcZkI738IZOq4=
+=5X9G
+-----END PGP SIGNATURE-----
