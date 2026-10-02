@@ -1,0 +1,71 @@
+name: Build APT Repository
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+    paths:
+      - "apt-repo/pool/**/*.deb"
+
+permissions:
+  contents: write
+
+jobs:
+  build-apt-repository:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install APT repository tools
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y dpkg-dev apt-utils gnupg
+
+      - name: Import APT signing key
+        env:
+          APT_GPG_PRIVATE_KEY: ${{ secrets.APT_GPG_PRIVATE_KEY }}
+        run: |
+          printf '%s' "$APT_GPG_PRIVATE_KEY" | gpg --batch --import
+
+      - name: Build package index
+        run: |
+          mkdir -p apt-repo/dists/stable/main/binary-amd64
+          mkdir -p apt-repo/pool/main/e/endfield-charge-plus
+
+          cd apt-repo
+          dpkg-scanpackages --arch amd64 pool/ /dev/null > dists/stable/main/binary-amd64/Packages
+          gzip -9 -c dists/stable/main/binary-amd64/Packages > dists/stable/main/binary-amd64/Packages.gz
+
+      - name: Build Release metadata
+        run: |
+          cd apt-repo
+
+          apt-ftparchive             -o APT::FTPArchive::Release::Origin="Endfield Charge Plus"             -o APT::FTPArchive::Release::Label="Endfield Charge Plus"             -o APT::FTPArchive::Release::Suite="stable"             -o APT::FTPArchive::Release::Codename="stable"             -o APT::FTPArchive::Release::Architectures="amd64"             -o APT::FTPArchive::Release::Components="main"             -o APT::FTPArchive::Release::Description="Official APT repository for Endfield Charge Plus for Linux"             release dists/stable > dists/stable/Release
+
+      - name: Sign Release metadata
+        env:
+          APT_GPG_PASSPHRASE: ${{ secrets.APT_GPG_PASSPHRASE }}
+        run: |
+          cd apt-repo/dists/stable
+
+          gpg --batch --yes             --pinentry-mode loopback             --passphrase "$APT_GPG_PASSPHRASE"             --local-user 9070506C1D07D84C7FCF45C958B9350D9ED0A4F8             --clearsign             --output InRelease             Release
+
+          gpg --batch --yes             --pinentry-mode loopback             --passphrase "$APT_GPG_PASSPHRASE"             --local-user 9070506C1D07D84C7FCF45C958B9350D9ED0A4F8             --armor             --detach-sign             --output Release.gpg             Release
+
+      - name: Commit generated APT metadata
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          git add apt-repo/dists
+
+          if git diff --cached --quiet; then
+            echo "No APT metadata changes to commit."
+            exit 0
+          fi
+
+          git commit -m "Update APT repository metadata"
+          git push
