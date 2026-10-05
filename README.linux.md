@@ -2,6 +2,18 @@
 
 Linux x64 版本保留 Avalonia 设置界面、HUD 动画、自定义方案、轮播、网络探测、DeepSeek 和 HTTP/JSON 数据源。四种发行包都包含 .NET 运行时。
 
+## 其他平台下载
+
+各平台由独立仓库维护和发布。请前往对应的 Releases 页面查看可用版本、安装包和校验文件。
+
+| 平台 | 仓库 | 发布页面 |
+| --- | --- | --- |
+| Windows | [项目仓库](https://github.com/GlacierGlimmer/zmd-charge-plus) | [Releases](https://github.com/GlacierGlimmer/zmd-charge-plus/releases) |
+| macOS | [项目仓库](https://github.com/GlacierGlimmer/zmd-charge-plus-for-macos) | [Releases](https://github.com/GlacierGlimmer/zmd-charge-plus-for-macos/releases) |
+| Android | [项目仓库](https://github.com/GlacierGlimmer/zmd-charge-plus-for-android) | [Releases](https://github.com/GlacierGlimmer/zmd-charge-plus-for-android/releases) |
+
+Android 仓库已建立；可下载版本以其 Releases 页面为准。
+
 ## 安装
 
 面向使用 glibc 2.35+、OpenSSL 3 的 Linux 桌面，例如 Ubuntu 22.04/24.04、Debian 12+、较新的 Fedora。需要 X11；Wayland 会话通过 XWayland 运行。暂不提供 ARM64、32 位或 Alpine/musl 包。

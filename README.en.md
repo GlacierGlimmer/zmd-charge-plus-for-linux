@@ -4,7 +4,17 @@
 
 An Endfield-inspired Linux desktop HUD based on [zmd-charge](https://github.com/QinAnze/zmd-charge) and [Endfield Charge Plus](https://github.com/GlacierGlimmer/zmd-charge-plus). It supports persistent or on-demand display, animations, custom profiles and automatic rotation.
 
-This repository contains the Linux edition. For Windows, visit [zmd-charge-plus](https://github.com/GlacierGlimmer/zmd-charge-plus).
+## Other platform downloads
+
+Each platform is maintained and released in its own repository. Open its Releases page for available versions, packages and checksums.
+
+| Platform | Repository | Releases |
+| --- | --- | --- |
+| Windows | [Repository](https://github.com/GlacierGlimmer/zmd-charge-plus) | [Releases](https://github.com/GlacierGlimmer/zmd-charge-plus/releases) |
+| macOS | [Repository](https://github.com/GlacierGlimmer/zmd-charge-plus-for-macos) | [Releases](https://github.com/GlacierGlimmer/zmd-charge-plus-for-macos/releases) |
+| Android | [Repository](https://github.com/GlacierGlimmer/zmd-charge-plus-for-android) | [Releases](https://github.com/GlacierGlimmer/zmd-charge-plus-for-android/releases) |
+
+The Android repository has been created; available builds are listed on its Releases page.
 
 ## Downloads
 
