@@ -633,7 +633,7 @@ public partial class HudWindow : Window
         }, DispatcherPriority.Loaded);
     }
 
-    public bool IsPointInTopCenterHotZone(PixelPoint screenPoint, int width = 240, int height = 5)
+    public bool IsPointInTopCenterHotZone(PixelPoint screenPoint, int width = 240, int height = 20)
     {
         var screen = ResolveScreen(_settings.MonitorIndex);
         if (screen is null) return false;

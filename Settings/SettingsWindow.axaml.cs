@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Diagnostics;
 using System.IO;
 using System.Net;
@@ -337,6 +337,8 @@ public partial class SettingsWindow : Window
 
     private async void OnSave(object? sender, RoutedEventArgs e)
     {
+        try
+        {
         _settings = CollectSettingsFromUi();
 
         SettingsManager.Save(_settings);
@@ -361,6 +363,14 @@ public partial class SettingsWindow : Window
             timer.Stop();
         };
         timer.Start();
+        }
+        catch (Exception ex)
+        {
+            SaveBtn.IsEnabled = true;
+            SaveBtn.Content = LocalizationManager.Text("保存失败", "Save failed");
+            MaintenanceStatusText.Text = ex.Message;
+            EndfieldChargePlus.Diagnostics.AppLog.Error("Unable to apply settings.", ex);
+        }
     }
 
     private async void OnExportSettings(object? sender, RoutedEventArgs e)
