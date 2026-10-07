@@ -1561,7 +1561,13 @@ public sealed class VariableHub : IDisposable
 
             v[sourcePrefix + "error"] = cache.Error;
             v[sourcePrefix + "status"] = cache.Error.Length == 0 ? "OK" : cache.Error;
-            if (cache.Error.Length != 0) continue;
+            if (cache.Error.Length != 0)
+            {
+                if (OperatingSystem.IsLinux())
+                    foreach (var f in source.Fields)
+                        v[sourcePrefix + Sanitize(f.Variable)] = cache.Error;
+                continue;
+            }
             try
             {
                 using var doc = JsonDocument.Parse(cache.Json);
@@ -1574,6 +1580,8 @@ public sealed class VariableHub : IDisposable
                     {
                         v[sourcePrefix + "error"] = LocalizationManager.Text("JSON 路径不存在：", "JSON path missing: ") + f.JsonPath;
                         v[sourcePrefix + "status"] = v[sourcePrefix + "error"];
+                        if (OperatingSystem.IsLinux())
+                            v[sourcePrefix + Sanitize(f.Variable)] = v[sourcePrefix + "error"];
                     }
                 }
             }
@@ -1581,6 +1589,9 @@ public sealed class VariableHub : IDisposable
             {
                 v[sourcePrefix + "error"] = LocalizationManager.Text("响应不是有效的 JSON。", "The response is not valid JSON.");
                 v[sourcePrefix + "status"] = v[sourcePrefix + "error"];
+                if (OperatingSystem.IsLinux())
+                    foreach (var f in source.Fields)
+                        v[sourcePrefix + Sanitize(f.Variable)] = v[sourcePrefix + "error"];
                 EndfieldChargePlus.Diagnostics.AppLog.Warn("HTTP source returned invalid JSON.");
             }
         }

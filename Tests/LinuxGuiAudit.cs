@@ -139,7 +139,19 @@ internal static class LinuxGuiAudit
         using var failedHub = new VariableHub(failedHttp);
         var failed = await failedHub.SnapshotAsync(sources, new[] { "deepseek.balance", "network.public_ipv4", "network.public_ipv6", "custom.audit.value" });
         Assert(new[] { "deepseek.balance", "network.public_ipv4", "network.public_ipv6", "custom.audit.value" }.All(k => failed[k] is string), "HTTP failures must show status instead of fake data or placeholders.");
+        Assert(Equals(failed["custom.audit.value"], failed["custom.audit.error"]), "HTTP mapping must expose the request error in the rendered field.");
+        using var invalidJsonHttp = new HttpClient(new InvalidJsonHttpHandler());
+        using var invalidJsonHub = new VariableHub(invalidJsonHttp);
+        var invalidJson = await invalidJsonHub.SnapshotAsync(sources, new[] { "custom.audit.value", "custom.audit.missing" });
+        Assert(invalidJson["custom.audit.value"] is string && invalidJson["custom.audit.missing"] is string
+            && Equals(invalidJson["custom.audit.value"], invalidJson["custom.audit.error"]), "Invalid JSON must render an error for every mapped field instead of dropping variables.");
         Console.WriteLine("PASS: unprivileged ICMP, TCP, UDP, failure states, custom HTTP/JSON and missing API key");
+    }
+
+    private sealed class InvalidJsonHttpHandler : HttpMessageHandler
+    {
+        protected override Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken ct)
+            => Task.FromResult(new HttpResponseMessage(HttpStatusCode.OK) { Content = new StringContent("<html>Invalid JSON</html>") });
     }
 
     private sealed class FailedHttpHandler : HttpMessageHandler
