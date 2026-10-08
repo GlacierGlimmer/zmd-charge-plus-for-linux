@@ -4,8 +4,11 @@
     <TargetFramework>net8.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
+    <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Program.cs" />
+    <Compile Include="LinuxGuiAudit.cs" />
     <ProjectReference Include="../EndfieldChargePlus.csproj" />
   </ItemGroup>
 </Project>
