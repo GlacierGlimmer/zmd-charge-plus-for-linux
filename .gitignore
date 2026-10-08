@@ -39,3 +39,6 @@ settings.*.json
 *.cer
 *.crt
 *.pubxml.user
+
+# Isolated official-period regression output
+**/obj-period/

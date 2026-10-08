@@ -170,6 +170,8 @@ public static class LocalizationManager
         ["数据源"] = "Data Sources",
         ["配置余额查询与峰谷时段。API Key 在本机加密存储，跨设备需重新填写。"] = "Configure balance queries and peak/off-peak windows. The API key is encrypted locally; enter it again on other devices.",
         ["工作日高峰窗口（北京时间，分号分隔）"] = "Weekday peak windows (Beijing time; separate with semicolons)",
+        ["DeepSeek 官方高峰窗口（北京时间）"] = "DeepSeek official peak windows (Beijing time)",
+        ["周一至周五，排除中国节假日；周末补班仍为低谷。"] = "Monday to Friday, excluding Chinese holidays; weekends remain off-peak even on makeup workdays.",
         ["将 GET JSON 字段映射为 custom.source.variable；Header 可引用环境变量。"] = "Map GET JSON fields to custom.source.variable; headers may reference environment variables.",
 
         // Tray

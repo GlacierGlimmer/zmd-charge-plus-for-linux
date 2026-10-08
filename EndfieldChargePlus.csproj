@@ -44,4 +44,7 @@
     <Compile Remove="artifacts\**\*.cs" />
   </ItemGroup>
 
+  <ItemGroup>
+    <EmbeddedResource Include="Assets/china-holidays.json" LogicalName="EndfieldChargePlus.china-holidays.json" />
+  </ItemGroup>
 </Project>
