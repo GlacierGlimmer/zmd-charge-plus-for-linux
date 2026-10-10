@@ -1,6 +1,8 @@
 # Endfield Charge Plus For Linux
 
-**简体中文** · [English](README.en.md)　｜　**Linux x64 · v0.1.0**
+当前源码版本：**v0.1.1**（尚未发布 Releases）。版本只在用户明确要求时修改，见[版本约定](docs/VERSIONING.md)。
+
+**简体中文** · [English](README.en.md)　｜　**Linux x64 · v0.1.1**
 
 基于 [zmd-charge](https://github.com/QinAnze/zmd-charge) 和 [Endfield Charge Plus](https://github.com/GlacierGlimmer/zmd-charge-plus) 开发的终末地风格 Linux 桌面悬浮 HUD。支持常驻显示、鼠标顶部唤出、动画切换、自定义方案和多数据轮播。
 
@@ -46,14 +48,14 @@ sudo apt-get remove endfield-charge-plus-for-linux
 
 也可以前往 [Releases](https://github.com/GlacierGlimmer/zmd-charge-plus-for-linux/releases) 手动下载。四种格式都包含 .NET 运行时，无需另装 .NET。
 
-| 格式 | v0.1.0 下载 | 适用方式 |
+| 格式 | v0.1.1 下载 | 适用方式 |
 | --- | --- | --- |
-| `.tar.gz` | [便携压缩包](https://github.com/GlacierGlimmer/zmd-charge-plus-for-linux/releases/download/v0.1.0/EndfieldChargePlusForLinux-v0.1.0-linux-x64.tar.gz) | 解压后运行 |
-| `.AppImage` | [AppImage](https://github.com/GlacierGlimmer/zmd-charge-plus-for-linux/releases/download/v0.1.0/EndfieldChargePlusForLinux-v0.1.0-linux-x64.AppImage) | 添加执行权限后运行 |
-| `.deb` | [DEB 安装包](https://github.com/GlacierGlimmer/zmd-charge-plus-for-linux/releases/download/v0.1.0/EndfieldChargePlusForLinux-v0.1.0-linux-x64.deb) | Ubuntu / Debian 系 |
-| `.rpm` | [RPM 安装包](https://github.com/GlacierGlimmer/zmd-charge-plus-for-linux/releases/download/v0.1.0/EndfieldChargePlusForLinux-v0.1.0-linux-x64.rpm) | Fedora 等 RPM 系 |
+| `.tar.gz` | [便携压缩包](https://github.com/GlacierGlimmer/zmd-charge-plus-for-linux/releases) | 解压后运行 |
+| `.AppImage` | [AppImage](https://github.com/GlacierGlimmer/zmd-charge-plus-for-linux/releases) | 添加执行权限后运行 |
+| `.deb` | [DEB 安装包](https://github.com/GlacierGlimmer/zmd-charge-plus-for-linux/releases) | Ubuntu / Debian 系 |
+| `.rpm` | [RPM 安装包](https://github.com/GlacierGlimmer/zmd-charge-plus-for-linux/releases) | Fedora 等 RPM 系 |
 
-[SHA-256 校验文件](https://github.com/GlacierGlimmer/zmd-charge-plus-for-linux/releases/download/v0.1.0/SHA256SUMS) · [Linux 详细说明](README.linux.md) · [v0.1.0 验证范围](docs/linux-validation.md)
+[SHA-256 校验文件](https://github.com/GlacierGlimmer/zmd-charge-plus-for-linux/releases) · [Linux 详细说明](README.linux.md) · [v0.1.1 验证范围](docs/linux-validation.md)
 
 ## 安装与启动
 
@@ -61,18 +63,18 @@ Debian / Ubuntu / Kali 等发行版推荐优先使用上面的 APT 软件源；�
 
 ```bash
 # Ubuntu / Debian / Kali（手动安装 .deb）
-sudo apt install ./EndfieldChargePlusForLinux-v0.1.0-linux-x64.deb
+sudo apt install ./EndfieldChargePlusForLinux-v0.1.1-linux-x64.deb
 
 # Fedora
-sudo dnf install ./EndfieldChargePlusForLinux-v0.1.0-linux-x64.rpm
+sudo dnf install ./EndfieldChargePlusForLinux-v0.1.1-linux-x64.rpm
 
 # AppImage
-chmod +x EndfieldChargePlusForLinux-v0.1.0-linux-x64.AppImage
-./EndfieldChargePlusForLinux-v0.1.0-linux-x64.AppImage
+chmod +x EndfieldChargePlusForLinux-v0.1.1-linux-x64.AppImage
+./EndfieldChargePlusForLinux-v0.1.1-linux-x64.AppImage
 
 # tar.gz
-tar -xzf EndfieldChargePlusForLinux-v0.1.0-linux-x64.tar.gz
-cd EndfieldChargePlusForLinux-v0.1.0-linux-x64
+tar -xzf EndfieldChargePlusForLinux-v0.1.1-linux-x64.tar.gz
+cd EndfieldChargePlusForLinux-v0.1.1-linux-x64
 ./EndfieldChargePlus
 ```
 

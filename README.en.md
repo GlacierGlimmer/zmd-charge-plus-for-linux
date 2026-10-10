@@ -1,6 +1,8 @@
 # Endfield Charge Plus For Linux
 
-[简体中文](README.md) · **English**　｜　**Linux x64 · v0.1.0**
+Current source version: **v0.1.1** (not published in Releases). Version changes require an explicit user request; see [version policy](docs/VERSIONING.md).
+
+[简体中文](README.md) · **English**　｜　**Linux x64 · v0.1.1**
 
 An Endfield-inspired Linux desktop HUD based on [zmd-charge](https://github.com/QinAnze/zmd-charge) and [Endfield Charge Plus](https://github.com/GlacierGlimmer/zmd-charge-plus). It supports persistent or on-demand display, animations, custom profiles and automatic rotation.
 
@@ -20,31 +22,31 @@ The Android repository has been created; available builds are listed on its Rele
 
 Get the packages from [Releases](https://github.com/GlacierGlimmer/zmd-charge-plus-for-linux/releases). All four formats include the .NET runtime.
 
-| Format | v0.1.0 | Use |
+| Format | v0.1.1 | Use |
 | --- | --- | --- |
-| `.tar.gz` | [Portable archive](https://github.com/GlacierGlimmer/zmd-charge-plus-for-linux/releases/download/v0.1.0/EndfieldChargePlusForLinux-v0.1.0-linux-x64.tar.gz) | Extract and run |
-| `.AppImage` | [AppImage](https://github.com/GlacierGlimmer/zmd-charge-plus-for-linux/releases/download/v0.1.0/EndfieldChargePlusForLinux-v0.1.0-linux-x64.AppImage) | Make executable and run |
-| `.deb` | [DEB package](https://github.com/GlacierGlimmer/zmd-charge-plus-for-linux/releases/download/v0.1.0/EndfieldChargePlusForLinux-v0.1.0-linux-x64.deb) | Ubuntu / Debian family |
-| `.rpm` | [RPM package](https://github.com/GlacierGlimmer/zmd-charge-plus-for-linux/releases/download/v0.1.0/EndfieldChargePlusForLinux-v0.1.0-linux-x64.rpm) | Fedora and compatible RPM systems |
+| `.tar.gz` | [Portable archive](https://github.com/GlacierGlimmer/zmd-charge-plus-for-linux/releases) | Extract and run |
+| `.AppImage` | [AppImage](https://github.com/GlacierGlimmer/zmd-charge-plus-for-linux/releases) | Make executable and run |
+| `.deb` | [DEB package](https://github.com/GlacierGlimmer/zmd-charge-plus-for-linux/releases) | Ubuntu / Debian family |
+| `.rpm` | [RPM package](https://github.com/GlacierGlimmer/zmd-charge-plus-for-linux/releases) | Fedora and compatible RPM systems |
 
-[SHA256SUMS](https://github.com/GlacierGlimmer/zmd-charge-plus-for-linux/releases/download/v0.1.0/SHA256SUMS) · [Detailed Linux guide](README.linux.md) · [Validation scope](docs/linux-validation.md)
+[SHA256SUMS](https://github.com/GlacierGlimmer/zmd-charge-plus-for-linux/releases) · [Detailed Linux guide](README.linux.md) · [Validation scope](docs/linux-validation.md)
 
 ## Install
 
 ```bash
 # Ubuntu / Debian
-sudo apt install ./EndfieldChargePlusForLinux-v0.1.0-linux-x64.deb
+sudo apt install ./EndfieldChargePlusForLinux-v0.1.1-linux-x64.deb
 
 # Fedora
-sudo dnf install ./EndfieldChargePlusForLinux-v0.1.0-linux-x64.rpm
+sudo dnf install ./EndfieldChargePlusForLinux-v0.1.1-linux-x64.rpm
 
 # AppImage
-chmod +x EndfieldChargePlusForLinux-v0.1.0-linux-x64.AppImage
-./EndfieldChargePlusForLinux-v0.1.0-linux-x64.AppImage
+chmod +x EndfieldChargePlusForLinux-v0.1.1-linux-x64.AppImage
+./EndfieldChargePlusForLinux-v0.1.1-linux-x64.AppImage
 
 # Portable archive
-tar -xzf EndfieldChargePlusForLinux-v0.1.0-linux-x64.tar.gz
-cd EndfieldChargePlusForLinux-v0.1.0-linux-x64
+tar -xzf EndfieldChargePlusForLinux-v0.1.1-linux-x64.tar.gz
+cd EndfieldChargePlusForLinux-v0.1.1-linux-x64
 ./EndfieldChargePlus
 ```
 

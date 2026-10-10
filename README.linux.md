@@ -22,8 +22,8 @@ Android 仓库已建立；可下载版本以其 Releases 页面为准。
 | --- | --- |
 | `.tar.gz` | 解压到固定目录，运行 `./EndfieldChargePlus` |
 | `.AppImage` | `chmod +x 文件名.AppImage` 后运行；若 FUSE 不可用，可用 `./文件名.AppImage --appimage-extract-and-run`，或解包后运行 `squashfs-root/AppRun` |
-| `.deb` | `sudo apt install ./EndfieldChargePlusForLinux-v0.1.0-linux-x64.deb` |
-| `.rpm` | `sudo dnf install ./EndfieldChargePlusForLinux-v0.1.0-linux-x64.rpm` |
+| `.deb` | `sudo apt install ./EndfieldChargePlusForLinux-v0.1.1-linux-x64.deb` |
+| `.rpm` | `sudo dnf install ./EndfieldChargePlusForLinux-v0.1.1-linux-x64.rpm` |
 
 DEB/RPM 安装后可从应用菜单或 `endfield-charge-plus-for-linux` 命令启动，安装目录为 `/opt/endfield-charge-plus-for-linux`。卸载使用 `sudo apt remove endfield-charge-plus-for-linux` 或 `sudo dnf remove endfield-charge-plus-for-linux`；个人配置保留。内部程序集与便携包可执行文件仍使用 `EndfieldChargePlus`，以保持资源和配置兼容。
 
