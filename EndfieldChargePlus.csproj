@@ -33,11 +33,6 @@
     <DebugSymbols>false</DebugSymbols>
   </PropertyGroup>
 
-  <PropertyGroup Condition="'$(Configuration)' == 'Release'">
-    <DebugType>none</DebugType>
-    <DebugSymbols>false</DebugSymbols>
-  </PropertyGroup>
-
   <ItemGroup>
     <PackageReference Include="Avalonia" Version="11.2.1" />
     <PackageReference Include="Avalonia.Desktop" Version="11.2.1" />
@@ -48,21 +43,11 @@
     <PackageReference Include="LibreHardwareMonitorLib" Version="0.9.6" />
   </ItemGroup>
 
-  <PropertyGroup Condition="'$(Configuration)' == 'Release'">
-    <DebugType>none</DebugType>
-    <DebugSymbols>false</DebugSymbols>
-  </PropertyGroup>
-
   <ItemGroup>
     <AvaloniaResource Include="Assets\tray_bolt.png" />
     <Compile Remove="Tests\**\*.cs" />
     <Compile Remove="artifacts\**\*.cs" />
   </ItemGroup>
-
-  <PropertyGroup Condition="'$(Configuration)' == 'Release'">
-    <DebugType>none</DebugType>
-    <DebugSymbols>false</DebugSymbols>
-  </PropertyGroup>
 
   <ItemGroup>
     <EmbeddedResource Include="Assets/china-holidays.json" LogicalName="EndfieldChargePlus.china-holidays.json" />
