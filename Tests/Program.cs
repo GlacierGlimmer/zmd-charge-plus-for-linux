@@ -1,11 +1,15 @@
 using EndfieldChargePlus.Customization;
 using EndfieldChargePlus.Settings;
 
+if (args.Length>0 && args[0]=="--frame-audit") { Environment.ExitCode=FrameNativeAudit.Run(); return; }
+
 if (args.Length > 0 && args[0] == "--gui-audit")
 {
     Environment.ExitCode = LinuxGuiAudit.Run(Path.GetFullPath(args[1]));
     return;
 }
+
+FeatureRegressionChecks.Run((ok,message)=> { if(!ok) throw new Exception(message); });
 
 string fixture = Path.Combine(Path.GetTempPath(), "ecp-tests-" + Guid.NewGuid().ToString("N"));
 Directory.CreateDirectory(fixture);

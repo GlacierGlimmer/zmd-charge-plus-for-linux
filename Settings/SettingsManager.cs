@@ -147,6 +147,14 @@ public static class SettingsManager
         => settings with
         {
             HudOpacity = Math.Clamp(settings.HudOpacity, 0.10, 1.0),
+            SamplingIntervalSeconds = double.IsFinite(settings.SamplingIntervalSeconds) ? Math.Clamp(settings.SamplingIntervalSeconds, 0.1, 60) : 1,
+            HudInstances = (settings.HudInstances ?? new()).Where(i => i is not null).Take(15)
+                .GroupBy(i => i.Id).Select(g => g.First()).Select(i => i with {
+                    Id=string.IsNullOrWhiteSpace(i.Id) ? Guid.NewGuid().ToString("N") : i.Id,
+                    Name=string.IsNullOrWhiteSpace(i.Name) ? "HUD" : i.Name.Trim(),
+                    Settings=Normalize((i.Settings ?? new()) with { MultiHudEnabled=false, HudInstances=new() }) }).ToList(),
+            HudFontFamily = (settings.HudFontFamily ?? "").Trim(),
+            ClickToCycle = settings.ClickToCycle,
             UiLanguage = LocalizationManager.NormalizePreference(settings.UiLanguage),
             CustomHud = HudSettingsNormalizer.Normalize(settings.CustomHud ?? CustomHudSettings.CreateDefault()),
         };

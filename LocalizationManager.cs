@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
@@ -27,6 +27,21 @@ public static class LocalizationManager
         ["重新检测 Linux 变量"] = "Detect Linux variables again",
         ["保存并应用"] = "Save & Apply",
         ["显示与位置"] = "Display & Position",
+        ["目标窗口"] = "Target window",
+        ["实验性功能"] = "Experimental Features",
+        ["HUD 字体"] = "HUD font",
+        ["帧率采集目标"] = "Frame-rate target",
+        ["刷新窗口／显示器列表"] = "Refresh window/display list",
+        ["100% 对应帧率 / FPS"] = "Frame rate at 100% / FPS",
+        ["系统默认"] = "System default",
+        ["选择已安装字体；系统默认会自动补全缺失的中文字符。"] = "Choose an installed font; the system supplies fallback glyphs for missing characters.",
+        ["适用于所有常驻 HUD，包括实验性多实例。点击哪个 HUD，就按它自己的轮播队列顺序切换，使用它的轮播动画；无需开启自动轮播。点击后重新计时该 HUD 的自动轮播间隔。"] = "Applies to every persistent HUD, including experimental instances. Clicking a HUD advances its own carousel queue using its transition animation, even with auto cycling off, and restarts that HUD’s automatic cycle interval.",
+        ["常驻时点击 HUD 切换方案"] = "Click a persistent HUD to switch profiles",
+        ["仅一直显示时可启用。每次点击按自动轮播队列的顺序切换，使用轮播切换动画；无需开启自动轮播。队列为空或只有一个方案时不切换。"] = "Available only in Always Visible mode. Each click advances through the automatic-cycle queue using its transition animation, even when automatic cycling is off. An empty or single-item queue does not switch.",
+        ["数据采样间隔 / 秒（所有 HUD 共用）"] = "Data sampling interval / seconds (shared by all HUDs)",
+        ["编辑任意 HUD 都可修改；保存后所有 HUD 使用同一采样间隔。时钟按秒更新，外部 API 保留自己的刷新间隔。"] = "Change this while editing any HUD. Save & Apply uses the same sampling interval for every HUD. Clocks update each second; external APIs retain their own refresh intervals.",
+        ["数据采样间隔 / 秒"] = "Data sampling interval / seconds",
+        ["间隔越小，采样越快、资源消耗越高。时钟按秒更新；外部 API 保留各自的刷新间隔。"] = "Shorter intervals sample faster and use more resources. Clocks update each second; external APIs retain their own refresh intervals.",
         ["HUD 内容与数据"] = "HUD Content & Data",
         ["关于"] = "About",
         ["HUD 总开关"] = "HUD Master Switch",
@@ -57,7 +72,7 @@ public static class LocalizationManager
         ["波纹强度"] = "Ripple Strength",
         ["波纹幅度"] = "Ripple Spread",
         ["终末地风格状态栏 HUD"] = "Endfield-style Status HUD",
-        ["构建日期  2026.09.23"] = "Build  2026.09.23",
+        ["构建日期  2026.10.11"] = "Build  2026.10.11",
         ["检查更新"] = "Check Updates",
         ["当前版本：v0.1.1"] = "Current: v0.1.1",
         ["最新版本：尚未获取"] = "Latest: not checked",

@@ -61,12 +61,43 @@ internal static class LinuxDesktop
             try
             {
                 if (window == IntPtr.Zero || !Connect() || XShapeQueryExtension(_display, out _, out _) == 0) return;
+                HudRegions.Remove(window);
                 // An empty ShapeInput region lets mouse events reach windows underneath the HUD.
                 XShapeCombineRectangles(_display, window, 2, 0, 0, IntPtr.Zero, 0, 0, 0);
                 XFlush(_display);
             }
             catch (DllNotFoundException) { }
             catch (EntryPointNotFoundException) { }
+        }
+    }
+
+    [StructLayout(LayoutKind.Sequential)] private struct XRectangle { public short X,Y; public ushort Width,Height; }
+    private static readonly Dictionary<IntPtr,(int X,int Y,int W,int H)> HudRegions=new();
+    internal static void ForgetHud(IntPtr window) { lock(Gate) HudRegions.Remove(window); }
+    internal static void SetHudInputRegion(IntPtr window,int x,int y,int width,int height)
+    {
+        lock (Gate)
+        {
+            if (!Connect() || XShapeQueryExtension(_display,out _,out _)==0) return;
+            var key=(x,y,width,height);
+            if(HudRegions.TryGetValue(window,out var previous) && previous==key) return;
+            HudRegions[window]=key;
+            width=Math.Clamp(width,1,65535);height=Math.Clamp(height,1,65535);
+            double radius=Math.Min(width,height)/2d;
+            var rows=new List<XRectangle>();
+            for(int row=0;row<height;row++) {
+                double dy=Math.Abs(row+.5-height/2d);
+                int inset=dy>=radius ? (int)radius : (int)Math.Ceiling(radius-Math.Sqrt(radius*radius-dy*dy));
+                int w=Math.Max(1,width-2*inset);
+                if(rows.Count>0 && rows[^1].X==x+inset && rows[^1].Width==w) {
+                    var prev=rows[^1];prev.Height++;rows[^1]=prev;
+                } else rows.Add(new XRectangle { X=(short)(x+inset),Y=(short)(y+row),Width=(ushort)w,Height=1 });
+            }
+            var memory=Marshal.AllocHGlobal(rows.Count*Marshal.SizeOf<XRectangle>());
+            try {
+                for(int i=0;i<rows.Count;i++) Marshal.StructureToPtr(rows[i],memory+i*Marshal.SizeOf<XRectangle>(),false);
+                XShapeCombineRectangles(_display,window,2,0,0,memory,rows.Count,0,0);XFlush(_display);
+            } finally { Marshal.FreeHGlobal(memory); }
         }
     }
 

@@ -23,6 +23,13 @@ public sealed record AppSettings
     public double RippleIntensity { get; init; } = DefaultRippleIntensity;
     public double RippleSpread { get; init; } = DefaultRippleSpread;
     public double HudOpacity { get; init; } = DefaultHudOpacity;
+    public double SamplingIntervalSeconds { get; init; } = 1;
+
+    public bool MultiHudEnabled { get; init; } = false;
+    public List<HudInstanceSettings> HudInstances { get; init; } = new();
+
+    public string HudFontFamily { get; init; } = "";
+    public bool ClickToCycle { get; init; } = false;
 
     public bool AlwaysVisible { get; init; } = false;
     public PersistentHudLayer PersistentLayer { get; init; } = PersistentHudLayer.Desktop;
@@ -61,4 +68,13 @@ public enum HudPosition
     BottomLeft,
     BottomCenter,
     BottomRight,
+    ScreenTopLeft,
+    ScreenTopCenter,
+    ScreenTopRight,
+    ScreenCenterLeft,
+    ScreenCenter,
+    ScreenCenterRight,
+    ScreenBottomLeft,
+    ScreenBottomCenter,
+    ScreenBottomRight,
 }

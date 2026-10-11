@@ -50,6 +50,23 @@
                 </Grid>
               </Border>
 
+              <Border x:Name="FrameOptionsPanel" Background="#1E1E20" CornerRadius="8" Padding="14" IsVisible="False">
+                <StackPanel Spacing="8">
+                  <TextBlock Text="帧率采集目标" Foreground="#C6CA4C"/>
+                  <StackPanel x:Name="FrameDisplayOptions" Spacing="6">
+                  <TextBlock Text="目标显示器"/>
+                  <ComboBox x:Name="FrameDisplayTargetCombo"/>
+                </StackPanel>
+                <StackPanel x:Name="FrameWindowOptions" Spacing="6">
+                  <TextBlock Text="目标窗口"/>
+                  <ComboBox x:Name="FrameWindowTargetCombo"/>
+                </StackPanel>
+                  <Button x:Name="RefreshFrameTargetsBtn" Content="刷新窗口／显示器列表"/>
+                  <TextBlock Text="100% 对应帧率 / FPS" Foreground="#85858B"/>
+                  <NumericUpDown x:Name="FrameFullScaleBox" Minimum="1" Maximum="1000" Value="120" Increment="1"/>
+                  <TextBlock x:Name="FrameCaptureHint" TextWrapping="Wrap" Foreground="#85858B"/>
+                </StackPanel>
+              </Border>
               <Border x:Name="GpuOptionsPanel" Background="#1E1E20" CornerRadius="8" Padding="14" IsVisible="False">
                 <Grid ColumnDefinitions="*,420">
                   <StackPanel Spacing="2" Margin="0,0,18,0">
@@ -150,6 +167,11 @@
                   <StackPanel Spacing="2">
                     <TextBlock x:Name="ProfileKindText" Text="" FontSize="12" Foreground="#BDBDC2"/>
                     <TextBlock Text="选择框中的方案即当前使用方案；始终保持一个方案被选中。" FontSize="11" Foreground="#6F6F74"/>
+                  </StackPanel>
+
+                  <StackPanel Spacing="6">
+                    <CheckBox x:Name="PersistentClickSwitch" Content="常驻时点击 HUD 切换方案"/>
+                    <TextBlock Text="适用于所有常驻 HUD，包括实验性多实例。点击哪个 HUD，就按它自己的轮播队列顺序切换，使用它的轮播动画；无需开启自动轮播。点击后重新计时该 HUD 的自动轮播间隔。" FontSize="12" Foreground="#85858B" TextWrapping="Wrap"/>
                   </StackPanel>
 
                   <Border x:Name="CycleOptionsPanel" Background="#19191B" BorderBrush="#303034" BorderThickness="1" CornerRadius="8" Padding="14">

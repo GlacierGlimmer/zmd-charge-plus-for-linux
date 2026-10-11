@@ -10,9 +10,11 @@ internal static class LinuxVariableCatalog
     private static Dictionary<string, HashSet<string>> _gpuKeys = new(StringComparer.OrdinalIgnoreCase);
     private static string _defaultGpu = "";
     private static readonly HashSet<string> Shared = new((
+        "frame.display.fps frame.window.fps frame.display.percent frame.window.percent frame.display.name frame.window.name frame.display.status frame.window.status " +
         "system.time system.date system.datetime system.uptime_seconds system.uptime_text system.boot_time " +
         "system.machine_name system.host_name system.user_name system.os_description system.os_version " +
         "system.os_architecture system.process_architecture system.framework_version system.processor_count " +
+        "frame.display.fps frame.window.fps frame.display.percent frame.window.percent frame.display.name frame.window.name frame.display.status frame.window.status " +
         "system.timezone_id system.timezone_name system.utc_offset_hours system.culture " +
         "app.name app.version app.pid app.start_time app.uptime_seconds app.uptime_text app.working_set_bytes " +
         "app.private_memory_bytes app.virtual_memory_bytes app.thread_count app.handle_count app.cpu_time_seconds " +

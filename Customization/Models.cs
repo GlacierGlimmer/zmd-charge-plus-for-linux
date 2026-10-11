@@ -48,6 +48,10 @@ public sealed record HudProfile
 
     // Optional per-profile GPU target. Empty means the first available adapter.
     public string GpuAdapterId { get; init; } = "";
+    public string FrameDisplayId { get; init; } = "";
+    public string FrameWindowId { get; init; } = "";
+    public double FrameFullScaleFps { get; init; } = 120;
+
 
     // Network profile presentation. All traffic values are system-wide totals across
     // active non-loopback interfaces. NetworkDisplayUnit: AutoBytes | Mbps.
@@ -110,6 +114,7 @@ public sealed record CustomHudSettings
             CycleProfileIds = profiles
                 .Where(p => string.Equals(p.Category, "系统", StringComparison.OrdinalIgnoreCase)
                          || string.Equals(p.BuiltInKey, "time.day-progress", StringComparison.OrdinalIgnoreCase))
+                .Where(p => !p.BuiltInKey.EndsWith("-fps",StringComparison.OrdinalIgnoreCase))
                 .Select(p => p.Id)
                 .ToList(),
             CycleAnimationMode = "Simple"
@@ -302,7 +307,13 @@ public sealed record CustomHudSettings
                 new() { Variable = "probe.loss_percent", Operator = ">=", Value = 30, Color = "#FF4D4F" },
                 new() { Variable = "probe.loss_percent", Operator = ">=", Value = 10, Color = "#FFB84D" },
             }
-        }
+        },
+        new() { IsBuiltIn=true, BuiltInKey="system.display-fps",Category="系统",Name="显示器帧率",
+            TaglineTemplate="/// DISPLAY FPS",TitleTemplate="显示器帧率",PrimaryTemplate="{frame.display.fps|0.0}",SecondaryTemplate=" FPS",
+            RightTemplate="{frame.display.percent|0}",RightSuffix="%",ProgressVariable="frame.display.percent",LeftIcon="monitor",RightIcon="monitor" },
+        new() { IsBuiltIn=true, BuiltInKey="system.window-fps",Category="系统",Name="窗口帧率",
+            TaglineTemplate="/// WINDOW FPS",TitleTemplate="窗口帧率",PrimaryTemplate="{frame.window.fps|0.0}",SecondaryTemplate=" FPS",
+            RightTemplate="{frame.window.percent|0}",RightSuffix="%",ProgressVariable="frame.window.percent",LeftIcon="monitor",RightIcon="monitor" },
     };
 }
 

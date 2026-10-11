@@ -54,7 +54,7 @@ Architecture: amd64
 Maintainer: GlacierGlimmer <glacierglimmer@users.noreply.github.com>
 Homepage: https://github.com/GlacierGlimmer/zmd-charge-plus-for-linux
 Installed-Size: $(du -sk "$stage/opt" | cut -f1)
-Depends: libc6 (>= 2.35), libgcc-s1, libstdc++6, zlib1g, libssl3, libicu70 | libicu72 | libicu74 | libicu76 | libicu78, libx11-6, libice6, libsm6, libfontconfig1, libxext6, libxrender1, libxcb1, libxrandr2, libxi6, libxcursor1, iputils-ping
+Depends: libc6 (>= 2.35), libgcc-s1, libstdc++6, zlib1g, libssl3, libicu70 | libicu72 | libicu74 | libicu76 | libicu78, libx11-6, libxpresent1, libice6, libsm6, libfontconfig1, libxext6, libxrender1, libxcb1, libxrandr2, libxi6, libxcursor1, iputils-ping
 Recommends: fonts-noto-cjk, xdg-utils
 Description: Endfield Charge Plus For Linux - customizable system HUD
  Displays Linux system metrics with customizable animated HUD profiles.
@@ -72,7 +72,7 @@ License: MIT
 URL: https://github.com/GlacierGlimmer/zmd-charge-plus-for-linux
 BuildArch: x86_64
 AutoReqProv: no
-Requires: glibc >= 2.35, libgcc, libstdc++, zlib, openssl-libs, libicu, libX11, libICE, libSM, fontconfig, libXext, libXrender, libxcb, libXrandr, libXi, libXcursor, iputils
+Requires: glibc >= 2.35, libgcc, libstdc++, zlib, openssl-libs, libicu, libX11, libXpresent, libICE, libSM, fontconfig, libXext, libXrender, libxcb, libXrandr, libXi, libXcursor, iputils
 Recommends: google-noto-sans-cjk-fonts, xdg-utils
 %description
 Displays Linux system metrics with customizable animated HUD profiles.

@@ -9,11 +9,20 @@ public static class BuiltInProfileLocalization
 
     public static HudProfile ForLanguage(HudProfile profile, AppLanguage language)
     {
+        if (profile.BuiltInKey is "system.display-fps" or "system.window-fps")
+        {
+            bool display=profile.BuiltInKey=="system.display-fps",english=language==AppLanguage.English;
+            string name=english ? (display ? "Display FPS" : "Window FPS") : (display ? "显示器帧率" : "窗口帧率");
+            return profile with { Category=english ? "System" : "系统",Name=name+(english ? " (Requires administrator authorization)" : "（需管理员授权）"),
+                TitleTemplate=english ? name : (display ? "显示器帧率" : "窗口帧率") };
+        }
         if (language != AppLanguage.English || string.IsNullOrWhiteSpace(profile.BuiltInKey))
             return profile;
 
         return profile.BuiltInKey.ToLowerInvariant() switch
         {
+            "system.display-fps" => profile with { Category="System",Name="Display FPS",TitleTemplate="Display FPS" },
+            "system.window-fps" => profile with { Category="System",Name="Window FPS",TitleTemplate="Window FPS" },
             "system.battery" => profile with
             {
                 Category = "System", Name = "Battery", TitleTemplate = "Battery"

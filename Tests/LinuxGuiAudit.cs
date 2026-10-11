@@ -17,7 +17,7 @@ internal static class LinuxGuiAudit
     internal static int Run(string output)
     {
         Directory.CreateDirectory(output);
-        SettingsManager.Save(SettingsManager.CreateDefaults() with { AlwaysVisible = true, UiLanguage = "zh-CN" });
+        SettingsManager.Save(SettingsManager.CreateDefaults() with { AlwaysVisible = true, UiLanguage = "zh-CN", MultiHudEnabled=true, HudInstances=new() { new() { Name="Second HUD",Settings=SettingsManager.CreateDefaults() with { AlwaysVisible=true,HudOffsetY=110,MonitorIndex=99 } } } });
         bool passed = false;
         EndfieldChargePlus.Program.BuildAvaloniaApp().AfterSetup(_ => DispatcherTimer.RunOnce(async () =>
         {
@@ -25,16 +25,18 @@ internal static class LinuxGuiAudit
             try
             {
                 var window = desktop.Windows.OfType<SettingsWindow>().Single();
-                Assert(window.Title!.Contains(ProductInfo.LinuxName), "Settings title was not renamed.");
+                Assert(window.Title==EndfieldChargePlus.Interop.ProcessPrivileges.SettingsTitle("0.1.1",ProductInfo.Name), "Frozen bilingual settings title has no parentheses.");
+                await Task.Delay(800);
+                Assert(desktop.Windows.OfType<EndfieldChargePlus.Views.HudWindow>().Count(w=>w.IsVisible)==2,"Multiple HUDs are independently visible; a removed display falls back to the primary.");
                 await window.Clipboard!.SetTextAsync("Linux clipboard audit");
                 Assert(await window.Clipboard.GetTextAsync() == "Linux clipboard audit", "Clipboard copy/read round trip failed on a fresh X server.");
                 using var listener = new TcpListener(IPAddress.Loopback, 0);
                 listener.Start();
                 int port = ((IPEndPoint)listener.LocalEndpoint).Port;
                 using var http = new HttpClient(new AuditHttpHandler());
-                using var hub = new VariableHub(http);
+                using var hub = new VariableHub(http) { SamplingIntervalSeconds=.1 };
                 var settings = CustomHudSettings.CreateDefault() with { DeepSeekApiKeyProtected = SecretStore.Protect("audit-key") };
-                var definitions = VariableCatalog.AllBuiltIns;
+                var definitions = VariableCatalog.AllBuiltIns.Where(d=>!d.Key.StartsWith("frame.")).ToArray();
                 Assert(!definitions.Any(d => d.Key.StartsWith("security.defender") || d.Key.StartsWith("dev.wsl") || d.Key.Contains("bitlocker")), "Windows-only variables remain exposed.");
                 var keys = definitions.Select(d => d.Key).ToArray();
                 await hub.SnapshotAsync(settings, keys, pingTarget: "localhost", probeProtocol: "TCP", probePort: port);
@@ -44,7 +46,7 @@ internal static class LinuxGuiAudit
                 { PrimaryTemplate = "{time.current}{network.download_bps}" }, values);
                 var missing = definitions.Where(d => !effective.TryGetValue(d.Key, out var value) || value is null).Select(d => d.Key).ToArray();
                 var report = new StringBuilder("# Linux variable audit\n\n");
-                report.AppendLine($"Advertised variables: {definitions.Count}. Missing values: {missing.Length}.\n");
+                report.AppendLine($"Advertised variables: {definitions.Length}. Missing values: {missing.Length}.\n");
                 report.AppendLine("Local metrics use the running Linux system. Public-IP and DeepSeek requests use deterministic HTTP fixtures; network probes use a real loopback TCP listener. GUI/clipboard are tested on Xvfb.\n");
                 report.AppendLine("| Variable | Rendered value |\n| --- | --- |");
                 foreach (var item in definitions)
@@ -60,7 +62,7 @@ internal static class LinuxGuiAudit
                 Assert(definitions.All(d => TemplateEngine.Render(d.TemplateToken, effective) != "--"), "A catalog variable still renders a placeholder.");
                 Assert(Convert.ToDouble(values["clipboard.text_length"]) == 21, "Linux clipboard text was not read: " + values["clipboard.text_length"]);
                 Assert(Convert.ToDouble(values["deepseek.balance"]) == 12.5, "DeepSeek fixture was not parsed.");
-                foreach (var profile in settings.Profiles)
+                foreach (var profile in settings.Profiles.Where(p=>!p.BuiltInKey.EndsWith("-fps")))
                 {
                     var rendered = HudProfileRenderer.Render(profile, effective);
                     Assert(!new[] { rendered.PrimaryText, rendered.SecondaryText, rendered.RightText }.Any(s => s.Contains("--")), "Built-in profile still renders placeholders: " + profile.BuiltInKey);
@@ -89,7 +91,7 @@ internal static class LinuxGuiAudit
                 customizer.GetVisualDescendants().OfType<TabControl>().First().SelectedIndex = 1;
                 await Task.Delay(100);
                 var list = customizer.FindControl<ListBox>("VariableList")!;
-                Assert(list.ItemCount >= definitions.Count, "UI variable library is missing supported entries.");
+                Assert(list.ItemCount >= definitions.Length, "UI variable library is missing supported entries.");
                 list.SelectedIndex = list.ItemCount - 1;
                 list.ScrollIntoView(list.SelectedItem!);
                 var refresh = customizer.FindControl<Button>("RefreshLinuxVariablesBtn")!;
@@ -97,7 +99,9 @@ internal static class LinuxGuiAudit
                 await Task.Delay(100);
                 bitmap.Render(window);
                 bitmap.Save(Path.Combine(output, "linux-variable-library.png"));
-                Console.WriteLine($"PASS: all {definitions.Count} advertised variables rendered without placeholders; built-in profiles, API fixtures, clipboard, branding and import migration");
+                await MultiHudRegressionChecks.Run(Assert);
+                await InteractionRegressionChecks.Run(Assert);
+                Console.WriteLine($"PASS: all {definitions.Length} advertised variables rendered without placeholders; built-in profiles, API fixtures, clipboard, branding and import migration");
                 passed = true;
                 window.FindControl<Button>("ExitBtn")!.RaiseEvent(new RoutedEventArgs(Button.ClickEvent));
             }

@@ -71,6 +71,31 @@ public static class HudProfileRenderer
         return keys;
     }
 
+    public static IReadOnlyCollection<string> GetUnavailableVariables(HudProfile profile, IReadOnlyDictionary<string, object?> values)
+    {
+        var effective=BuildEffectiveVariables(profile,values);
+        var missing=GetRequiredVariables(profile).Where(key =>
+            !effective.TryGetValue(key,out var value) || value is null ||
+            value is double d && !double.IsFinite(d) || value is float f && !float.IsFinite(f) ||
+            value is string text && (string.IsNullOrWhiteSpace(text) || text=="--" || text=="N/A")).ToHashSet(StringComparer.OrdinalIgnoreCase);
+        if (IsNetworkProfile(profile))
+            foreach (var key in new[] { "network.download_bps", "network.upload_bps" })
+                if (!values.TryGetValue(key,out var value) || value is null) missing.Add(key);
+        foreach (var template in new[] { profile.TaglineTemplate,profile.TitleTemplate,profile.PrimaryTemplate,profile.SecondaryTemplate,profile.RightTemplate,profile.RightSuffix })
+            foreach (System.Text.RegularExpressions.Match token in System.Text.RegularExpressions.Regex.Matches(template ?? "",@"\{=[^{}]*\}"))
+            {
+                string rendered=TemplateEngine.Render(token.Value,effective);
+                if (rendered=="--" || rendered.Contains("NaN",StringComparison.OrdinalIgnoreCase) || rendered.Contains("Infinity",StringComparison.OrdinalIgnoreCase)) missing.Add("表达式 / Expression: "+token.Value);
+            }
+        if (profile.ProgressVariable.TrimStart().StartsWith('='))
+        {
+            string expression=profile.ProgressVariable.TrimStart()[1..];
+            if (!ExpressionEngine.TryEvaluate(expression,effective,out var result,out _) || result is null || result is double number && !double.IsFinite(number))
+                missing.Add("进度表达式 / Progress expression");
+        }
+        return missing;
+    }
+
     public static bool NeedsSecondAccurateClock(HudProfile profile) =>
         IsTimeProfile(profile)
         || GetRequiredVariables(profile).Any(k =>

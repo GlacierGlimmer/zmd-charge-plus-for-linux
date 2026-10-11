@@ -28,6 +28,14 @@ public static class VariableCatalog
 
     private static readonly IReadOnlyList<VariableDefinition> StaticBuiltIns = new List<VariableDefinition>
     {
+        V("frame.display.fps","显示器帧率","系统","选定显示器的实际呈现／画面更新速率，采集范围随平台不同；不是固定刷新率。",unit:"FPS"),
+        V("frame.window.fps","窗口帧率","系统","所选窗口的呈现／画面更新速率；Windows 统计所属进程的主交换链。",unit:"FPS"),
+        V("frame.display.percent","显示器帧率比例","系统","实际帧率除以方案设置的 100% 帧率。",unit:"%"),
+        V("frame.window.percent","窗口帧率比例","系统","实际帧率除以方案设置的 100% 帧率。",unit:"%"),
+        V("frame.display.name","帧率显示器名称","系统","当前帧率目标显示器。","文本"),
+        V("frame.window.name","帧率窗口名称","系统","当前帧率目标窗口。","文本"),
+        V("frame.display.status","显示器帧率状态","系统","真实采集状态及不可用原因。","文本"),
+        V("frame.window.status","窗口帧率状态","系统","真实采集状态及不可用原因。","文本"),
         // ===== 电池 =====
         V("battery.percent", "电池电量", "电池", "当前电池剩余电量百分比。", unit: "%", use: "右侧状态 / 圆环"),
         V("battery.remaining_mwh", "当前电池容量", "电池", "当前剩余电池容量。", unit: "mWh", use: "左侧主值", formats: "0"),

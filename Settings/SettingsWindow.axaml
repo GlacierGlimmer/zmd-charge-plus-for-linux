@@ -129,8 +129,14 @@
 
             <Border Background="#242426" BorderBrush="#343438" BorderThickness="1" CornerRadius="10" Padding="18,16">
               <StackPanel Spacing="14">
+                <TextBlock Text="HUD 字体" Foreground="#C6CA4C"/>
+                <ComboBox x:Name="HudFontCombo" MinWidth="320" MaxWidth="520" HorizontalAlignment="Left"/>
+                <TextBlock Text="选择已安装字体；系统默认会自动补全缺失的中文字符。" TextWrapping="Wrap" Foreground="#85858B"/>
+              </StackPanel>
+            </Border>
+            <Border Background="#242426" BorderBrush="#343438" BorderThickness="1" CornerRadius="10" Padding="18,16">
+              <StackPanel Spacing="14">
                 <TextBlock Text="位置" FontSize="14" FontWeight="SemiBold" Foreground="#C6CA4C"/>
-
                 <Grid ColumnDefinitions="*,*">
                   <StackPanel Spacing="4" Margin="0,0,6,0">
                     <TextBlock Text="目标显示器" FontSize="11" Foreground="#85858B"/>
@@ -177,6 +183,13 @@
               </StackPanel>
             </Border>
 
+            <Border Background="#252528" CornerRadius="14" Padding="18" Margin="0,0,0,14">
+              <StackPanel Spacing="8">
+                <TextBlock Text="数据采样间隔 / 秒" Foreground="#C6CA4C"/>
+                <NumericUpDown x:Name="SamplingIntervalBox" Minimum="0.1" Maximum="60" Increment="0.1" FormatString="0.0"/>
+                <TextBlock Text="间隔越小，采样越快、资源消耗越高。时钟按秒更新；外部 API 保留各自的刷新间隔。" TextWrapping="Wrap" Foreground="#85858B"/>
+              </StackPanel>
+            </Border>
             <Border Background="#242426" BorderBrush="#343438" BorderThickness="1" CornerRadius="10" Padding="18,16">
               <StackPanel Spacing="14">
                 <Grid ColumnDefinitions="*,Auto">
@@ -217,6 +230,12 @@
         <custom:HudCustomizerView x:Name="Customizer" Margin="4,12,4,4"/>
       </TabItem>
 
+      <TabItem Header="实验性功能">
+        <ScrollViewer>
+          <StackPanel x:Name="ExperimentalPanel" Margin="20" Spacing="16"/>
+        </ScrollViewer>
+      </TabItem>
+
       <TabItem Header="关于">
         <ScrollViewer VerticalScrollBarVisibility="Auto">
           <StackPanel Margin="4,12,4,18" Spacing="12">
@@ -232,7 +251,7 @@
                   <TextBlock x:Name="AboutArchitectureText" Text="Windows · x64" FontSize="12" Foreground="#8E8E94" Margin="0,1,0,0"/>
                   <StackPanel Orientation="Horizontal" Spacing="18" Margin="0,7,0,0">
                     <TextBlock x:Name="AboutVersionText" Text="v0.1.1" FontSize="13" FontWeight="SemiBold" Foreground="#C6CA4C"/>
-                    <TextBlock Text="构建日期  2026.09.23" FontSize="13" Foreground="#D2D2D6"/>
+                    <TextBlock Text="构建日期  2026.10.11" FontSize="13" Foreground="#D2D2D6"/>
                   </StackPanel>
                 </StackPanel>
 

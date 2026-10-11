@@ -23,7 +23,7 @@ jobs:
       - name: Install packaging and GUI test tools
         run: |
           sudo apt-get update
-          sudo apt-get install -y rpm cpio squashfs-tools desktop-file-utils xvfb xdotool libice6 libsm6 libfontconfig1 libx11-6 libxext6 libxrender1 libxcb1 libxrandr2 libxi6 libxcursor1 fonts-noto-cjk iputils-ping
+          sudo apt-get install -y rpm cpio squashfs-tools desktop-file-utils xvfb xdotool libice6 libsm6 libfontconfig1 libx11-6 libxpresent1 libxext6 libxrender1 libxcb1 libxrandr2 libxi6 libxcursor1 fonts-noto-cjk iputils-ping
       - name: Test Linux collectors and integration
         run: dotnet run --project Tests/EndfieldChargePlus.PlatformTests.csproj -c Release
       - name: Audit every advertised variable in a real Linux GUI

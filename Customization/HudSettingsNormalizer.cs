@@ -31,6 +31,8 @@ public static class HudSettingsNormalizer
             var canonical = CloneProfile(builtin) with
             {
                 Id = existing?.Id ?? builtin.Id,
+                FrameDisplayId=existing?.FrameDisplayId ?? "", FrameWindowId=existing?.FrameWindowId ?? "",
+                FrameFullScaleFps=existing is not null && double.IsFinite(existing.FrameFullScaleFps) ? Math.Clamp(existing.FrameFullScaleFps,1,1000) : 120,
                 IsBuiltIn = true,
                 BuiltInKey = builtin.BuiltInKey,
                 // The built-in time scheme keeps its dedicated user option while all
@@ -63,7 +65,7 @@ public static class HudSettingsNormalizer
 
         string activeId = source.ActiveProfileId;
         if (string.IsNullOrWhiteSpace(activeId) || normalized.All(p => !string.Equals(p.Id, activeId, StringComparison.OrdinalIgnoreCase)))
-            activeId = normalized.FirstOrDefault()?.Id ?? "";
+            activeId = (normalized.FirstOrDefault(p=>p.BuiltInKey=="system.memory") ?? normalized.FirstOrDefault())?.Id ?? "";
 
         // Cycle queue is identity-based, so renaming a custom scheme does not break its
         // position. Missing/deleted schemes are removed automatically. A null queue means
@@ -73,7 +75,7 @@ public static class HudSettingsNormalizer
         List<string> cycleIds;
         if (source.CycleProfileIds is null)
         {
-            cycleIds = normalized.Select(p => p.Id).ToList();
+            cycleIds = normalized.Where(p=>!p.BuiltInKey.EndsWith("-fps",StringComparison.OrdinalIgnoreCase)).Select(p => p.Id).ToList();
         }
         else
         {
@@ -109,6 +111,8 @@ public static class HudSettingsNormalizer
                 {
                     Id = p.Id,
                     IsBuiltIn = true,
+                    FrameDisplayId=p.FrameDisplayId ?? "", FrameWindowId=p.FrameWindowId ?? "",
+                    FrameFullScaleFps=double.IsFinite(p.FrameFullScaleFps) ? Math.Clamp(p.FrameFullScaleFps,1,1000) : 120,
                     TimeTargetEnabled = string.Equals(builtin.BuiltInKey, "time.day-progress", StringComparison.OrdinalIgnoreCase)
                         ? p.TimeTargetEnabled
                         : builtin.TimeTargetEnabled,
@@ -143,6 +147,8 @@ public static class HudSettingsNormalizer
             BuiltInKey = "",
             Category = "自定义",
             Name = name,
+            FrameDisplayId=p.FrameDisplayId ?? "", FrameWindowId=p.FrameWindowId ?? "",
+            FrameFullScaleFps=double.IsFinite(p.FrameFullScaleFps) ? Math.Clamp(p.FrameFullScaleFps,1,1000) : 120,
             TimeTarget = NormalizeTargetTime(p.TimeTarget),
             PingTarget = NormalizePingTarget(p.PingTarget),
             ProbeProtocol = NormalizeProbeProtocol(p.ProbeProtocol),
