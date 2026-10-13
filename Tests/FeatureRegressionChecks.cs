@@ -6,6 +6,7 @@ internal static class FeatureRegressionChecks
 {
     internal static void Run(Action<bool,string> check)
     {
+        WorldClockChecks.Run(check);
         var frames=new FrameEventWindow();
         check(frames.Read(100)==null,"FPS cannot fabricate a zero before its first event.");
         frames.Add(1,100); frames.Add(1,101);

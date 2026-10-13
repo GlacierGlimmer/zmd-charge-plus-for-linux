@@ -44,7 +44,7 @@ public partial class SettingsWindow
         _instanceName = InstanceText(new TextBox(),"实例名称", "Instance name");
         _editingLabel = new TextBlock { Foreground=Brushes.Orange, TextWrapping=TextWrapping.Wrap };
         var editButton = InstanceText(new Button(),"定位并编辑所选 HUD", "Locate and edit selected HUD");
-        var add = InstanceText(new Button(),"新增 HUD", "Add HUD");
+        var add = InstanceText(new Button { Name="AddHudInstanceButton" },"新增 HUD", "Add HUD");
         var remove = InstanceText(new Button(),"删除所选实例", "Remove selected instance");
         var buttons = new StackPanel { Orientation=Orientation.Horizontal, Spacing=10 };
         buttons.Children.Add(add); buttons.Children.Add(remove); buttons.Children.Add(editButton);
@@ -58,8 +58,8 @@ public partial class SettingsWindow
         {
             _rootSettings=CollectSettingsFromUi();
             if (_rootSettings.HudInstances.Count>=15) return;
-            var local=CollectEditorSettings() with { MultiHudEnabled=false, HudInstances=new(),
-                HudOffsetY=CollectEditorSettings().HudOffsetY+80, AlwaysVisible=true };
+            var local=HudInstanceSettings.ForNewInstance(CollectEditorSettings(),
+                new[] { _rootSettings }.Concat(_rootSettings.HudInstances.Where(i=>i.Enabled).Select(i=>i.Settings)));
             var instance=new HudInstanceSettings { Name=$"HUD {_rootSettings.HudInstances.Count+2}", Settings=local };
             _rootSettings=_rootSettings with { MultiHudEnabled=true, HudInstances=_rootSettings.HudInstances.Append(instance).ToList() };
             _selectedInstanceId=instance.Id; ApplyEditorControls(local); RefreshInstanceEditor();

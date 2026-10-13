@@ -56,9 +56,15 @@ public sealed partial class CustomHudRuntime
 
     private void RestoreInstanceHighlight()
     {
+        if (_isChild) return; // Only the coordinator owns the Settings highlight.
         if (!_settingsEditing || _instances.Count==0) { ClearInstanceHighlights(); return; }
         var target=string.IsNullOrEmpty(_editingInstanceId) ? (_hud,this) :
-            _instances.TryGetValue(_editingInstanceId,out var found) ? (found.Hud,found.Runtime) : (_hud,this);
+            _instances.TryGetValue(_editingInstanceId,out var found) ? (found.Hud,found.Runtime) : default;
+        if(target.Item1 is null || target.Item1.IsClosed || target.Item2._disposed) { ClearInstanceHighlights(); return; }
+        // An unapplied/deleted target must not leave an old HUD marked as current.
+        if(!ReferenceEquals(target.Item2,this)) EndPreview(this);
+        foreach(var instance in _instances.Values.ToArray())
+            if(!ReferenceEquals(target.Item2,instance.Runtime)) EndPreview(instance.Runtime);
         target.Item2._editingPreview=true;
         target.Item1.SetEditingHighlight(true,_editingInstanceName);
         target.Item1.ApplySettings(target.Item2._appSettings with { PersistentLayer=PersistentHudLayer.Topmost });
@@ -80,11 +86,24 @@ public sealed partial class CustomHudRuntime
     {
         if (_disposed) return false;
         _settingsEditing=true;_editingInstanceId=id;_editingInstanceName=name;
-        ClearInstanceHighlights();
-        if (_instances.Count==0) return false;
+        if (_instances.Count==0) { ClearInstanceHighlights(); return false; }
         var target = string.IsNullOrEmpty(id) ? (_hud, this) :
             _instances.TryGetValue(id, out var found) ? (found.Hud, found.Runtime) : default;
-        if (target.Item1 is null) return false;
+        if (target.Item1 is null || target.Item1.IsClosed || target.Item2._disposed)
+        {
+            ClearInstanceHighlights();
+            return false;
+        }
+        // Re-selecting or localizing the editor must not cancel a live profile
+        // transition, reset its queue, or summon the same HUD again.
+        if (target.Item2._editingPreview && target.Item1.IsEditingHighlighted)
+        {
+            target.Item1.SetEditingHighlight(true,name);
+            return !target.Item1.IsClosed;
+        }
+        if (!ReferenceEquals(target.Item2,this)) EndPreview(this);
+        foreach(var instance in _instances.Values.ToArray())
+            if (!ReferenceEquals(target.Item2,instance.Runtime)) EndPreview(instance.Runtime);
         target.Item2._editingPreview=true;
         target.Item1.ApplySettings(target.Item2._appSettings with { PersistentLayer=PersistentHudLayer.Topmost });
         target.Item2._nextPersistentRefresh=DateTime.MinValue;

@@ -70,6 +70,7 @@ public partial class SettingsWindow : Window
     private readonly HudWindow _hud;
     private readonly CustomHudRuntime _runtime;
     private bool _monitorComboReady;
+    private bool _applyingPositionUi;
     private string? _maintenanceStatusZh;
     private string? _maintenanceStatusEn;
 
@@ -95,6 +96,7 @@ public partial class SettingsWindow : Window
         HudEnabledSwitch.IsCheckedChanged += (_, _) => UpdateModeUi();
         AlwaysVisibleSwitch.IsCheckedChanged += (_, _) => UpdateModeUi();
         PositionModeCombo.SelectionChanged += (_, _) => UpdateModeUi();
+        PositionCombo.SelectionChanged += OnPositionPresetChanged;
         SaveBtn.Click += OnSave;
         ExitBtn.Click += (_, _) => (Avalonia.Application.Current?.ApplicationLifetime as
             Avalonia.Controls.ApplicationLifetimes.IClassicDesktopStyleApplicationLifetime)?.Shutdown();
@@ -143,27 +145,33 @@ public partial class SettingsWindow : Window
 
     private void RebuildLocalizedChoiceItems()
     {
-        int layerIndex = PersistentLayerCombo.SelectedIndex;
-        int modeIndex = PositionModeCombo.SelectedIndex;
-        int positionIndex = PositionCombo.SelectedIndex;
+        bool previousPositionUi=_applyingPositionUi;
+        _applyingPositionUi=true;
+        try
+        {
+            int layerIndex = PersistentLayerCombo.SelectedIndex;
+            int modeIndex = PositionModeCombo.SelectedIndex;
+            int positionIndex = PositionCombo.SelectedIndex;
 
-        PersistentLayerCombo.Items.Clear();
-        PersistentLayerCombo.Items.Add(LocalizationManager.Text("始终置顶", "Always on Top"));
-        PersistentLayerCombo.Items.Add(LocalizationManager.Text("桌面层（不置顶）", "Desktop Layer"));
+            PersistentLayerCombo.Items.Clear();
+            PersistentLayerCombo.Items.Add(LocalizationManager.Text("始终置顶", "Always on Top"));
+            PersistentLayerCombo.Items.Add(LocalizationManager.Text("桌面层（不置顶）", "Desktop Layer"));
 
-        PositionModeCombo.Items.Clear();
-        PositionModeCombo.Items.Add(LocalizationManager.Text("预设位置 + 微调", "Preset + Offset"));
-        PositionModeCombo.Items.Add(LocalizationManager.Text("自定义坐标", "Custom Coordinates"));
+            PositionModeCombo.Items.Clear();
+            PositionModeCombo.Items.Add(LocalizationManager.Text("预设位置 + 微调", "Preset + Offset"));
+            PositionModeCombo.Items.Add(LocalizationManager.Text("自定义坐标", "Custom Coordinates"));
 
-        PositionCombo.Items.Clear();
-        string[] zh = ["左上（工作区）", "顶部居中（工作区）", "右上（工作区）", "左侧居中（工作区）", "居中（工作区）", "右侧居中（工作区）", "左下（任务栏 / Dock 上）", "底部居中（任务栏 / Dock 上）", "右下（任务栏 / Dock 上）", "屏幕左上角", "屏幕顶部居中", "屏幕右上角", "屏幕左侧居中", "屏幕正中央", "屏幕右侧居中", "屏幕左下角", "屏幕底部居中", "屏幕右下角"];
-        string[] en = ["Top Left (work area)", "Top Center (work area)", "Top Right (work area)", "Center Left (work area)", "Center (work area)", "Center Right (work area)", "Bottom Left (above taskbar / Dock)", "Bottom Center (above taskbar / Dock)", "Bottom Right (above taskbar / Dock)", "Screen Top Left", "Screen Top Center", "Screen Top Right", "Screen Center Left", "Screen Center", "Screen Center Right", "Screen Bottom Left", "Screen Bottom Center", "Screen Bottom Right"];
-        for (int i = 0; i < zh.Length; i++)
-            PositionCombo.Items.Add(LocalizationManager.Text(zh[i], en[i]));
+            PositionCombo.Items.Clear();
+            string[] zh = ["左上（工作区）", "顶部居中（工作区）", "右上（工作区）", "左侧居中（工作区）", "居中（工作区）", "右侧居中（工作区）", "左下（任务栏 / Dock 上）", "底部居中（任务栏 / Dock 上）", "右下（任务栏 / Dock 上）", "屏幕左上角", "屏幕顶部居中", "屏幕右上角", "屏幕左侧居中", "屏幕正中央", "屏幕右侧居中", "屏幕左下角", "屏幕底部居中", "屏幕右下角"];
+            string[] en = ["Top Left (work area)", "Top Center (work area)", "Top Right (work area)", "Center Left (work area)", "Center (work area)", "Center Right (work area)", "Bottom Left (above taskbar / Dock)", "Bottom Center (above taskbar / Dock)", "Bottom Right (above taskbar / Dock)", "Screen Top Left", "Screen Top Center", "Screen Top Right", "Screen Center Left", "Screen Center", "Screen Center Right", "Screen Bottom Left", "Screen Bottom Center", "Screen Bottom Right"];
+            for (int i = 0; i < zh.Length; i++)
+                PositionCombo.Items.Add(LocalizationManager.Text(zh[i], en[i]));
 
-        if (layerIndex >= 0) PersistentLayerCombo.SelectedIndex = Math.Min(layerIndex, PersistentLayerCombo.Items.Count - 1);
-        if (modeIndex >= 0) PositionModeCombo.SelectedIndex = Math.Min(modeIndex, PositionModeCombo.Items.Count - 1);
-        if (positionIndex >= 0) PositionCombo.SelectedIndex = Math.Min(positionIndex, PositionCombo.Items.Count - 1);
+            if (layerIndex >= 0) PersistentLayerCombo.SelectedIndex = Math.Min(layerIndex, PersistentLayerCombo.Items.Count - 1);
+            if (modeIndex >= 0) PositionModeCombo.SelectedIndex = Math.Min(modeIndex, PositionModeCombo.Items.Count - 1);
+            if (positionIndex >= 0) PositionCombo.SelectedIndex = Math.Min(positionIndex, PositionCombo.Items.Count - 1);
+        }
+        finally { _applyingPositionUi=previousPositionUi; }
     }
 
     private async void OnLanguageSelected(AppLanguage language)
@@ -286,45 +294,58 @@ public partial class SettingsWindow : Window
         CustomPositionPanel.Opacity = custom ? 1.0 : 0.40;
     }
 
+    private void OnPositionPresetChanged(object? sender,SelectionChangedEventArgs e)
+    {
+        if (_applyingPositionUi || PositionCombo.SelectedIndex<0) return;
+        OffsetXBox.Value=0;
+        OffsetYBox.Value=0;
+    }
+
     private void ApplyEditorControls(AppSettings settings)
     {
-        _settings = settings;
-
-        SamplingIntervalBox.Value = (decimal)_rootSettings.SamplingIntervalSeconds;
-        ScaleBox.Value = (decimal)settings.GlobalScale;
-        DurationBox.Value = (decimal)settings.DisplayDurationSeconds;
-        BounceBox.Value = (decimal)settings.BounceStrength;
-        RippleIntensityBox.Value = (decimal)settings.RippleIntensity;
-        RippleSpreadBox.Value = (decimal)settings.RippleSpread;
-        HudOpacitySlider.Value = Math.Clamp(settings.HudOpacity * 100.0, 10.0, 100.0);
-        UpdateOpacityLabel();
-
-        HudFontCombo.SelectedIndex = 0;
-        for (int i=1; i<HudFontCombo.Items.Count; i++)
-            if (string.Equals(HudFontCombo.Items[i]?.ToString(), settings.HudFontFamily, StringComparison.OrdinalIgnoreCase)) HudFontCombo.SelectedIndex=i;
-        ClickToCycleSwitch.IsChecked = _rootSettings.ClickToCycle;
-        HudEnabledSwitch.IsChecked = settings.HudEnabled;
-        StartupSwitch.IsChecked = settings.StartWithWindows;
-        AlwaysVisibleSwitch.IsChecked = settings.AlwaysVisible;
-        PersistentLayerCombo.SelectedIndex = settings.PersistentLayer == PersistentHudLayer.Desktop ? 1 : 0;
-        PositionModeCombo.SelectedIndex = settings.PositionMode == HudPositionMode.CustomCoordinates ? 1 : 0;
-        PositionCombo.SelectedIndex = PositionToIndex(settings.HudPosition);
-        OffsetXBox.Value = settings.HudOffsetX;
-        OffsetYBox.Value = settings.HudOffsetY;
-        CustomXBox.Value = settings.HudCustomX;
-        CustomYBox.Value = settings.HudCustomY;
-
-        if (_monitorComboReady)
+        bool previousPositionUi=_applyingPositionUi;
+        _applyingPositionUi=true;
+        try
         {
-            int wanted = settings.MonitorIndex < 0 ? 0 : settings.MonitorIndex + 1;
-            MonitorCombo.SelectedIndex = wanted >= 0 && wanted < MonitorCombo.Items.Count ? wanted : 0;
-        }
+            _settings = settings;
 
-        Customizer.SetSamplingInterval(_rootSettings.SamplingIntervalSeconds);
-        Customizer.Load(settings.CustomHud, _runtime.GetInstanceHud(_selectedInstanceId));
-        string previewId=_selectedInstanceId;
-        Customizer.PreviewPresenter=(data,refresh)=>_settingsEditorOpen && previewId==_selectedInstanceId ? _runtime.PreviewInstanceAsync(previewId,data,refresh) : Task.CompletedTask;
-        UpdateModeUi();
+            SamplingIntervalBox.Value = (decimal)_rootSettings.SamplingIntervalSeconds;
+            ScaleBox.Value = (decimal)settings.GlobalScale;
+            DurationBox.Value = (decimal)settings.DisplayDurationSeconds;
+            BounceBox.Value = (decimal)settings.BounceStrength;
+            RippleIntensityBox.Value = (decimal)settings.RippleIntensity;
+            RippleSpreadBox.Value = (decimal)settings.RippleSpread;
+            HudOpacitySlider.Value = Math.Clamp(settings.HudOpacity * 100.0, 10.0, 100.0);
+            UpdateOpacityLabel();
+
+            HudFontCombo.SelectedIndex = 0;
+            for (int i=1; i<HudFontCombo.Items.Count; i++)
+                if (string.Equals(HudFontCombo.Items[i]?.ToString(), settings.HudFontFamily, StringComparison.OrdinalIgnoreCase)) HudFontCombo.SelectedIndex=i;
+            ClickToCycleSwitch.IsChecked = _rootSettings.ClickToCycle;
+            HudEnabledSwitch.IsChecked = settings.HudEnabled;
+            StartupSwitch.IsChecked = settings.StartWithWindows;
+            AlwaysVisibleSwitch.IsChecked = settings.AlwaysVisible;
+            PersistentLayerCombo.SelectedIndex = settings.PersistentLayer == PersistentHudLayer.Desktop ? 1 : 0;
+            PositionModeCombo.SelectedIndex = settings.PositionMode == HudPositionMode.CustomCoordinates ? 1 : 0;
+            PositionCombo.SelectedIndex = PositionToIndex(settings.HudPosition);
+            OffsetXBox.Value = settings.HudOffsetX;
+            OffsetYBox.Value = settings.HudOffsetY;
+            CustomXBox.Value = settings.HudCustomX;
+            CustomYBox.Value = settings.HudCustomY;
+
+            if (_monitorComboReady)
+            {
+                int wanted = settings.MonitorIndex < 0 ? 0 : settings.MonitorIndex + 1;
+                MonitorCombo.SelectedIndex = wanted >= 0 && wanted < MonitorCombo.Items.Count ? wanted : 0;
+            }
+
+            Customizer.SetSamplingInterval(_rootSettings.SamplingIntervalSeconds);
+            Customizer.Load(settings.CustomHud, _runtime.GetInstanceHud(_selectedInstanceId));
+            string previewId=_selectedInstanceId;
+            Customizer.PreviewPresenter=(data,refresh)=>_settingsEditorOpen && previewId==_selectedInstanceId ? _runtime.PreviewInstanceAsync(previewId,data,refresh) : Task.CompletedTask;
+            UpdateModeUi();
+        }
+        finally { _applyingPositionUi=previousPositionUi; }
     }
 
     private AppSettings CollectEditorSettings()

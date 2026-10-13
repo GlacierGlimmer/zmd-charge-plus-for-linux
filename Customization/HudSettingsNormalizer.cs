@@ -37,10 +37,11 @@ public static class HudSettingsNormalizer
                 BuiltInKey = builtin.BuiltInKey,
                 // The built-in time scheme keeps its dedicated user option while all
                 // structural/template fields remain canonical and read-only.
-                TimeTargetEnabled = string.Equals(builtin.BuiltInKey, "time.day-progress", StringComparison.OrdinalIgnoreCase)
+                TimeUtcOffsetMinutes = builtin.BuiltInKey=="time.world-clock" ? WorldClockTimeZones.Normalize(existing?.TimeUtcOffsetMinutes ?? 0) : null,
+                TimeTargetEnabled = (string.Equals(builtin.BuiltInKey, "time.day-progress", StringComparison.OrdinalIgnoreCase) || string.Equals(builtin.BuiltInKey, "time.world-clock", StringComparison.OrdinalIgnoreCase))
                     ? existing?.TimeTargetEnabled ?? builtin.TimeTargetEnabled
                     : builtin.TimeTargetEnabled,
-                TimeTarget = string.Equals(builtin.BuiltInKey, "time.day-progress", StringComparison.OrdinalIgnoreCase)
+                TimeTarget = (string.Equals(builtin.BuiltInKey, "time.day-progress", StringComparison.OrdinalIgnoreCase) || string.Equals(builtin.BuiltInKey, "time.world-clock", StringComparison.OrdinalIgnoreCase))
                     ? NormalizeTargetTime(existing?.TimeTarget ?? builtin.TimeTarget)
                     : builtin.TimeTarget,
                 GpuAdapterId = string.Equals(builtin.BuiltInKey, "system.gpu", StringComparison.OrdinalIgnoreCase)
@@ -75,7 +76,7 @@ public static class HudSettingsNormalizer
         List<string> cycleIds;
         if (source.CycleProfileIds is null)
         {
-            cycleIds = normalized.Where(p=>!p.BuiltInKey.EndsWith("-fps",StringComparison.OrdinalIgnoreCase)).Select(p => p.Id).ToList();
+            cycleIds = normalized.Where(p=>!p.BuiltInKey.EndsWith("-fps",StringComparison.OrdinalIgnoreCase) && p.BuiltInKey!="time.world-clock").Select(p => p.Id).ToList();
         }
         else
         {
@@ -113,10 +114,11 @@ public static class HudSettingsNormalizer
                     IsBuiltIn = true,
                     FrameDisplayId=p.FrameDisplayId ?? "", FrameWindowId=p.FrameWindowId ?? "",
                     FrameFullScaleFps=double.IsFinite(p.FrameFullScaleFps) ? Math.Clamp(p.FrameFullScaleFps,1,1000) : 120,
-                    TimeTargetEnabled = string.Equals(builtin.BuiltInKey, "time.day-progress", StringComparison.OrdinalIgnoreCase)
+                    TimeUtcOffsetMinutes = builtin.BuiltInKey=="time.world-clock" ? WorldClockTimeZones.Normalize(p.TimeUtcOffsetMinutes ?? 0) : null,
+                    TimeTargetEnabled = (string.Equals(builtin.BuiltInKey, "time.day-progress", StringComparison.OrdinalIgnoreCase) || string.Equals(builtin.BuiltInKey, "time.world-clock", StringComparison.OrdinalIgnoreCase))
                         ? p.TimeTargetEnabled
                         : builtin.TimeTargetEnabled,
-                    TimeTarget = string.Equals(builtin.BuiltInKey, "time.day-progress", StringComparison.OrdinalIgnoreCase)
+                    TimeTarget = (string.Equals(builtin.BuiltInKey, "time.day-progress", StringComparison.OrdinalIgnoreCase) || string.Equals(builtin.BuiltInKey, "time.world-clock", StringComparison.OrdinalIgnoreCase))
                         ? NormalizeTargetTime(p.TimeTarget)
                         : builtin.TimeTarget,
                     GpuAdapterId = string.Equals(builtin.BuiltInKey, "system.gpu", StringComparison.OrdinalIgnoreCase)
@@ -150,6 +152,7 @@ public static class HudSettingsNormalizer
             FrameDisplayId=p.FrameDisplayId ?? "", FrameWindowId=p.FrameWindowId ?? "",
             FrameFullScaleFps=double.IsFinite(p.FrameFullScaleFps) ? Math.Clamp(p.FrameFullScaleFps,1,1000) : 120,
             TimeTarget = NormalizeTargetTime(p.TimeTarget),
+            TimeUtcOffsetMinutes = p.TimeUtcOffsetMinutes.HasValue ? WorldClockTimeZones.Normalize(p.TimeUtcOffsetMinutes.Value) : null,
             PingTarget = NormalizePingTarget(p.PingTarget),
             ProbeProtocol = NormalizeProbeProtocol(p.ProbeProtocol),
             ProbePort = NormalizeProbePort(p.ProbePort),

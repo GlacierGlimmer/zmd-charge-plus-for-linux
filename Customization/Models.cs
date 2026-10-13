@@ -45,6 +45,8 @@ public sealed record HudProfile
     // Time category option: day progress by default; when enabled, show the remaining proportion to the next daily target time.
     public bool TimeTargetEnabled { get; init; } = false;
     public string TimeTarget { get; init; } = "10:00:00";
+    // Null uses local time; world-clock profiles store a fixed UTC offset in minutes.
+    public int? TimeUtcOffsetMinutes { get; init; } = null;
 
     // Optional per-profile GPU target. Empty means the first available adapter.
     public string GpuAdapterId { get; init; } = "";
@@ -124,7 +126,7 @@ public sealed record CustomHudSettings
     public static List<HudProfile> CreateDefaultProfiles() => OperatingSystem.IsLinux()
         ? LinuxVariableCatalog.AdaptProfiles(CreatePlatformProfiles()) : CreatePlatformProfiles();
 
-    internal static List<HudProfile> CreatePlatformProfiles() => new()
+    internal static List<HudProfile> CreatePlatformProfiles() => new List<HudProfile>()
     {
         new()
         {
@@ -267,6 +269,28 @@ public sealed record CustomHudSettings
         new()
         {
             IsBuiltIn = true,
+            BuiltInKey = "time.world-clock",
+            Category = "时间",
+            Name = "世界时钟",
+            AnimationMode = "Full",
+            TaglineTemplate = "/// WORLD CLOCK",
+            TitleTemplate = "世界时钟",
+            PrimaryTemplate = "{time.current}",
+            SecondaryTemplate = " {time.utc_offset}",
+            RightTemplate = "{time.display.status_text}",
+            RightSuffix = "",
+            ProgressVariable = "time.display.progress",
+            ProgressMin = 0,
+            ProgressMax = 100,
+            LeftIcon = "clock",
+            RightIcon = "clock",
+            TimeTargetEnabled = false,
+            TimeTarget = "10:00:00",
+            TimeUtcOffsetMinutes = 0
+        },
+        new()
+        {
+            IsBuiltIn = true,
             BuiltInKey = "deepseek.balance-period",
             Category = "DeepSeek API",
             Name = "余额 / 时段",
@@ -314,7 +338,7 @@ public sealed record CustomHudSettings
         new() { IsBuiltIn=true, BuiltInKey="system.window-fps",Category="系统",Name="窗口帧率",
             TaglineTemplate="/// WINDOW FPS",TitleTemplate="窗口帧率",PrimaryTemplate="{frame.window.fps|0.0}",SecondaryTemplate=" FPS",
             RightTemplate="{frame.window.percent|0}",RightSuffix="%",ProgressVariable="frame.window.percent",LeftIcon="monitor",RightIcon="monitor" },
-    };
+    }.OrderBy(p=>BuiltInProfileOrder.Rank(p.BuiltInKey)).ToList();
 }
 
 public sealed record HudRenderData(

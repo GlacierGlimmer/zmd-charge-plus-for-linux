@@ -306,6 +306,7 @@ public sealed class VariableHub : IDisposable
             double yearTotal = Math.Max(1d, (yearEnd - yearStart).TotalSeconds);
             var dto = new DateTimeOffset(now);
 
+            v["time.utc_offset"] = WorldClockTimeZones.OffsetText((int)dto.Offset.TotalMinutes);
             v["time.current"] = now.ToString("HH:mm:ss", CultureInfo.InvariantCulture);
             v["time.current_12h"] = now.ToString("hh:mm:ss tt", CultureInfo.CurrentCulture);
             v["time.date"] = now.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture);

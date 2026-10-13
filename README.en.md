@@ -1,8 +1,10 @@
 # Endfield Charge Plus For Linux
 
-Current source version: **v0.1.1** (not published in Releases). Version changes require an explicit user request; see [version policy](docs/VERSIONING.md).
+See this repository’s [Releases](https://github.com/GlacierGlimmer/zmd-charge-plus-for-linux/releases) for current downloads and per-version changes. This README covers installation and general usage.
 
-[简体中文](README.md) · **English**　｜　**Linux x64 · v0.1.1**
+Multiple HUDs, custom fonts and sampling intervals, persistent-click profile cycling, real FPS, World clock and grouped built-ins; see Settings and the [change log](docs/release-notes.md).
+
+[简体中文](README.md) · **English**　｜　**Linux x64**
 
 An Endfield-inspired Linux desktop HUD based on [zmd-charge](https://github.com/QinAnze/zmd-charge) and [Endfield Charge Plus](https://github.com/GlacierGlimmer/zmd-charge-plus). It supports persistent or on-demand display, animations, custom profiles and automatic rotation.
 
@@ -22,33 +24,11 @@ The Android repository has been created; available builds are listed on its Rele
 
 Get the packages from [Releases](https://github.com/GlacierGlimmer/zmd-charge-plus-for-linux/releases). All four formats include the .NET runtime.
 
-| Format | v0.1.1 | Use |
-| --- | --- | --- |
-| `.tar.gz` | [Portable archive](https://github.com/GlacierGlimmer/zmd-charge-plus-for-linux/releases) | Extract and run |
-| `.AppImage` | [AppImage](https://github.com/GlacierGlimmer/zmd-charge-plus-for-linux/releases) | Make executable and run |
-| `.deb` | [DEB package](https://github.com/GlacierGlimmer/zmd-charge-plus-for-linux/releases) | Ubuntu / Debian family |
-| `.rpm` | [RPM package](https://github.com/GlacierGlimmer/zmd-charge-plus-for-linux/releases) | Fedora and compatible RPM systems |
-
 [SHA256SUMS](https://github.com/GlacierGlimmer/zmd-charge-plus-for-linux/releases) · [Detailed Linux guide](README.linux.md) · [Validation scope](docs/linux-validation.md)
 
 ## Install
 
-```bash
-# Ubuntu / Debian
-sudo apt install ./EndfieldChargePlusForLinux-v0.1.1-linux-x64.deb
 
-# Fedora
-sudo dnf install ./EndfieldChargePlusForLinux-v0.1.1-linux-x64.rpm
-
-# AppImage
-chmod +x EndfieldChargePlusForLinux-v0.1.1-linux-x64.AppImage
-./EndfieldChargePlusForLinux-v0.1.1-linux-x64.AppImage
-
-# Portable archive
-tar -xzf EndfieldChargePlusForLinux-v0.1.1-linux-x64.tar.gz
-cd EndfieldChargePlusForLinux-v0.1.1-linux-x64
-./EndfieldChargePlus
-```
 
 DEB/RPM installations provide an application-menu entry and the `endfield-charge-plus-for-linux` command. Launching again opens Settings in the existing instance. Settings also has an Exit button.
 

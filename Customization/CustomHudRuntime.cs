@@ -27,6 +27,9 @@ public sealed partial class CustomHudRuntime : IDisposable
     {
         var previous=_revision;
         _revision=new CancellationTokenSource();
+        // An interrupted close/summon no longer represents a completed
+        // persistent presentation, even when its old profile ID is unchanged.
+        if (_hud.IsHudBusy) _persistentShown=false;
         previous.Cancel(); previous.Dispose();
         _hud.CancelPresentation();
     }
@@ -697,7 +700,7 @@ public sealed partial class CustomHudRuntime : IDisposable
 
     private void OnHudClicked()
     {
-        if (_disposed || !_appSettings.AlwaysVisible || !_appSettings.ClickToCycle || _editingPreview) return;
+        if (_disposed || !_appSettings.AlwaysVisible || !_appSettings.ClickToCycle) return;
         var queue=ResolveCycleProfiles();
         if (queue.Count<2) return;
         string current=string.IsNullOrEmpty(_manualProfileId)

@@ -251,10 +251,11 @@ public partial class HudCustomizerView : UserControl
                 var profile = _profiles[_selectedIndex];
                 LocalizeBuiltInEditorText(profile);
                 ProfileKindText.Text = profile.IsBuiltIn
-                    ? LocalizationManager.Text("内置方案 · 保存修改时创建副本", "Built-in · saving changes creates a copy")
+                    ? BuiltInEditingHint(profile)
                     : LocalizationManager.Text("自定义方案", "Custom Profile");
             }
 
+            RebuildWorldClockChoices((WorldClockZoneCombo.SelectedItem as WorldClockZone)?.Minutes);
             RefreshCycleEditor();
             RebuildVariableCategories();
             RefreshVariableList();
@@ -423,7 +424,7 @@ public partial class HudCustomizerView : UserControl
         var p = BuiltInProfileLocalization.ForCurrentLanguage(rawProfile);
         ProfileNameBox.Text = ProfileDisplayName(rawProfile);
         ProfileKindText.Text = rawProfile.IsBuiltIn
-            ? LocalizationManager.Text("内置方案 · 保存修改时创建副本", "Built-in · saving changes creates a copy")
+            ? BuiltInEditingHint(rawProfile)
             : LocalizationManager.Text("自定义方案", "Custom Profile");
         AnimationModeCombo.SelectedIndex = string.Equals(p.AnimationMode, "Full", StringComparison.OrdinalIgnoreCase) ? 1 : 0;
         TaglineBox.Text = p.TaglineTemplate;
@@ -442,6 +443,7 @@ public partial class HudCustomizerView : UserControl
             p.ColorRules.Select(r => $"{r.Variable} {r.Operator} {r.Value.ToString(CultureInfo.InvariantCulture)} => {r.Color}"));
         TimeTargetSwitch.IsChecked = p.TimeTargetEnabled;
         TimeTargetBox.Text = p.TimeTarget;
+        RebuildWorldClockChoices(p.TimeUtcOffsetMinutes);
         SelectGpuAdapter(p.GpuAdapterId);
         NetworkDisplayUnitCombo.SelectedIndex = string.Equals(p.NetworkDisplayUnit, "Mbps", StringComparison.OrdinalIgnoreCase) ? 0 : 1;
         NetworkPercentModeCombo.SelectedIndex = p.NetworkPercentMode?.Trim().ToLowerInvariant() switch
@@ -489,6 +491,13 @@ public partial class HudCustomizerView : UserControl
                 ProfilesFunctionallyEqual(editorBase,edited with { FrameDisplayId=editorBase.FrameDisplayId,FrameWindowId=editorBase.FrameWindowId,FrameFullScaleFps=editorBase.FrameFullScaleFps }))
             {
                 _profiles[_selectedIndex]=old with { FrameDisplayId=edited.FrameDisplayId,FrameWindowId=edited.FrameWindowId,FrameFullScaleFps=edited.FrameFullScaleFps };
+                return !ProfilesFunctionallyEqual(editorBase,edited);
+            }
+            if (old.BuiltInKey is "time.day-progress" or "time.world-clock" &&
+                (string.IsNullOrWhiteSpace(ProfileNameBox.Text) || string.Equals(ProfileNameBox.Text.Trim(),ProfileDisplayName(old),StringComparison.Ordinal)) &&
+                ProfilesFunctionallyEqual(editorBase,edited with { TimeTargetEnabled=editorBase.TimeTargetEnabled,TimeTarget=editorBase.TimeTarget,TimeUtcOffsetMinutes=editorBase.TimeUtcOffsetMinutes }))
+            {
+                _profiles[_selectedIndex]=old with { TimeTargetEnabled=edited.TimeTargetEnabled,TimeTarget=edited.TimeTarget,TimeUtcOffsetMinutes=edited.TimeUtcOffsetMinutes };
                 return !ProfilesFunctionallyEqual(editorBase,edited);
             }
             string enteredName = ProfileNameBox.Text?.Trim() ?? "";
@@ -597,6 +606,7 @@ public partial class HudCustomizerView : UserControl
             ColorRules = ParseColorRules(ColorRulesBox.Text),
             TimeTargetEnabled = isTime ? TimeTargetSwitch.IsChecked == true : old.TimeTargetEnabled,
             TimeTarget = isTime ? NormalizeTimeTarget(TimeTargetBox.Text, old.TimeTarget) : old.TimeTarget,
+            TimeUtcOffsetMinutes = WorldClockTimeZones.UsesUtcOffset(old) ? (WorldClockZoneCombo.SelectedItem as WorldClockZone)?.Minutes ?? old.TimeUtcOffsetMinutes ?? 0 : null,
             GpuAdapterId = gpuAdapterId,
             FrameDisplayId = HudProfileRenderer.GetRequiredVariables(old).Any(k=>k.StartsWith("frame.display.")) ? (FrameDisplayTargetCombo.SelectedItem as FrameTarget)?.Id ?? old.FrameDisplayId : old.FrameDisplayId,
             FrameWindowId = HudProfileRenderer.GetRequiredVariables(old).Any(k=>k.StartsWith("frame.window.")) ? (FrameWindowTargetCombo.SelectedItem as FrameTarget)?.Id ?? old.FrameWindowId : old.FrameWindowId,
@@ -627,6 +637,7 @@ public partial class HudCustomizerView : UserControl
             || !string.Equals(a.RightIcon, b.RightIcon, StringComparison.OrdinalIgnoreCase)
             || !string.Equals(a.AccentColor, b.AccentColor, StringComparison.OrdinalIgnoreCase)
             || a.FrameDisplayId != b.FrameDisplayId || a.FrameWindowId != b.FrameWindowId || a.FrameFullScaleFps != b.FrameFullScaleFps
+            || a.TimeUtcOffsetMinutes != b.TimeUtcOffsetMinutes
             || a.TimeTargetEnabled != b.TimeTargetEnabled
             || !string.Equals(a.TimeTarget, b.TimeTarget, StringComparison.Ordinal)
             || !string.Equals(a.GpuAdapterId, b.GpuAdapterId, StringComparison.OrdinalIgnoreCase)
@@ -759,6 +770,19 @@ public partial class HudCustomizerView : UserControl
             x.StartsWith("ping.", StringComparison.OrdinalIgnoreCase)
             || x.StartsWith("probe.", StringComparison.OrdinalIgnoreCase));
 
+    private static string BuiltInEditingHint(HudProfile profile) => profile.BuiltInKey is "time.day-progress" or "time.world-clock"
+        ? LocalizationManager.Text("内置方案 · 可设置时区与目标时间；内容修改创建副本", "Built-in · zone and daily target are configurable; content edits create a copy")
+        : LocalizationManager.Text("内置方案 · 保存修改时创建副本", "Built-in · saving changes creates a copy");
+
+    private void RebuildWorldClockChoices(int? selected)
+    {
+        int minutes=WorldClockTimeZones.Normalize(selected ?? 0);
+        var choices=WorldClockTimeZones.All.ToList();
+        if(choices.All(z=>z.Minutes!=minutes)) choices.Add(new WorldClockZone(minutes,"自定义偏移","Custom offset"));
+        WorldClockZoneCombo.ItemsSource=choices.OrderBy(z=>z.Minutes).ToArray();
+        WorldClockZoneCombo.SelectedItem=choices.Single(z=>z.Minutes==minutes);
+    }
+
     private void UpdateContextOptionsUi()
     {
         if (TimeOptionsPanel is null || GpuOptionsPanel is null || NetworkOptionsPanel is null || PingOptionsPanel is null || DeepSeekOptionsHintPanel is null) return;
@@ -772,6 +796,7 @@ public partial class HudCustomizerView : UserControl
         FrameOptionsPanel.IsVisible=profile is not null && HudProfileRenderer.GetRequiredVariables(profile).Any(k=>k.StartsWith("frame."));
         DeepSeekOptionsHintPanel.IsVisible = isDeepSeek;
 
+        WorldClockOptions.IsVisible=profile is not null && WorldClockTimeZones.UsesUtcOffset(profile);
         TimeOptionsPanel.IsVisible = isTime;
         TimeTargetSwitch.IsEnabled = isTime;
         TimeTargetBox.IsEnabled = isTime && TimeTargetSwitch.IsChecked == true;

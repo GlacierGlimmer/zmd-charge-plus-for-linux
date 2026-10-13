@@ -279,6 +279,7 @@ public static class VariableCatalog
         // ===== 时间 =====
         V("time.current", "当前时间（24 小时）", "时间", "本地当前时间，格式 HH:mm:ss。", "文本", use: "左侧主值", formats: "无需格式化"),
         V("time.current_12h", "当前时间（12 小时）", "时间", "本地当前时间，12 小时制并包含 AM/PM。", "文本", use: "左侧主值", formats: "无需格式化"),
+        V("time.utc_offset", "UTC 时区偏移", "时间", "本地当前 UTC 偏移；世界时钟方案中为所选固定 UTC 偏移。", "文本", use: "左侧信息", formats: "无需格式化"),
         V("time.date", "当前日期", "时间", "本地当前日期，格式 yyyy-MM-dd。", "文本", use: "标题 / 左侧信息", formats: "无需格式化"),
         V("time.datetime", "当前日期时间", "时间", "本地当前日期时间。", "文本", use: "标题 / 左侧信息", formats: "无需格式化"),
         V("time.iso", "ISO 日期时间", "时间", "当前本地时间的 ISO 8601 表示。", "文本", use: "左侧信息", formats: "无需格式化"),
@@ -684,7 +685,7 @@ public static class VariableCatalog
             ],
             ["时间"] =
             [
-                "time.current", "time.current_12h", "time.date", "time.datetime", "time.iso",
+                "time.current", "time.utc_offset", "time.current_12h", "time.date", "time.datetime", "time.iso",
                 "time.world",
                 "time.year", "time.month", "time.month_name", "time.day",
                 "time.day_of_week", "time.day_of_year", "time.week_of_year",

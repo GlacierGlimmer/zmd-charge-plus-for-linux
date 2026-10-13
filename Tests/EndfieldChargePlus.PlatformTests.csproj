@@ -8,7 +8,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Program.cs" />
-    <Compile Include="FeatureRegressionChecks.cs" /><Compile Include="InteractionRegressionChecks.cs" /><Compile Include="MultiHudRegressionChecks.cs" />
+    <Compile Include="WorldClockChecks.cs" /><Compile Include="FeatureRegressionChecks.cs" /><Compile Include="InteractionRegressionChecks.cs" /><Compile Include="PositionRegressionChecks.cs" /><Compile Include="MultiHudLayerChecks.cs" /><Compile Include="MultiHudRegressionChecks.cs" />
     <Compile Include="FrameNativeAudit.cs" />
     <Compile Include="LinuxGuiAudit.cs" />
     <ProjectReference Include="../EndfieldChargePlus.csproj" />

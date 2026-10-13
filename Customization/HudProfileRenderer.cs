@@ -8,9 +8,12 @@ namespace EndfieldChargePlus.Customization;
 public static class HudProfileRenderer
 {
     public static HudRenderData Render(HudProfile profile, IReadOnlyDictionary<string, object?> vars)
+        => RenderAt(profile,vars,DateTimeOffset.UtcNow);
+
+    public static HudRenderData RenderAt(HudProfile profile,IReadOnlyDictionary<string,object?> vars,DateTimeOffset instant)
     {
         profile = BuiltInProfileLocalization.ForCurrentLanguage(profile);
-        var effective = BuildEffectiveVariables(profile, vars);
+        var effective = BuildEffectiveVariables(profile, vars,instant);
 
         double raw = TemplateEngine.EvaluateNumber(profile.ProgressVariable, effective, profile.ProgressMin);
         double span = profile.ProgressMax - profile.ProgressMin;
@@ -105,7 +108,7 @@ public static class HudProfileRenderer
 
     internal static IReadOnlyDictionary<string, object?> BuildEffectiveVariables(
         HudProfile profile,
-        IReadOnlyDictionary<string, object?> vars)
+        IReadOnlyDictionary<string, object?> vars,DateTimeOffset? instant=null)
     {
         var required = GetRequiredVariables(profile);
         bool needsTime = IsTimeProfile(profile)
@@ -120,7 +123,9 @@ public static class HudProfileRenderer
 
         if (needsTime)
         {
-            var now = DateTime.Now;
+            var clock=WorldClockTimeZones.ReadClock(profile,instant ?? DateTimeOffset.UtcNow);
+            var now=clock.DateTime;
+            WorldClockTimeZones.AddCalendarValues(result,clock);
             var dayProgress = Math.Clamp(now.TimeOfDay.TotalSeconds / TimeSpan.FromDays(1).TotalSeconds * 100d, 0d, 100d);
 
             result["time.current"] = now.ToString("HH:mm:ss", CultureInfo.InvariantCulture);

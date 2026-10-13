@@ -37,6 +37,12 @@
 
               <!-- Context options stay immediately below the scheme selector. -->
               <Border x:Name="TimeOptionsPanel" Background="#1E1E20" CornerRadius="8" Padding="14" IsVisible="False">
+                <StackPanel Spacing="12">
+                  <StackPanel x:Name="WorldClockOptions" Spacing="4" IsVisible="False">
+                    <TextBlock Text="UTC 时区" Foreground="#C6CA4C"/>
+                    <ComboBox x:Name="WorldClockZoneCombo" Height="36"/>
+                    <TextBlock Text="使用固定 UTC 偏移，不自动跟随夏令时。目标时间也按所选时区计算。" FontSize="11" Foreground="#85858B" TextWrapping="Wrap"/>
+                  </StackPanel>
                 <Grid ColumnDefinitions="*,Auto,240">
                   <StackPanel Spacing="2" Margin="0,0,16,0">
                     <TextBlock Text="目标时间模式" FontSize="12" Foreground="#E6E6E8"/>
@@ -48,6 +54,7 @@
                     <TextBox x:Name="TimeTargetBox" Watermark="10:00:00"/>
                   </StackPanel>
                 </Grid>
+                </StackPanel>
               </Border>
 
               <Border x:Name="FrameOptionsPanel" Background="#1E1E20" CornerRadius="8" Padding="14" IsVisible="False">

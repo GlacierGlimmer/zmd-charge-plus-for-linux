@@ -164,7 +164,7 @@
                         <NumericUpDown x:Name="OffsetYBox" Minimum="-10000" Maximum="10000" Increment="1"/>
                       </StackPanel>
                     </Grid>
-                    <TextBlock Text="X 向右为正，Y 向下为正。" FontSize="11" Foreground="#6F6F74"/>
+                    <TextBlock Text="X 向右为正，Y 向下为正。切换预设位置会将 X/Y 微调归零。" FontSize="11" Foreground="#6F6F74"/>
                   </StackPanel>
                 </Border>
 
@@ -251,7 +251,7 @@
                   <TextBlock x:Name="AboutArchitectureText" Text="Windows · x64" FontSize="12" Foreground="#8E8E94" Margin="0,1,0,0"/>
                   <StackPanel Orientation="Horizontal" Spacing="18" Margin="0,7,0,0">
                     <TextBlock x:Name="AboutVersionText" Text="v0.1.1" FontSize="13" FontWeight="SemiBold" Foreground="#C6CA4C"/>
-                    <TextBlock Text="构建日期  2026.10.11" FontSize="13" Foreground="#D2D2D6"/>
+                    <TextBlock x:Name="BuildDateText" Text="构建日期  2026.10.12" FontSize="13" Foreground="#D2D2D6"/>
                   </StackPanel>
                 </StackPanel>
 

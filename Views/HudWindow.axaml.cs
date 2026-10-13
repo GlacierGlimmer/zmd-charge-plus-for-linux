@@ -355,12 +355,14 @@ public partial class HudWindow : Window
     {
         if (_closed || !_persistent) return;
 
+        // Steady sampling changes data only. Native layers and animation
+        // transforms are configured on presentation/settings transitions.
         ApplyRenderData(data);
-        ApplyWindowLayer(true);
-        SetPersistentFinalState();
-
         if (!IsVisible)
+        {
+            SetPersistentFinalState();
             ShowPositioned();
+        }
     }
 
     public void HidePersistent() => _ = HidePersistentAsync();

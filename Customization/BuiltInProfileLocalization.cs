@@ -51,6 +51,7 @@ public static class BuiltInProfileLocalization
             {
                 Category = "Time", Name = "Day Progress", TitleTemplate = "Day Progress"
             },
+            "time.world-clock" => profile with { Category="Time",Name="World Clock",TitleTemplate="World Clock" },
             "deepseek.balance-period" => profile with
             {
                 Category = "DeepSeek API", Name = "Balance / Period",

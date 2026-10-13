@@ -11,7 +11,7 @@ internal static class LinuxVariableCatalog
     private static string _defaultGpu = "";
     private static readonly HashSet<string> Shared = new((
         "frame.display.fps frame.window.fps frame.display.percent frame.window.percent frame.display.name frame.window.name frame.display.status frame.window.status " +
-        "system.time system.date system.datetime system.uptime_seconds system.uptime_text system.boot_time " +
+        "time.utc_offset system.time system.date system.datetime system.uptime_seconds system.uptime_text system.boot_time " +
         "system.machine_name system.host_name system.user_name system.os_description system.os_version " +
         "system.os_architecture system.process_architecture system.framework_version system.processor_count " +
         "frame.display.fps frame.window.fps frame.display.percent frame.window.percent frame.display.name frame.window.name frame.display.status frame.window.status " +
