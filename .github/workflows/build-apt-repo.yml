@@ -2,6 +2,12 @@ name: Build APT Repository
 
 on:
   workflow_dispatch:
+    inputs:
+      release_tag:
+        description: Published Linux release to index
+        required: true
+        default: v0.1.1
+        type: string
   push:
     branches:
       - main
@@ -18,6 +24,21 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+
+      - name: Download and verify the published package
+        if: github.event_name == 'workflow_dispatch'
+        env:
+          RELEASE_TAG: ${{ inputs.release_tag }}
+        run: |
+          set -euo pipefail
+          [[ "$RELEASE_TAG" =~ ^v[0-9]+\.[0-9]+\.[0-9]+$ ]]
+          file="EndfieldChargePlusForLinux-${RELEASE_TAG}-linux-x64.deb"
+          base="https://github.com/GlacierGlimmer/zmd-charge-plus-for-linux/releases/download/${RELEASE_TAG}"
+          curl --fail --location --retry 3 "$base/$file" --output "$RUNNER_TEMP/$file"
+          curl --fail --location --retry 3 "$base/SHA256SUMS-Linux.txt" --output "$RUNNER_TEMP/SHA256SUMS-Linux.txt"
+          (cd "$RUNNER_TEMP" && sha256sum --check --ignore-missing SHA256SUMS-Linux.txt)
+          test "$(dpkg-deb --field "$RUNNER_TEMP/$file" Version)" = "${RELEASE_TAG#v}"
+          cp "$RUNNER_TEMP/$file" apt-repo/pool/main/e/endfield-charge-plus/
 
       - name: Install APT repository tools
         run: |
@@ -37,7 +58,7 @@ jobs:
 
           cd apt-repo
           dpkg-scanpackages pool/ /dev/null > dists/stable/main/binary-amd64/Packages
-          gzip -9 -c dists/stable/main/binary-amd64/Packages > dists/stable/main/binary-amd64/Packages.gz
+          gzip -n -9 -c dists/stable/main/binary-amd64/Packages > dists/stable/main/binary-amd64/Packages.gz
 
       - name: Build Release metadata
         run: |
@@ -60,7 +81,7 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
-          git add apt-repo/dists
+          git add apt-repo/dists apt-repo/pool
 
           if git diff --cached --quiet; then
             echo "No APT metadata changes to commit."
