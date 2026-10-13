@@ -9,5 +9,7 @@ trap 'rm -rf -- "$isolated"' EXIT
 export XDG_DATA_HOME="$isolated/data" XDG_CONFIG_HOME="$isolated/config"
 unset WAYLAND_DISPLAY
 cd "$root"
-timeout 120 xvfb-run -a -s '-screen 0 1600x1000x24' \
+# The audit includes 225 native HUD creation/removal cycles; virtualized software
+# compositors may take longer than the collector-only part. Keep a bounded limit.
+timeout 600 xvfb-run -a -s '-screen 0 1600x1000x24' \
     dotnet run --project Tests/EndfieldChargePlus.PlatformTests.csproj -c Release -- --gui-audit "$output"

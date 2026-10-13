@@ -1,3 +1,41 @@
+// Cache only the exact published package referenced by the signed APT index.
+// Older packages continue to use the existing R2 bucket.
+const releasePackages = {
+  "/pool/main/e/endfield-charge-plus/EndfieldChargePlusForLinux-v0.1.1-linux-x64.deb": {
+    url: "https://github.com/GlacierGlimmer/zmd-charge-plus-for-linux/releases/download/v0.1.1/EndfieldChargePlusForLinux-v0.1.1-linux-x64.deb",
+    size: 34366734,
+    sha256: "cac2236d1a1ddc527267c4535062055cbdd90f607e1a266cb28ff69f50428865",
+  },
+};
+
+async function cacheReleasePackage(bucket, key, release) {
+  const existing = await bucket.head(key);
+  if (existing?.size === release.size && existing.customMetadata?.sha256 === release.sha256) return;
+  const response = await fetch(release.url);
+  if (!response.ok || !response.body || Number(response.headers.get("content-length")) !== release.size)
+    throw new Error("Unexpected release package response");
+  const temporary = "staging/" + crypto.randomUUID();
+  const [upload, checksum] = response.body.tee();
+  const digest = new crypto.DigestStream("SHA-256");
+  try {
+    // Stream both copies; never retain the 34 MB package in Worker memory.
+    const [object] = await Promise.all([
+      bucket.put(temporary, upload),
+      checksum.pipeTo(digest),
+    ]);
+    const sha = Array.from(new Uint8Array(await digest.digest), x => x.toString(16).padStart(2, "0")).join("");
+    if (object.size !== release.size || sha !== release.sha256) throw new Error("Release checksum mismatch");
+    const verified = await bucket.get(temporary);
+    if (!verified) throw new Error("Verified staging package disappeared");
+    await bucket.put(key, verified.body, {
+      httpMetadata: { contentType: "application/vnd.debian.binary-package" },
+      customMetadata: { sha256: release.sha256 },
+    });
+  } finally {
+    await bucket.delete(temporary);
+  }
+}
+
 export default {
   async fetch(request, env) {
     const url = new URL(request.url);
@@ -14,6 +52,14 @@ export default {
     }
 
     const key = decodeURIComponent(url.pathname.slice(1));
+    if (releasePackages[url.pathname]) {
+      try {
+        await cacheReleasePackage(env.APT_PACKAGES, key, releasePackages[url.pathname]);
+      } catch (error) {
+        console.error("APT package cache failed", error instanceof Error ? error.message : "Unknown failure");
+        return new Response("Package temporarily unavailable", { status: 503, headers: { "Retry-After": "30" } });
+      }
+    }
 
     if (request.method === "HEAD") {
       const object = await env.APT_PACKAGES.head(key);

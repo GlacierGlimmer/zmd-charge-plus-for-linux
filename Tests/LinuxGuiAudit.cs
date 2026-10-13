@@ -99,7 +99,9 @@ internal static class LinuxGuiAudit
                 await Task.Delay(100);
                 bitmap.Render(window);
                 bitmap.Save(Path.Combine(output, "linux-variable-library.png"));
+                Console.WriteLine("GUI audit: variable library verified; starting 225 native HUD lifecycle cycles");
                 await MultiHudRegressionChecks.Run(Assert);
+                Console.WriteLine("GUI audit: HUD lifecycle verified; starting settings and click interaction checks");
                 await InteractionRegressionChecks.Run(Assert);
                 Console.WriteLine($"PASS: all {definitions.Length} advertised variables rendered without placeholders; built-in profiles, API fixtures, clipboard, branding and import migration");
                 passed = true;
