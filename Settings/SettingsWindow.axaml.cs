@@ -125,7 +125,7 @@ public partial class SettingsWindow : Window
         string currentVersion = GetCurrentVersionText();
         AboutVersionText.Text = $"v{currentVersion}";
         BuildDateText.Text=LocalizationManager.Formatted("构建日期  2026.10.18",$"Build  {"2026.10.18"}");
-        Title = EndfieldChargePlus.Interop.ProcessPrivileges.SettingsTitle(currentVersion);
+        Title = EndfieldChargePlus.Interop.ProcessPrivileges.SettingsTitle(currentVersion,ProductInfo.Name);
         UpdateCurrentVersionText.Text = LocalizationManager.Formatted($"当前版本：v{currentVersion}", (System.FormattableString)$"Current: v{currentVersion}");
         UpdateLatestVersionText.Text = LocalizationManager.Text("最新版本：尚未获取", "Latest: not checked");
         UpdateStatusText.Text = LocalizationManager.Text("状态：尚未检查", "Status: not checked");
@@ -224,7 +224,7 @@ public partial class SettingsWindow : Window
         string currentVersion = GetCurrentVersionText();
         AboutVersionText.Text = $"v{currentVersion}";
         BuildDateText.Text=LocalizationManager.Formatted("构建日期  2026.10.18",$"Build  {"2026.10.18"}");
-        Title = EndfieldChargePlus.Interop.ProcessPrivileges.SettingsTitle(currentVersion);
+        Title = EndfieldChargePlus.Interop.ProcessPrivileges.SettingsTitle(currentVersion,ProductInfo.Name);
         UpdateCurrentVersionText.Text = LocalizationManager.Formatted($"当前版本：v{currentVersion}", (System.FormattableString)$"Current: v{currentVersion}");
         if (LastUpdateResult is { } result)
             ApplyUpdateCheckResult(result);

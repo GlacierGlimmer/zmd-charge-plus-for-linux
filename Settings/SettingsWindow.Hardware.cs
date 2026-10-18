@@ -48,7 +48,8 @@ public partial class SettingsWindow
         foreach(var button in new[]{_installDriver,_restartHardware,_refreshHardware,_exportHardware,_copyHardwareKey}) {button.Margin=new Thickness(0,0,8,8);actions.Children.Add(button);}
         panel.Children.Add(_hardwareStatus);panel.Children.Add(_hardwareHint);panel.Children.Add(actions);panel.Children.Add(_hardwareSearch);panel.Children.Add(_hardwareCount);panel.Children.Add(_hardwareList);
         _hardwareSearch.TextChanged+=(_,_)=>FilterHardwareRows();
-        _refreshHardware.Click+=async(_,_)=>await RefreshHardwareAsync();
+        _refreshHardware.Name="HardwareRefreshButton";
+        _refreshHardware.Click+=async(_,_)=>await RefreshHardwareAsync(rediscover:true);
         _hardwareTimer.Tick+=async(_,_)=>{if(HardwarePage.IsSelected && DataManagementPage.IsSelected)await RefreshHardwareAsync();};
         HardwarePage.PropertyChanged+=async(_,e)=>{
             if(e.Property==TabItem.IsSelectedProperty && HardwarePage.IsSelected && DataManagementPage.IsSelected)await RefreshHardwareAsync();
@@ -84,11 +85,12 @@ public partial class SettingsWindow
         _hardwareSearch.Watermark=LocalizationManager.Text("搜索名称、来源 ID 或变量","Search name, source ID or variable");FilterHardwareRows();
         UpdateHardwareStatus();
     }
-    internal async Task RefreshHardwareAsync()
+    internal async Task RefreshHardwareAsync(bool rediscover=false)
     {
         if(_readingHardware || _hardwareLifetime.IsCancellationRequested)return;
         _readingHardware=true;_refreshHardware.IsEnabled=false;
         try {
+            if(rediscover)await Task.Run(LinuxVariableCatalog.Refresh,_hardwareLifetime.Token);
             var values=await _runtime.SnapshotHardwareAsync(_hardwareLifetime.Token);
             if(_hardwareLifetime.IsCancellationRequested)return;
             _hardwareValues.Clear();foreach(var pair in values)_hardwareValues[pair.Key]=pair.Value;

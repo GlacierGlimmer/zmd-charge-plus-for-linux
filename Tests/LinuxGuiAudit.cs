@@ -80,23 +80,30 @@ internal static class LinuxGuiAudit
                 using var bitmap = new RenderTargetBitmap(new PixelSize((int)window.Bounds.Width, (int)window.Bounds.Height), new Vector(96, 96));
                 bitmap.Render(window);
                 bitmap.Save(Path.Combine(output, "linux-settings.png"));
-                window.FindControl<Button>("LanguageEnglishBtn")!.RaiseEvent(new RoutedEventArgs(Button.ClickEvent));
+                window.FindControl<Button>("LanguageButton")!.RaiseEvent(new RoutedEventArgs(Button.ClickEvent));
+                await Task.Delay(120);
+                var languagePage=window.OwnedWindows.Single();
+                var languages=languagePage.GetVisualDescendants().OfType<ListBox>().Single(l=>l.Name=="LanguageList");
+                Assert(languages.ItemCount==147,"The native language page contains Auto and all 146 languages.");
+                languages.SelectedItem=languages.Items.Cast<object>().Single(l=>l.GetType().GetProperty("Code")!.GetValue(l)?.ToString()=="en-US");
+                await Task.Delay(120);languagePage.Close();
                 await Task.Delay(100);
                 Assert(window.Title!.Contains(ProductInfo.LinuxName) && !window.Title.Contains("For Linux For Linux"), "English branding failed.");
                 bitmap.Render(window);
                 bitmap.Save(Path.Combine(output, "linux-settings-en.png"));
-                window.GetVisualDescendants().OfType<TabControl>().First().SelectedIndex = 1;
-                await Task.Delay(100);
+                window.NavigateToSettingsSection("variables");
+                await Task.Delay(250);
                 var customizer = window.FindControl<HudCustomizerView>("Customizer")!;
-                customizer.GetVisualDescendants().OfType<TabControl>().First().SelectedIndex = 1;
                 await Task.Delay(100);
                 var list = customizer.FindControl<ListBox>("VariableList")!;
-                Assert(list.ItemCount >= definitions.Length, "UI variable library is missing supported entries.");
+                Assert(list.ItemCount >= VariableCatalog.VisibleBuiltIns.Count, "UI variable library is missing supported entries.");
                 list.SelectedIndex = list.ItemCount - 1;
                 list.ScrollIntoView(list.SelectedItem!);
-                var refresh = customizer.FindControl<Button>("RefreshLinuxVariablesBtn")!;
-                Assert(refresh.IsVisible && refresh.Content?.ToString() == "Detect Linux variables again", "Linux capability refresh control is missing or untranslated.");
-                await Task.Delay(100);
+                window.NavigateToSettingsSection("hardware");await Task.Delay(250);
+                var refresh=window.GetVisualDescendants().OfType<Button>().Single(b=>b.Name=="HardwareRefreshButton");
+                Assert(refresh.IsEffectivelyVisible && refresh.Content?.ToString()=="Refresh","The shared hardware refresh action is visible and translated.");
+                refresh.RaiseEvent(new RoutedEventArgs(Button.ClickEvent));await Task.Delay(350);
+                window.NavigateToSettingsSection("variables");await Task.Delay(100);
                 bitmap.Render(window);
                 bitmap.Save(Path.Combine(output, "linux-variable-library.png"));
                 Console.WriteLine("GUI audit: variable library verified; starting 225 native HUD lifecycle cycles");
@@ -105,7 +112,7 @@ internal static class LinuxGuiAudit
                 await InteractionRegressionChecks.Run(Assert);
                 Console.WriteLine($"PASS: all {definitions.Length} advertised variables rendered without placeholders; built-in profiles, API fixtures, clipboard, branding and import migration");
                 passed = true;
-                window.FindControl<Button>("ExitBtn")!.RaiseEvent(new RoutedEventArgs(Button.ClickEvent));
+                window.Close();desktop.Shutdown(0);
             }
             catch (Exception ex)
             {
