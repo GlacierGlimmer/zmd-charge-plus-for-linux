@@ -43,12 +43,11 @@ public partial class SettingsWindow
             var unit=new TextBlock{Text=row.Unit,MinWidth=42,Foreground=Brushes.Gray};
             Grid.SetColumn(value,1);Grid.SetColumn(unit,2);grid.Children.Add(name);grid.Children.Add(value);grid.Children.Add(unit);return grid;
         });
-        _installDriver=new() {IsVisible=false};_refreshHardware=new();_exportHardware=new();_copyHardwareKey=new();_restartHardware=new() {IsVisible=false};
+        _installDriver=new() {IsVisible=false};_refreshHardware=new(){Name="HardwareRefreshButton"};_exportHardware=new();_copyHardwareKey=new();_restartHardware=new() {IsVisible=false};
         var actions=new WrapPanel{Orientation=Avalonia.Layout.Orientation.Horizontal};
         foreach(var button in new[]{_installDriver,_restartHardware,_refreshHardware,_exportHardware,_copyHardwareKey}) {button.Margin=new Thickness(0,0,8,8);actions.Children.Add(button);}
         panel.Children.Add(_hardwareStatus);panel.Children.Add(_hardwareHint);panel.Children.Add(actions);panel.Children.Add(_hardwareSearch);panel.Children.Add(_hardwareCount);panel.Children.Add(_hardwareList);
         _hardwareSearch.TextChanged+=(_,_)=>FilterHardwareRows();
-        _refreshHardware.Name="HardwareRefreshButton";
         _refreshHardware.Click+=async(_,_)=>await RefreshHardwareAsync(rediscover:true);
         _hardwareTimer.Tick+=async(_,_)=>{if(HardwarePage.IsSelected && DataManagementPage.IsSelected)await RefreshHardwareAsync();};
         HardwarePage.PropertyChanged+=async(_,e)=>{
