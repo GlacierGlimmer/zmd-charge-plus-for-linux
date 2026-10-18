@@ -1239,7 +1239,7 @@ internal sealed class AdvancedVariableProvider : IDisposable
         6 => LocalizationManager.Text("锂离子", "Li-ion"),
         7 => LocalizationManager.Text("锌空气", "Zinc-air"),
         8 => LocalizationManager.Text("锂聚合物", "Li-polymer"),
-        _ => LocalizationManager.Text($"类型 {c}", $"Type {c}")
+        _ => LocalizationManager.Formatted($"类型 {c}", (System.FormattableString)$"Type {c}")
     };
     private static string MemoryFormFactorName(int x) => x switch { 8 => "DIMM", 9 => "TSOP", 12 => "SODIMM", 13 => "SRIMM", 15 => "FB-DIMM", _ => x > 0 ? $"FormFactor {x}" : "" };
     private static string MemoryTypeName(int x) => x switch { 20 => "DDR", 21 => "DDR2", 22 => "DDR2 FB-DIMM", 24 => "DDR3", 26 => "DDR4", 27 => "LPDDR", 28 => "LPDDR2", 29 => "LPDDR3", 30 => "LPDDR4", 34 => "DDR5", 35 => "LPDDR5", _ => x > 0 ? $"SMBIOS {x}" : "" };

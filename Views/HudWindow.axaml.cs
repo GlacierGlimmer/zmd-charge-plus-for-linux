@@ -56,6 +56,7 @@ public partial class HudWindow : Window
     private Border? _editingFrame;
     private TextBlock? _editingHint;
     private bool _editingHighlight;
+    private double _contentWidth=560;
     public bool IsEditingHighlighted => _editingHighlight;
     public void SetEditingHighlight(bool enabled, string name)
     {
@@ -133,7 +134,16 @@ public partial class HudWindow : Window
             text.FontFamily=numeric;
         TitleText.FontFamily=title;
         _animOptions = AnimationOptions.FromSettings(settings);
-        GlobalScale.RenderTransform = new ScaleTransform(settings.GlobalScale, settings.GlobalScale);
+        double scale=settings.GlobalScale*GlobalAppearance.NormalizeScale(settings.GlobalUiScale);
+        GlobalScale.RenderTransform = new ScaleTransform(scale,scale);
+        double fontScale=GlobalAppearance.NormalizeScale(settings.GlobalFontScale);
+        TagLineText.FontSize=9*fontScale;TitleText.FontSize=26*fontScale;
+        PrimaryText.FontSize=26*fontScale;SecondaryText.FontSize=14*fontScale;
+        RightText.FontSize=22*fontScale;RightSuffixText.FontSize=13*fontScale;
+        ContentClip.Height=60*Math.Max(1,fontScale);
+        Width=Math.Max(1200,620*scale);Height=Math.Max(160,200*scale*Math.Max(1,fontScale));
+        Root.Width=Width;Root.Height=100*Math.Max(1,fontScale);
+        UpdateContentGeometry();
         Opacity = Math.Clamp(settings.HudOpacity, 0.0, 1.0);
         ApplyWindowLayer(_persistent);
 
@@ -369,7 +379,7 @@ public partial class HudWindow : Window
 
     public async Task HidePersistentAsync() => await HideAnimatedAsync();
 
-    public async Task HideAnimatedAsync()
+    public async Task HideAnimatedAsync(bool force=false)
     {
         _cts?.Cancel();
         _cts=new CancellationTokenSource();
@@ -395,7 +405,7 @@ public partial class HudWindow : Window
         {
             if (ReferenceEquals(_cts,hideCts))
             {
-                if (!_closed && IsVisible && !_editingHighlight) Hide();
+                if (!_closed && IsVisible && (force || !_editingHighlight)) Hide();
                 IsHudBusy = false;
             }
         }
@@ -404,6 +414,8 @@ public partial class HudWindow : Window
     private void ApplyRenderData(HudRenderData data)
     {
         var previous = _lastRenderData;
+        var direction=LocalizationManager.IsRightToLeft ? FlowDirection.RightToLeft : FlowDirection.LeftToRight;
+        foreach(var text in new[]{TagLineText,TitleText,PrimaryText,SecondaryText,RightText,RightSuffixText})text.FlowDirection=direction;
 
         if (previous?.Tagline != data.Tagline) TagLineText.Text = data.Tagline;
         if (previous?.Title != data.Title) TitleText.Text = data.Title;
@@ -411,6 +423,7 @@ public partial class HudWindow : Window
         if (previous?.SecondaryText != data.SecondaryText) SecondaryText.Text = data.SecondaryText;
         if (previous?.RightText != data.RightText) RightText.Text = data.RightText;
         if (previous?.RightSuffix != data.RightSuffix) RightSuffixText.Text = data.RightSuffix;
+        UpdateContentGeometry();
 
         if (previous?.LeftIcon != data.LeftIcon)
         {
@@ -549,11 +562,12 @@ public partial class HudWindow : Window
 
     private void ResetToInitial()
     {
+        ContentHost.RenderTransform=new TranslateTransform();
         Root.Opacity = 1;
         ScaleHost.RenderTransform = new ScaleTransform(1d, 1d);
-        Pill.Width = 560;
-        Pill.Height = 60;
-        Pill.CornerRadius = new CornerRadius(30d);
+        Pill.Width = _contentWidth;
+        Pill.Height = 60*_animOptions.FontHeightFactor;
+        Pill.CornerRadius = new CornerRadius(30d*_animOptions.FontHeightFactor);
         Pill.Opacity = 0;
         Pill.RenderTransform = new ScaleTransform(0.6d, 0.6d);
 
@@ -583,9 +597,9 @@ public partial class HudWindow : Window
 
     private void SetSimpleCState()
     {
-        Pill.Width = 560;
-        Pill.Height = 60;
-        Pill.CornerRadius = new CornerRadius(30d);
+        Pill.Width = _contentWidth;
+        Pill.Height = 60*_animOptions.FontHeightFactor;
+        Pill.CornerRadius = new CornerRadius(30d*_animOptions.FontHeightFactor);
         Pill.Opacity = 0;
         Pill.RenderTransform = new ScaleTransform(0.6d, 0.6d);
 
@@ -597,7 +611,7 @@ public partial class HudWindow : Window
         CircleForm.Opacity = 0;
         SquareForm.Opacity = 1;
         TitleHost.Opacity = 0;
-        RippleHost.Height = 60;
+        RippleHost.Height = 60*_animOptions.FontHeightFactor;
         RippleHost.RenderTransform = new TranslateTransform(0d, 0d);
         RippleInnerHost.RenderTransform = new TranslateTransform(0d, 16d);
         RippleMidHost.RenderTransform = new TranslateTransform(0d, 16d);
@@ -611,12 +625,13 @@ public partial class HudWindow : Window
 
     private void SetPersistentFinalState()
     {
+        ContentHost.RenderTransform=new TranslateTransform();
         Root.Opacity = 1;
         ScaleHost.RenderTransform = new ScaleTransform(1d, 1d);
 
-        Pill.Width = 560;
-        Pill.Height = 60;
-        Pill.CornerRadius = new CornerRadius(30d);
+        Pill.Width = _contentWidth;
+        Pill.Height = 60*_animOptions.FontHeightFactor;
+        Pill.CornerRadius = new CornerRadius(30d*_animOptions.FontHeightFactor);
         Pill.Opacity = 1;
         Pill.RenderTransform = new ScaleTransform(1d, 1d);
 
@@ -628,7 +643,7 @@ public partial class HudWindow : Window
         CircleForm.Opacity = 0;
         SquareForm.Opacity = 1;
 
-        RippleHost.Height = 60;
+        RippleHost.Height = 60*_animOptions.FontHeightFactor;
         RippleHost.RenderTransform = new TranslateTransform(-245d, 0d);
         RippleInner.Opacity = 0;
         RippleMid.Opacity = 0;
@@ -645,13 +660,22 @@ public partial class HudWindow : Window
 
         var area = screen.WorkingArea;
         double scaling = screen.Scaling > 0 ? screen.Scaling : 1d;
+        double desiredScale=_settings.GlobalScale*GlobalAppearance.NormalizeScale(_settings.GlobalUiScale);
+        double fitWidth=Math.Max(1,area.Width/scaling-32)/(_contentWidth+24);
+        double fitHeight=Math.Max(1,area.Height/scaling-32)/(90*_animOptions.FontHeightFactor+24);
+        double actualScale=Math.Max(.05,Math.Min(desiredScale,Math.Min(fitWidth,fitHeight)));
+        GlobalScale.RenderTransform=new ScaleTransform(actualScale,actualScale);
+        Width=Math.Max(1200,(_contentWidth+60)*actualScale);
+        Height=Math.Max(160,200*actualScale*_animOptions.FontHeightFactor);
+        Root.Width=Width;
+
 
         // 窗口本身比 560px HUD 大，是为了保留原动画波纹空间。
         // 定位时按“可见 HUD”而不是透明窗口外框计算，所以坐标更符合用户直觉。
         double windowWidthPx = Width * scaling;
         double windowHeightPx = Height * scaling;
-        double hudWidthPx = 560d * _settings.GlobalScale * scaling;
-        double hudHeightPx = 60d * _settings.GlobalScale * scaling; // 最终可见胶囊高度
+        double hudWidthPx = _contentWidth * actualScale * scaling;
+        double hudHeightPx = 60d * _animOptions.FontHeightFactor * actualScale * scaling; // 最终可见胶囊高度
         double paddingX = Math.Max(0d, (windowWidthPx - hudWidthPx) / 2d);
         double paddingY = Math.Max(0d, (windowHeightPx - hudHeightPx) / 2d);
 
@@ -659,7 +683,7 @@ public partial class HudWindow : Window
         double hudLeft=origin.X,hudTop=origin.Y;
         if(_editingHighlight) {
             // Keep the outline/caption visible at physical monitor edges; restore the saved position on close.
-            double extra=12*_settings.GlobalScale*scaling;
+            double extra=12*actualScale*scaling;
             hudLeft=Math.Clamp(hudLeft,screen.Bounds.X+extra,Math.Max(screen.Bounds.X+extra,screen.Bounds.Right-hudWidthPx-extra));
             hudTop=Math.Clamp(hudTop,screen.Bounds.Y+extra,Math.Max(screen.Bounds.Y+extra,screen.Bounds.Bottom-hudHeightPx-extra));
         }
@@ -692,6 +716,12 @@ public partial class HudWindow : Window
             PositionHud();
             EnsureInputHitTest();
         }, DispatcherPriority.Loaded);
+    }
+
+    public bool IsPointInConfiguredHotZone(PixelPoint screenPoint)
+    {
+        var screen=ResolveScreen(_settings.MonitorIndex);
+        return _settings.HotZoneEnabled && screen is not null && HudHotZone.Bounds(screen.Bounds,_settings).Contains(screenPoint);
     }
 
     public bool IsPointInTopCenterHotZone(PixelPoint screenPoint, int width = 240, int height = 20)

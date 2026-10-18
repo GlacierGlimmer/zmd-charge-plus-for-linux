@@ -765,7 +765,7 @@ public static class VariableCatalog
         return int.MaxValue;
     }
 
-    public static IReadOnlyList<VariableDefinition> AllBuiltIns => OperatingSystem.IsLinux()
+    private static IReadOnlyList<VariableDefinition> PlatformBuiltIns => OperatingSystem.IsLinux()
         ? LinuxVariableCatalog.Build(StaticBuiltIns.Concat(AdvancedBuiltIns)) : WindowsBuiltIns.Value;
 
     internal static IEnumerable<VariableDefinition> PlatformIndependentDefinitions => StaticBuiltIns.Concat(AdvancedBuiltIns);
@@ -781,6 +781,8 @@ public static class VariableCatalog
             .Select(x => x.Item)
             .ToList());
 
+    public static IReadOnlyList<VariableDefinition> AllBuiltIns=>PlatformBuiltIns.Concat(HardwareTelemetryCatalog.Definitions).Concat(HardwareStatusVariables.All).GroupBy(d=>d.Key,StringComparer.OrdinalIgnoreCase).Select(g=>g.First()).ToArray();
+    internal static IReadOnlyList<VariableDefinition> VisibleBuiltIns=>AllBuiltIns.Where(d=>!HardwareVariableCompatibility.IsDuplicate(d.Key)).ToArray();
     public static VariableDefinition? Find(string key) =>
         AllBuiltIns.FirstOrDefault(x => string.Equals(x.Key, key, StringComparison.OrdinalIgnoreCase));
 

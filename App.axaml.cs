@@ -17,6 +17,7 @@ namespace EndfieldChargePlus;
 public partial class App : Application
 {
     private HudWindow? _hud;
+    private DesktopGlobalHotkey? _hudHotkey;
     private CustomHudRuntime? _runtime;
     private WindowsTrayIcon? _tray;
     private TrayIcon? _linuxTray;
@@ -37,6 +38,7 @@ public partial class App : Application
             AppLog.Info("Avalonia framework initialization completed; loading settings.");
             var settings = SettingsManager.Load();
             LocalizationManager.Initialize(settings.UiLanguage);
+            GlobalAppearance.SetPreferences(settings.GlobalFontScale,settings.GlobalUiScale);
             StartupManager.Apply(settings.StartWithWindows);
 
             _hud = new HudWindow();
@@ -45,6 +47,13 @@ public partial class App : Application
             _runtime = new CustomHudRuntime(_hud);
             _runtime.ApplySettings(settings);
             _runtime.Start();
+            try {
+                _hudHotkey=new DesktopGlobalHotkey(()=> {
+                    if(_settingsWindow?.IsRecordingHudHotkey!=true && _runtime is not null)_=_runtime.ToggleUserVisibilityAsync();
+                });
+                if(!_hudHotkey.TryUpdate(settings.HudToggleHotkey))AppLog.Warn("The HUD shortcut could not be registered on this desktop session.");
+            } catch(Exception ex) {AppLog.Error("Unable to initialize the HUD shortcut.",ex);}
+
 
             // Normal interactive launch opens Settings. Windows autostart stays silent:
             // only the tray icon and startup HUD presentation are shown.
@@ -72,6 +81,7 @@ public partial class App : Application
     private SettingsWindow CreateSettingsWindow(AppSettings settings)
     {
         var window = new SettingsWindow(settings, _hud!, _runtime!);
+        window.AttachHudHotkey(_hudHotkey);
         window.Closed += (_, _) =>
         {
             if (ReferenceEquals(_settingsWindow, window))
@@ -181,7 +191,7 @@ public partial class App : Application
                     .Replace("Latest: ", "", StringComparison.Ordinal);
                 _tray?.ShowNotification(
                     LocalizationManager.Text("Endfield Charge Plus 有新版本", "Endfield Charge Plus update available"),
-                    LocalizationManager.Text($"发现 {latest}。可在“关于”页面查看更新状态。", $"Found {latest}. See About for update details."));
+                    LocalizationManager.Formatted($"发现 {latest}。可在“关于”页面查看更新状态。", (System.FormattableString)$"Found {latest}. See About for update details."));
             }
         });
     }
@@ -303,7 +313,7 @@ public partial class App : Application
         _tray = null;
         _linuxTray?.Dispose();
         _linuxTray = null;
-        _runtime?.Dispose();
+        _hudHotkey?.Dispose();_runtime?.Dispose();
         _runtime = null;
         _hud?.Close();
         _hud = null;

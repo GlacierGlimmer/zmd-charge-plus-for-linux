@@ -25,7 +25,7 @@ internal static class LinuxGuiAudit
             try
             {
                 var window = desktop.Windows.OfType<SettingsWindow>().Single();
-                Assert(window.Title==EndfieldChargePlus.Interop.ProcessPrivileges.SettingsTitle("0.1.1",ProductInfo.Name), "Frozen bilingual settings title has no parentheses.");
+                Assert(window.Title==EndfieldChargePlus.Interop.ProcessPrivileges.SettingsTitle("0.1.2",ProductInfo.Name), "Frozen bilingual settings title has no parentheses.");
                 await Task.Delay(800);
                 Assert(desktop.Windows.OfType<EndfieldChargePlus.Views.HudWindow>().Count(w=>w.IsVisible)==2,"Multiple HUDs are independently visible; a removed display falls back to the primary.");
                 await window.Clipboard!.SetTextAsync("Linux clipboard audit");

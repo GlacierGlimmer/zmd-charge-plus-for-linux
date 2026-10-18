@@ -86,9 +86,7 @@ public static class HudSettingsNormalizer
                 .ToList();
         }
 
-        string cycleAnimationMode = string.Equals(source.CycleAnimationMode, "Simple", StringComparison.OrdinalIgnoreCase)
-            ? "Simple"
-            : "Full";
+        string cycleAnimationMode = source.CycleAnimationMode?.ToUpperInvariant() switch { "SIMPLE"=>"Simple", "FULL"=>"Full", _=>"Roll" };
 
         return source with
         {
@@ -96,7 +94,8 @@ public static class HudSettingsNormalizer
             ActiveProfileId = activeId,
             CycleSeconds = Math.Clamp(source.CycleSeconds, 3, 3600),
             CycleProfileIds = cycleIds,
-            CycleAnimationMode = cycleAnimationMode
+            CycleAnimationMode = cycleAnimationMode,
+            Triggers=HudTriggerRule.Normalize(source.Triggers)
         };
     }
 

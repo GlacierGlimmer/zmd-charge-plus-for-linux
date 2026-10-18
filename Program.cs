@@ -122,7 +122,7 @@ internal static class Program
         Interop.LinuxDesktop.PrepareClipboard();
         return AppBuilder.Configure<App>()
             .UsePlatformDetect()
-            .WithInterFont()
+            .With(LocalizationManager.FontOptions).WithInterFont()
             .LogToTrace();
     }
 }

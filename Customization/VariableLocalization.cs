@@ -52,10 +52,41 @@ public static class VariableLocalization
 
     public static VariableDefinition Localize(VariableDefinition item)
     {
-        if (!LocalizationManager.IsEnglish)
-            return item;
+        if(LocalizationManager.UsesChineseSource)return SourceDefinition(item);
+        var en=SourceDefinition(item);
+        if(LocalizationManager.IsEnglish)return en;
+        string T(string value)=>LocalizationManager.TranslateEnglish(value);
+        string name=T(en.Name),description=T(en.Description);
+        if(description==en.Description)
+        {
+            if(en.Description=="Custom value mapped from an HTTP / JSON data source.")
+                description=LocalizationManager.Text("从 HTTP / JSON 数据源映射的自定义值。","Custom value mapped from an HTTP / JSON data source.");
+            else if(en.Description==$"Current {en.Name}.")
+                description=LocalizationManager.Formatted($"当前的 {name}。",$"Current {name}.");
+            else if(en.Description==$"Current {en.Name}, reported in {en.Unit}.")
+                description=LocalizationManager.Formatted($"当前的 {name}，单位：{en.Unit}。",$"Current {name}, reported in {en.Unit}.");
+            else if(en.Description==$"Measured {en.Name} ({en.Unit}).")
+                description=LocalizationManager.Formatted($"实测 {name}（{en.Unit}）。",$"Measured {name} ({en.Unit}).");
+            else if(en.Description==$"Measured {en.Name}.")
+                description=LocalizationManager.Formatted($"实测 {name}。",$"Measured {name}.");
+            else if(en.Description==$"Name reported for {en.Name.Replace(" Name", "", StringComparison.OrdinalIgnoreCase)}.")
+                description=LocalizationManager.Formatted($"设备报告的名称：{name}。",$"Reported name: {name}.");
+            else if(en.ValueType=="Boolean" && en.Description==$"Whether {en.Name.ToLowerInvariant()} is active or true.")
+                description=LocalizationManager.Formatted($"{name} 是否启用或为真。",$"Whether {name} is active or true.");
+        }
+        return en with {Name=name,Category=T(en.Category),Description=description,ValueType=T(en.ValueType),RecommendedUse=T(en.RecommendedUse),RecommendedFormats=en.RecommendedFormats=="None" ? T("None") : en.RecommendedFormats};
+    }
+
+    private static VariableDefinition SourceDefinition(VariableDefinition item)
+    {
+        if (LocalizationManager.UsesChineseSource)
+            return HardwareVariableCompatibility.IsSummary(item.Key) ? item with {Name=item.Name+"（汇总）"} : item;
+        if(item.Key.StartsWith("media.",StringComparison.OrdinalIgnoreCase)) return MediaVariableCatalog.English(item);
+        if(item.Key.StartsWith("sensor.",StringComparison.OrdinalIgnoreCase))return item with {Category=item.Category switch {"硬件信息"=>"Hardware Info","硬件传感器"=>"Hardware Sensors",_=>item.Category},ValueType=item.ValueType=="数值" ? "Number" : "Text",RecommendedUse="HUD content / rules",RecommendedFormats=item.RecommendedFormats.Replace("无需格式化","None")};
+        if(item.Key.StartsWith("hardware.",StringComparison.OrdinalIgnoreCase))return HardwareStatusVariables.English(item);
 
         string name = item.Key=="time.utc_offset" ? "UTC Offset" : HumanizeKey(item.Key);
+        if(HardwareVariableCompatibility.IsSummary(item.Key))name+=" (summary)";
         string category = CategoryMap.TryGetValue(item.Category, out var mappedCategory) ? mappedCategory : HumanizeWords(item.Category);
         string type = item.ValueType switch
         {
@@ -77,13 +108,6 @@ public static class VariableLocalization
         string description = item.Key=="time.utc_offset"
             ? "Current local UTC offset; World Clock uses the selected fixed UTC offset."
             : BuildDescription(item.Key, name, type, unit);
-        if (OperatingSystem.IsLinux() && item.Key.StartsWith("disk.mount_", StringComparison.Ordinal))
-        {
-            string mount = item.Name.Split(" · ", 2)[0];
-            string metric = item.Key[(item.Key.LastIndexOf('.') + 1)..];
-            name = mount + " · " + HumanizeKey("disk." + metric);
-            description = $"Filesystem capacity or block-device statistics for mount {mount}. Reported in {unit}.";
-        }
         return item with
         {
             Name = name,

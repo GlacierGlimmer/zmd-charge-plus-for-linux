@@ -71,6 +71,7 @@ internal static class LinuxVariableCatalog
 
     internal static bool Supports(string key)
     {
+        if(key.StartsWith("sensor.",StringComparison.OrdinalIgnoreCase) || key.StartsWith("hardware.",StringComparison.OrdinalIgnoreCase))return true;
         if (key.StartsWith("custom.", StringComparison.OrdinalIgnoreCase)) return true;
         if (Shared.Contains(key) || Detected.Contains(key)) return true;
         if (!VariableCatalog.PlatformIndependentDefinitions.Any(d => d.Key.Equals(key, StringComparison.OrdinalIgnoreCase))) return false;
