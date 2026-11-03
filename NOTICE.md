@@ -1,61 +1,59 @@
-# Notices / 来源与第三方许可
+# Endfield Charge Plus
 
-## 原项目 / Upstream
+来源、署名与第三方组件 / Origin, attribution and third-party components
 
-Endfield Charge Plus is a modified derivative of the HUD project
-[QinAnze/zmd-charge](https://github.com/QinAnze/zmd-charge).
-本项目基于 QinAnze 的 zmd-charge 进行二次开发，保留原项目来源和署名。
+## 项目来源 / Origin
 
-The original project's README identifies its license as MIT. The upstream
-repository did not expose a standalone LICENSE file at the time this notice
-was prepared; no unverified original copyright wording is asserted here.
-The MIT LICENSE in this repository covers GlacierGlimmer's contributions;
-original code/assets remain subject to their applicable upstream terms.
+本项目基于 [QinAnze/zmd-charge](https://github.com/QinAnze/zmd-charge) 修改和扩展。保留原项目 **QinAnze** 的来源与署名；上游 README 标示 MIT。ECP 自有新增贡献的许可见本仓库 LICENSE；原始代码、资源及第三方组件各自适用的版权和许可继续有效。
 
-## Third-party components / 第三方组件
+Endfield Charge Plus is a modified derivative of QinAnze/zmd-charge. Original attribution to QinAnze is retained; the upstream README identifies MIT. This repository's LICENSE covers ECP's own additions. Original code/assets and third-party components remain subject to their applicable terms.
 
-### Avalonia UI 11.2.1
+本项目为社区独立项目，与《明日方舟：终末地》的开发、发行方不存在官方授权或隶属关系。相关商标属于各自权利人。
+
+This is an independent community project, without official affiliation or endorsement from the developers/publishers of Arknights: Endfield. Trademarks belong to their respective owners.
+
+开发与维护 / Developer and maintainer: **GlacierGlimmer冰川雪貓**  
+项目网站 / Website: https://zmd-bar.x-neko.com
+
+## 桌面 UI 与运行环境 / Desktop UI and runtime
+
+- Avalonia、Avalonia.Desktop、Avalonia.Themes.Fluent、Avalonia.Fonts.Inter：本项目使用 11.2.1，MIT。https://github.com/AvaloniaUI/Avalonia
+- Inter 字体：The Inter Project Authors，SIL Open Font License 1.1。https://github.com/rsms/inter
+- .NET 自包含运行环境及随其分发的组件：适用 Microsoft .NET 对应的许可与第三方声明。https://github.com/dotnet/runtime
+
+The four Avalonia packages above are used under MIT. The bundled Inter typeface retains its OFL terms. Self-contained builds also carry the .NET runtime; retain its license and third-party notices when redistributing it.
+
+## 离线字体 / Offline fonts
+
+附带的 Noto Serif Tibetan、Noto Sans Gothic、Noto Sans Deseret 为未修改的字体，用于相应字符回退。版权属于各字体的 The Noto Project Authors；各字体对应的 SIL Open Font License 1.1、版权署名和保留名称以原文为准。
+
+The unmodified Noto fallback fonts retain their original author notices and OFL terms. See Assets/Fonts for source details and the adjacent OFL texts; directory portable builds place them in Licenses/Fonts.
 
 
-Direct packages:
+## Linux 平台说明 / Linux platform notes
 
-- `Avalonia` 11.2.1
-- `Avalonia.Desktop` 11.2.1
-- `Avalonia.Themes.Fluent` 11.2.1
-- `Avalonia.Fonts.Inter` 11.2.1
+本平台通过 Linux 的 procfs、sysfs、网络接口和桌面能力提供本机指标。共享项目中引用的 System.Management、System.Security.Cryptography.ProtectedData（MIT）与 LibreHardwareMonitorLib（MPL-2.0）仍保留各自条款；引用它们不表示 Linux 会执行 Windows 专属采集器或安装 Windows 驱动。
 
-Avalonia is distributed under the MIT license.
+Linux reads supported procfs/sysfs, networking and desktop interfaces. Referenced shared .NET packages retain their applicable licenses; Windows-only collectors and drivers are not run or installed by this edition. Optional system tools or services retain their own licenses and are not relicensed by ECP.
 
-Project: https://github.com/AvaloniaUI/Avalonia
+## 许可文件与再分发 / License files and redistribution
 
-### Inter typeface
+本仓库 LICENSE、字体 OFL、采集器许可及运行环境附带的许可原文不因本文的排版或说明调整而改变。Windows 目录便携包将它们集中放在 Licenses；其他平台请保留对应安装包内的许可目录及资源文件。第三方组件的版本号与许可证版本用于识别实际组件及条款，不是 Endfield Charge Plus 的产品版本。
 
-`Avalonia.Fonts.Inter` bundles the Inter typeface used by the application UI.
+License texts and original copyright notices are preserved. Windows directory portable packages collect them under Licenses; other platforms retain their corresponding packaged resources. Third-party/library/license versions identify those components and terms, independently of the ECP product version.
 
-- Typeface: Inter
-- Copyright: The Inter Project Authors
-- License: SIL Open Font License 1.1 (OFL-1.1)
-- Project: https://github.com/rsms/inter
+隐私、本地数据位置、联网功能与权限说明见 PRIVACY.md。请在再分发时保留所需版权和许可，不要将本文当作替代第三方完整许可的授权文本。
 
-The typeface is used unmodified by Endfield Charge Plus.
+See PRIVACY.md for data locations, network access and permissions. Retain required copyright/license files when redistributing; this explanatory index does not replace full third-party license terms.
 
-### Microsoft .NET packages
 
-- `System.Management` 10.0.2 — MIT
-- `System.Security.Cryptography.ProtectedData` 8.0.0 — MIT
+## Platform artwork and motion
 
-Project: https://github.com/dotnet/runtime
+Ring geometry, staggered opening, hover springs and page-reveal timing: adapted from KnifeLemon/Filee, copyright (c) 2026 Myeonggu Kim and Filee contributors, MIT. The original license is retained.
+- Windows: Microsoft standard four-square SVG, https://commons.wikimedia.org/wiki/File:Windows_logo_-_2021.svg (public-domain geometry; Microsoft trademark).
+- macOS: Apple navigation SVG, https://www.apple.com/ ; cropped viewport, official light-on-dark fill. Apple trademark.
+- Linux: Tux by Larry Ewing, vector by Garrett LeSage, refined by IFo Hancroft; https://github.com/garrett/Tux (CC0/public domain).
+- Android: https://developer.android.com/static/images/brand/android-head_flat.svg . The Android robot is reproduced or modified from work created and shared by Google and used according to terms described in the Creative Commons 3.0 Attribution License. https://creativecommons.org/licenses/by/3.0/ . Android is a trademark of Google LLC.
+SVG rendering: Avalonia.Svg.Skia / Svg.Skia (MIT, Wieslaw Soltes), Svg.Custom / SVG.NET (MS-PL), ExCSS (MIT); AndroidSVG (Apache-2.0, Paul LeBeau). https://github.com/wieslawsoltes/Svg.Skia ; https://github.com/BigBadaboom/androidsvg .
 
-### LibreHardwareMonitorLib 0.9.6
-
-- Package: `LibreHardwareMonitorLib` 0.9.6
-- License: Mozilla Public License 2.0 (MPL-2.0)
-- Project: https://github.com/LibreHardwareMonitor/LibreHardwareMonitor
-
-It is used for hardware sensor values that Windows does not expose through a stable generic API, such as supported CPU/GPU temperatures, clocks, voltage, power, motherboard temperature and fan sensors. If a sensor is not exposed by the machine or driver, Endfield Charge Plus leaves the related value unavailable rather than manufacturing a value.
-
-LibreHardwareMonitor itself includes additional third-party components under their own terms; see the upstream project's third-party notices for those transitive components.
-
-### Runtime / transitive dependencies
-
-Self-contained builds also carry the .NET runtime and transitive dependencies brought in by the packages above. Their original license metadata and upstream notices remain applicable. When preparing a public binary release, keep this notice together with the source release information and retain all license files required by the corresponding upstream components.
+About UI SVG assets: Lucide (ISC, https://github.com/lucide-icons/lucide; original notice in Lucide-LICENSE.txt) and Simple Icons (CC0, https://github.com/simple-icons/simple-icons; original notice in SimpleIcons-LICENSE.txt). BiliBili/YouTube/GitHub marks identify their linked services. Endfield Charge Plus uses its own supplied SVG brand asset.

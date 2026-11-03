@@ -40,6 +40,8 @@ public sealed class VariableHub : IDisposable
         _advanced = new AdvancedVariableProvider(http);
     }
 
+    private static readonly HashSet<string> CpuUsageOnlyKeys=new(StringComparer.OrdinalIgnoreCase){"cpu.usage","cpu.user_usage","cpu.kernel_usage","cpu.idle_percent"};
+
     private const int PingTimeoutMs = 1000;
     private const double PingFullScaleMs = 999d;
 
@@ -127,6 +129,7 @@ public sealed class VariableHub : IDisposable
         try
         {
         ObjectDisposedException.ThrowIf(Volatile.Read(ref _disposed)!=0,this);
+        if (OperatingSystem.IsWindows()) await _advanced.ReleaseIdleHardwareAsync().ConfigureAwait(false);
         if (_lastLanguage != LocalizationManager.Current)
         {
             _lastLanguage = LocalizationManager.Current;
@@ -185,7 +188,7 @@ public sealed class VariableHub : IDisposable
                     return local;
                 }
                 if (needCpu || needMemory)
-                    AddCpuAndMemory(local, needCpu, needMemory);
+                    AddCpuAndMemory(local, needCpu, needMemory, requested is null || requested.Any(k => k.StartsWith("cpu.",StringComparison.OrdinalIgnoreCase) && !CpuUsageOnlyKeys.Contains(k)));
                 if (needBattery)
                     AddBattery(local);
                 if (needNetwork)
@@ -351,7 +354,7 @@ public sealed class VariableHub : IDisposable
         {
             using var p = Process.GetCurrentProcess();
             var asm = Assembly.GetEntryAssembly() ?? Assembly.GetExecutingAssembly();
-            var version = asm.GetName().Version?.ToString(3) ?? "0.1.2";
+            var version = asm.GetName().Version?.ToString(3) ?? "0.2.0";
             var start = p.StartTime;
             var uptime = Math.Max(0d, (DateTime.Now - start).TotalSeconds);
             v["app.name"] = ProductInfo.Name;
@@ -390,7 +393,7 @@ public sealed class VariableHub : IDisposable
         catch { }
     }
 
-    private void AddCpuAndMemory(IDictionary<string, object?> v, bool includeCpu, bool includeMemory)
+    private void AddCpuAndMemory(IDictionary<string, object?> v, bool includeCpu, bool includeMemory, bool includeCpuDetails=true)
     {
         if (includeCpu)
         {
@@ -424,7 +427,7 @@ public sealed class VariableHub : IDisposable
             v["cpu.kernel_usage"] = kernelUsage;
             v["cpu.idle_percent"] = _cpuPrimed ? idlePercent : Math.Max(0d, 100d - usage);
 
-            if (DateTime.UtcNow >= _nextCpuInfoRead)
+            if (includeCpuDetails && DateTime.UtcNow >= _nextCpuInfoRead)
             {
                 _nextCpuInfoRead = DateTime.UtcNow.AddMinutes(10);
                 try
@@ -464,7 +467,7 @@ public sealed class VariableHub : IDisposable
 
             // Win32_Processor.CurrentClockSpeed is often nominal/static on modern CPUs.
             // Processor Information exposes Windows' live effective-performance ratio.
-            if (DateTime.UtcNow >= _nextCpuFrequencyRead)
+            if (includeCpuDetails && DateTime.UtcNow >= _nextCpuFrequencyRead)
             {
                 _nextCpuFrequencyRead = DateTime.UtcNow.AddMilliseconds(750);
                 try
@@ -1540,6 +1543,8 @@ public sealed class VariableHub : IDisposable
             if (requested is not null && !requested.Any(k => k.StartsWith(sourcePrefix, StringComparison.OrdinalIgnoreCase)))
                 continue;
 
+            if(_httpCache.Count>=32)foreach(var key in _httpCache.Where(p=>p.Value.ExpiresAt<=DateTime.UtcNow).Select(p=>p.Key).ToArray())_httpCache.Remove(key);
+            if(_httpCache.Count>=64)_httpCache.Clear();
             string cacheKey = source.Name + "|" + Convert.ToHexString(System.Security.Cryptography.SHA256.HashData(System.Text.Encoding.UTF8.GetBytes(JsonSerializer.Serialize(source))));
             if (!_httpCache.TryGetValue(cacheKey, out var cache) || DateTime.UtcNow >= cache.ExpiresAt)
             {

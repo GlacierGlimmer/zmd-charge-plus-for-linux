@@ -37,7 +37,7 @@ Without FUSE, run the AppImage with `--appimage-extract-and-run`. Portable build
 ## Features and Linux data
 
 - Animated HUD, simple/full transitions, positioning, scale, opacity, display layers and profile rotation.
-- Custom templates, expressions, progress indicators, conditional colors and Chinese/English UI.
+- Custom templates, expressions, progress indicators, conditional colors and 20 UI languages.
 - CPU, memory, swap, battery, disk capacity/I/O, network, processes, display, clipboard and device metrics from actual Linux sources.
 - DRM/hwmon GPU metrics and NVIDIA `nvidia-smi`, filtered for the selected adapter.
 - ICMP/TCP/UDP probes, DeepSeek balance/period information and custom HTTP/JSON sources.

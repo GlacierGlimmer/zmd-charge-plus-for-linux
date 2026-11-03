@@ -60,7 +60,7 @@ public static class StartupManager
         var legacy = Path.Combine(Path.GetDirectoryName(AutostartPath)!, "endfield-charge-plus.desktop");
         if (File.Exists(legacy) && File.ReadAllText(legacy).Contains("Name=Endfield Charge Plus\n", StringComparison.Ordinal))
             File.Delete(legacy);
-        if (!enabled) { File.Delete(AutostartPath); return; }
+        if (!enabled) { if (File.Exists(AutostartPath)) File.Delete(AutostartPath); return; }
         // AppImage mounts are temporary. Persist the original AppImage path instead.
         string? executable = Environment.GetEnvironmentVariable("APPIMAGE");
         if (string.IsNullOrEmpty(executable)) executable = Environment.ProcessPath;

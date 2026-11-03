@@ -1,0 +1,755 @@
+{
+  "auditedAt": "2026-11-03T21:23:59",
+  "coreVersion": "20261102",
+  "coreFields": 2535,
+  "locales": 20,
+  "errors": [],
+  "legacyMismatch": {
+    "zh-CN": 10,
+    "en-US": 5,
+    "zh-TW": 638,
+    "ja-JP": 5,
+    "ko-KR": 4,
+    "de-DE": 4,
+    "fr-FR": 4,
+    "es-ES": 4,
+    "pt-BR": 4,
+    "ru-RU": 5,
+    "ar-SA": 4,
+    "hi-IN": 4,
+    "bn-BD": 5,
+    "ur-PK": 4,
+    "id-ID": 5,
+    "vi-VN": 4,
+    "th-TH": 4,
+    "tr-TR": 4,
+    "it-IT": 4,
+    "fa-IR": 4
+  },
+  "emptyPatternMismatch": {},
+  "metrics": [
+    {
+      "code": "zh-CN",
+      "version": "20261102",
+      "declared": 2535,
+      "total": 2535,
+      "translated": 2469,
+      "identical_english": 66,
+      "blank": 0,
+      "placeholder_errors": 0,
+      "placeholder_warnings": 11,
+      "placeholder_samples": [
+        {
+          "index": 849,
+          "errors": [],
+          "warnings": [
+            "missing placeholder: {deepseek.period.name}"
+          ]
+        },
+        {
+          "index": 953,
+          "errors": [],
+          "warnings": [
+            "missing placeholder: custom.<source>.<variable>"
+          ]
+        },
+        {
+          "index": 1727,
+          "errors": [],
+          "warnings": [
+            "missing placeholder: ${env:VARIABLE_NAME}"
+          ]
+        }
+      ],
+      "hash_ok": true,
+      "newer_than_core": false
+    },
+    {
+      "code": "en-US",
+      "version": "20261102",
+      "declared": 2535,
+      "total": 2535,
+      "translated": 2535,
+      "identical_english": 0,
+      "blank": 0,
+      "placeholder_errors": 0,
+      "placeholder_warnings": 5,
+      "placeholder_samples": [
+        {
+          "index": 2222,
+          "errors": [],
+          "warnings": [
+            "unexpected placeholders: cpu.usage"
+          ]
+        },
+        {
+          "index": 2466,
+          "errors": [],
+          "warnings": [
+            "missing placeholder: windows.title"
+          ]
+        },
+        {
+          "index": 2467,
+          "errors": [],
+          "warnings": [
+            "missing placeholder: linux.title"
+          ]
+        }
+      ],
+      "hash_ok": true,
+      "newer_than_core": false
+    },
+    {
+      "code": "zh-TW",
+      "version": "20261102",
+      "declared": 2535,
+      "total": 2535,
+      "translated": 2469,
+      "identical_english": 66,
+      "blank": 0,
+      "placeholder_errors": 0,
+      "placeholder_warnings": 11,
+      "placeholder_samples": [
+        {
+          "index": 849,
+          "errors": [],
+          "warnings": [
+            "missing placeholder: {deepseek.period.name}"
+          ]
+        },
+        {
+          "index": 953,
+          "errors": [],
+          "warnings": [
+            "missing placeholder: custom.<source>.<variable>"
+          ]
+        },
+        {
+          "index": 1727,
+          "errors": [],
+          "warnings": [
+            "missing placeholder: ${env:VARIABLE_NAME}",
+            "unexpected placeholders: ${env:環境變數名}"
+          ]
+        }
+      ],
+      "hash_ok": true,
+      "newer_than_core": false
+    },
+    {
+      "code": "ja-JP",
+      "version": "20261102",
+      "declared": 2535,
+      "total": 2535,
+      "translated": 2469,
+      "identical_english": 66,
+      "blank": 0,
+      "placeholder_errors": 0,
+      "placeholder_warnings": 6,
+      "placeholder_samples": [
+        {
+          "index": 953,
+          "errors": [],
+          "warnings": [
+            "missing placeholder: data.value"
+          ]
+        },
+        {
+          "index": 2222,
+          "errors": [],
+          "warnings": [
+            "unexpected placeholders: cpu.usage"
+          ]
+        },
+        {
+          "index": 2466,
+          "errors": [],
+          "warnings": [
+            "missing placeholder: windows.title"
+          ]
+        }
+      ],
+      "hash_ok": true,
+      "newer_than_core": false
+    },
+    {
+      "code": "ko-KR",
+      "version": "20261102",
+      "declared": 2535,
+      "total": 2535,
+      "translated": 2469,
+      "identical_english": 66,
+      "blank": 0,
+      "placeholder_errors": 0,
+      "placeholder_warnings": 5,
+      "placeholder_samples": [
+        {
+          "index": 2222,
+          "errors": [],
+          "warnings": [
+            "unexpected placeholders: cpu.usage"
+          ]
+        },
+        {
+          "index": 2466,
+          "errors": [],
+          "warnings": [
+            "missing placeholder: windows.title"
+          ]
+        },
+        {
+          "index": 2467,
+          "errors": [],
+          "warnings": [
+            "missing placeholder: linux.title"
+          ]
+        }
+      ],
+      "hash_ok": true,
+      "newer_than_core": false
+    },
+    {
+      "code": "de-DE",
+      "version": "20261102",
+      "declared": 2535,
+      "total": 2535,
+      "translated": 2446,
+      "identical_english": 89,
+      "blank": 0,
+      "placeholder_errors": 0,
+      "placeholder_warnings": 6,
+      "placeholder_samples": [
+        {
+          "index": 1392,
+          "errors": [],
+          "warnings": [
+            "unexpected placeholders: Node.js-Version"
+          ]
+        },
+        {
+          "index": 2222,
+          "errors": [],
+          "warnings": [
+            "unexpected placeholders: cpu.usage"
+          ]
+        },
+        {
+          "index": 2466,
+          "errors": [],
+          "warnings": [
+            "missing placeholder: windows.title"
+          ]
+        }
+      ],
+      "hash_ok": true,
+      "newer_than_core": false
+    },
+    {
+      "code": "fr-FR",
+      "version": "20261102",
+      "declared": 2535,
+      "total": 2535,
+      "translated": 2434,
+      "identical_english": 101,
+      "blank": 0,
+      "placeholder_errors": 0,
+      "placeholder_warnings": 5,
+      "placeholder_samples": [
+        {
+          "index": 2222,
+          "errors": [],
+          "warnings": [
+            "unexpected placeholders: cpu.usage"
+          ]
+        },
+        {
+          "index": 2466,
+          "errors": [],
+          "warnings": [
+            "missing placeholder: windows.title"
+          ]
+        },
+        {
+          "index": 2467,
+          "errors": [],
+          "warnings": [
+            "missing placeholder: linux.title"
+          ]
+        }
+      ],
+      "hash_ok": true,
+      "newer_than_core": false
+    },
+    {
+      "code": "es-ES",
+      "version": "20261102",
+      "declared": 2535,
+      "total": 2535,
+      "translated": 2448,
+      "identical_english": 87,
+      "blank": 0,
+      "placeholder_errors": 0,
+      "placeholder_warnings": 5,
+      "placeholder_samples": [
+        {
+          "index": 2222,
+          "errors": [],
+          "warnings": [
+            "unexpected placeholders: cpu.usage"
+          ]
+        },
+        {
+          "index": 2466,
+          "errors": [],
+          "warnings": [
+            "missing placeholder: windows.title"
+          ]
+        },
+        {
+          "index": 2467,
+          "errors": [],
+          "warnings": [
+            "missing placeholder: linux.title"
+          ]
+        }
+      ],
+      "hash_ok": true,
+      "newer_than_core": false
+    },
+    {
+      "code": "pt-BR",
+      "version": "20261102",
+      "declared": 2535,
+      "total": 2535,
+      "translated": 2449,
+      "identical_english": 86,
+      "blank": 0,
+      "placeholder_errors": 0,
+      "placeholder_warnings": 5,
+      "placeholder_samples": [
+        {
+          "index": 2222,
+          "errors": [],
+          "warnings": [
+            "unexpected placeholders: cpu.usage"
+          ]
+        },
+        {
+          "index": 2466,
+          "errors": [],
+          "warnings": [
+            "missing placeholder: windows.title"
+          ]
+        },
+        {
+          "index": 2467,
+          "errors": [],
+          "warnings": [
+            "missing placeholder: linux.title"
+          ]
+        }
+      ],
+      "hash_ok": true,
+      "newer_than_core": false
+    },
+    {
+      "code": "ru-RU",
+      "version": "20261102",
+      "declared": 2535,
+      "total": 2535,
+      "translated": 2463,
+      "identical_english": 72,
+      "blank": 0,
+      "placeholder_errors": 0,
+      "placeholder_warnings": 5,
+      "placeholder_samples": [
+        {
+          "index": 2222,
+          "errors": [],
+          "warnings": [
+            "unexpected placeholders: cpu.usage"
+          ]
+        },
+        {
+          "index": 2466,
+          "errors": [],
+          "warnings": [
+            "missing placeholder: windows.title"
+          ]
+        },
+        {
+          "index": 2467,
+          "errors": [],
+          "warnings": [
+            "missing placeholder: linux.title"
+          ]
+        }
+      ],
+      "hash_ok": true,
+      "newer_than_core": false
+    },
+    {
+      "code": "ar-SA",
+      "version": "20261102",
+      "declared": 2535,
+      "total": 2535,
+      "translated": 2465,
+      "identical_english": 70,
+      "blank": 0,
+      "placeholder_errors": 0,
+      "placeholder_warnings": 6,
+      "placeholder_samples": [
+        {
+          "index": 2189,
+          "errors": [],
+          "warnings": [
+            "missing placeholder: media.progress"
+          ]
+        },
+        {
+          "index": 2222,
+          "errors": [],
+          "warnings": [
+            "unexpected placeholders: cpu.usage"
+          ]
+        },
+        {
+          "index": 2466,
+          "errors": [],
+          "warnings": [
+            "missing placeholder: windows.title"
+          ]
+        }
+      ],
+      "hash_ok": true,
+      "newer_than_core": false
+    },
+    {
+      "code": "hi-IN",
+      "version": "20261102",
+      "declared": 2535,
+      "total": 2535,
+      "translated": 2465,
+      "identical_english": 70,
+      "blank": 0,
+      "placeholder_errors": 0,
+      "placeholder_warnings": 5,
+      "placeholder_samples": [
+        {
+          "index": 2222,
+          "errors": [],
+          "warnings": [
+            "unexpected placeholders: cpu.usage"
+          ]
+        },
+        {
+          "index": 2466,
+          "errors": [],
+          "warnings": [
+            "missing placeholder: windows.title"
+          ]
+        },
+        {
+          "index": 2467,
+          "errors": [],
+          "warnings": [
+            "missing placeholder: linux.title"
+          ]
+        }
+      ],
+      "hash_ok": true,
+      "newer_than_core": false
+    },
+    {
+      "code": "bn-BD",
+      "version": "20261102",
+      "declared": 2535,
+      "total": 2535,
+      "translated": 2469,
+      "identical_english": 66,
+      "blank": 0,
+      "placeholder_errors": 0,
+      "placeholder_warnings": 14,
+      "placeholder_samples": [
+        {
+          "index": 207,
+          "errors": [],
+          "warnings": [
+            "missing placeholder: Build.MANUFACTURER",
+            "unexpected placeholders: Build.MANUFACTURER-"
+          ]
+        },
+        {
+          "index": 208,
+          "errors": [],
+          "warnings": [
+            "missing placeholder: Build.MODEL",
+            "unexpected placeholders: Build.MODEL-"
+          ]
+        },
+        {
+          "index": 598,
+          "errors": [],
+          "warnings": [
+            "unexpected placeholders: Environment.ProcessorCount-"
+          ]
+        }
+      ],
+      "hash_ok": true,
+      "newer_than_core": false
+    },
+    {
+      "code": "ur-PK",
+      "version": "20261102",
+      "declared": 2535,
+      "total": 2535,
+      "translated": 2471,
+      "identical_english": 64,
+      "blank": 0,
+      "placeholder_errors": 0,
+      "placeholder_warnings": 5,
+      "placeholder_samples": [
+        {
+          "index": 2222,
+          "errors": [],
+          "warnings": [
+            "unexpected placeholders: cpu.usage"
+          ]
+        },
+        {
+          "index": 2466,
+          "errors": [],
+          "warnings": [
+            "missing placeholder: windows.title"
+          ]
+        },
+        {
+          "index": 2467,
+          "errors": [],
+          "warnings": [
+            "missing placeholder: linux.title"
+          ]
+        }
+      ],
+      "hash_ok": true,
+      "newer_than_core": false
+    },
+    {
+      "code": "id-ID",
+      "version": "20261102",
+      "declared": 2535,
+      "total": 2535,
+      "translated": 2433,
+      "identical_english": 102,
+      "blank": 0,
+      "placeholder_errors": 0,
+      "placeholder_warnings": 5,
+      "placeholder_samples": [
+        {
+          "index": 2222,
+          "errors": [],
+          "warnings": [
+            "unexpected placeholders: cpu.usage"
+          ]
+        },
+        {
+          "index": 2466,
+          "errors": [],
+          "warnings": [
+            "missing placeholder: windows.title"
+          ]
+        },
+        {
+          "index": 2467,
+          "errors": [],
+          "warnings": [
+            "missing placeholder: linux.title"
+          ]
+        }
+      ],
+      "hash_ok": true,
+      "newer_than_core": false
+    },
+    {
+      "code": "vi-VN",
+      "version": "20261102",
+      "declared": 2535,
+      "total": 2535,
+      "translated": 2444,
+      "identical_english": 91,
+      "blank": 0,
+      "placeholder_errors": 0,
+      "placeholder_warnings": 5,
+      "placeholder_samples": [
+        {
+          "index": 2222,
+          "errors": [],
+          "warnings": [
+            "unexpected placeholders: cpu.usage"
+          ]
+        },
+        {
+          "index": 2466,
+          "errors": [],
+          "warnings": [
+            "missing placeholder: windows.title"
+          ]
+        },
+        {
+          "index": 2467,
+          "errors": [],
+          "warnings": [
+            "missing placeholder: linux.title"
+          ]
+        }
+      ],
+      "hash_ok": true,
+      "newer_than_core": false
+    },
+    {
+      "code": "th-TH",
+      "version": "20261102",
+      "declared": 2535,
+      "total": 2535,
+      "translated": 2466,
+      "identical_english": 69,
+      "blank": 0,
+      "placeholder_errors": 0,
+      "placeholder_warnings": 5,
+      "placeholder_samples": [
+        {
+          "index": 2222,
+          "errors": [],
+          "warnings": [
+            "unexpected placeholders: cpu.usage"
+          ]
+        },
+        {
+          "index": 2466,
+          "errors": [],
+          "warnings": [
+            "missing placeholder: windows.title"
+          ]
+        },
+        {
+          "index": 2467,
+          "errors": [],
+          "warnings": [
+            "missing placeholder: linux.title"
+          ]
+        }
+      ],
+      "hash_ok": true,
+      "newer_than_core": false
+    },
+    {
+      "code": "tr-TR",
+      "version": "20261102",
+      "declared": 2535,
+      "total": 2535,
+      "translated": 2456,
+      "identical_english": 79,
+      "blank": 0,
+      "placeholder_errors": 0,
+      "placeholder_warnings": 5,
+      "placeholder_samples": [
+        {
+          "index": 2222,
+          "errors": [],
+          "warnings": [
+            "unexpected placeholders: cpu.usage"
+          ]
+        },
+        {
+          "index": 2466,
+          "errors": [],
+          "warnings": [
+            "missing placeholder: windows.title"
+          ]
+        },
+        {
+          "index": 2467,
+          "errors": [],
+          "warnings": [
+            "missing placeholder: linux.title"
+          ]
+        }
+      ],
+      "hash_ok": true,
+      "newer_than_core": false
+    },
+    {
+      "code": "it-IT",
+      "version": "20261102",
+      "declared": 2535,
+      "total": 2535,
+      "translated": 2450,
+      "identical_english": 85,
+      "blank": 0,
+      "placeholder_errors": 0,
+      "placeholder_warnings": 5,
+      "placeholder_samples": [
+        {
+          "index": 2222,
+          "errors": [],
+          "warnings": [
+            "unexpected placeholders: cpu.usage"
+          ]
+        },
+        {
+          "index": 2466,
+          "errors": [],
+          "warnings": [
+            "missing placeholder: windows.title"
+          ]
+        },
+        {
+          "index": 2467,
+          "errors": [],
+          "warnings": [
+            "missing placeholder: linux.title"
+          ]
+        }
+      ],
+      "hash_ok": true,
+      "newer_than_core": false
+    },
+    {
+      "code": "fa-IR",
+      "version": "20261102",
+      "declared": 2535,
+      "total": 2535,
+      "translated": 2465,
+      "identical_english": 70,
+      "blank": 0,
+      "placeholder_errors": 0,
+      "placeholder_warnings": 6,
+      "placeholder_samples": [
+        {
+          "index": 2189,
+          "errors": [],
+          "warnings": [
+            "missing placeholder: media.progress"
+          ]
+        },
+        {
+          "index": 2222,
+          "errors": [],
+          "warnings": [
+            "unexpected placeholders: cpu.usage"
+          ]
+        },
+        {
+          "index": 2466,
+          "errors": [],
+          "warnings": [
+            "missing placeholder: windows.title"
+          ]
+        }
+      ],
+      "hash_ok": true,
+      "newer_than_core": false
+    }
+  ]
+}

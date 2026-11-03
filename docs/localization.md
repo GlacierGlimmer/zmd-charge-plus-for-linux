@@ -1,26 +1,42 @@
-# 语言目录、全局外观与平台范围（2026-10-18 开发源码）
+# 本地化维护说明（2026-10-23）
 
-设置顶部现在是带地球图标的 `Language / 当前语言中的“语言”` 按钮，点击进入独立的可搜索语言页面。列表显示语言原名与地区，保留“跟随系统”；其偏好保存为 `Auto`。明确选择的地区或书写系统会保留，例如 `zh-HK`、`en-GB`、`pt-PT`、`sr-Cyrl`。不支持的系统语言回退英语。
+只维护最初的 20 种语言：zh-CN, en-US, zh-TW, ja-JP, ko-KR, de-DE, fr-FR, es-ES, pt-BR, ru-RU, ar-SA, hi-IN, bn-BD, ur-PK, id-ID, vi-VN, th-TH, tr-TR, it-IT, fa-IR。
 
-“全局字体大小和UI缩放”分别设置 75%–200% 的文字倍率和界面倍率，设置窗口与所有 HUD 共用。单个 HUD 的原有大小参数继续与全局 UI 倍率相乘。两项偏好立即保存，编辑器中未提交的配置、JSON 和密钥不随之提交。大倍率下保留滚动访问，HUD 按内容尺寸和屏幕边界适配。
+## 通用语言与显示名称
 
-## 目录与译文覆盖
+20 种语言面向各地使用者，语言选择仅显示原生语言名，不附国家或地区。简体与繁体按文字系统区分；English、繁體中文、Português 等均不限定使用地区。英文采用通用技术文案，其他译文也避免把语言与单一国家绑定。
 
-根据 Mojang Java 26.3 稳定版的语言清单核对了 143 个语言选项，另外保留 ECP 的孟加拉语、乌尔都语和藏语，共 146 项。非官方、历史拼写和趣味语言也在目录中。下载的游戏语言资源仅作本地元数据核对，未放入源码仓库。
+en-US、zh-TW、pt-BR 等旧资源代码仅用于兼容已有语言包、配置和系统语言匹配，不是使用范围限制；en-GB/en-AU/en-IN 等共用英语，zh-Hant/zh-HK/zh-MO 共用繁体中文，其他语言同样按语言族匹配。时区名称、地理数据和服务实际计费时区仍保留准确含义。
 
-146 项均有离线包和基础导航。`reviewed-coverage.json` 将目录覆盖和正文覆盖分别记录：当前只有 44 套覆盖现有桌面消息键集合，102 套仍有高级文案回退；44 套中也有地区复用和趣味英语变体，不能据此声称全部自然语言已经完成审校。安卓专用长说明还有额外翻译缺口。罕见语言和构造语言的自行编写文字仍需进一步校订。
+## 资源格式
 
-HTTP/JSON 内置注释说明提供简中与繁中，其他语言使用英语说明。变量键、格式槽、公式、JSON、URL、单位和用户文本保持原样。运行时不调用在线翻译服务。
+运行时读取 core.lang、语言 .lang 和对应 SHA-256，头部为 #20261020$2470。UTF-8 无 BOM、LF；一行对应一个字段。字段内换行用 \n，反斜杠用 \\。旧 JSON 译文保留作历史维护资料，不能覆盖已审校 .lang。
 
-## 平台与验证范围
+本轮原位归类 339 个平台专属字段；译文行号、内容和总数不变。加上原有标题，共 Windows 94、Linux 18、macOS 45、Android 186 个专属字段。2127 个共用字段不改名。
 
-Windows、Linux、macOS 使用相同的语言浏览页、设置导航和全局外观控件。硬件采集与系统权限遵循各自平台；PawnIO/AIDA64 仅在 Windows。Linux/macOS 手册给出原生接口说明，不要求安装 Windows 驱动。当前原生桌面构建没有媒体会话数据源时，手册明确标注不可用。Linux 全局快捷键使用 X11；纯 Wayland 会报告不支持，不能视为已经达到所有输入能力一致。
+| 平台 | 示例 |
+| --- | --- |
+| Windows | windows.pawnio.install_or_update、windows.aida64.setup_instructions |
+| Linux | linux.frames.x11_required、linux.cpu.procfs_description |
+| macOS | macos.permission.screen_recording_required、macos.gpu.unified_memory |
+| Android | android.overlay、android.permission.overlay、android.display.avoid_cutout、android.island.native_android |
 
-Android 使用同一语言目录及离线译文。自定义语言标签由应用内部解析，不冒充 Android 官方资源限定符。系统通知的排版和字号由 Android 控制；全局 HUD 字体/UI 设置作用于应用设置页和悬浮 HUD。移动端手册按实际控件和可用能力调整。
+platform-fields.json 记录新名、原始英文键、行号与来源；加载器兼容旧文案调用和新字段名。en-US 显示文案不一定等于原始查找键，不能只靠英文值反推映射。
 
-本轮已通过实际主题下的语言/缩放专项、原有 21 语言界面专项、离线包语法检查与安卓单元测试。托管编译通过不等于已在真实 macOS、Linux 桌面或安卓设备完成全部原生交互实测。`check_resources.py --complete` 会在存在正文缺口时失败，不能用基础目录通过替代完整翻译验收。
+专属字段和共用字段仍放在同一个语言包中。Endfield Charge Plus 和各平台完整产品名保留原文；变量、公式、API 和技术枚举不翻译。
 
-版本冻结为 Windows/Linux 0.1.2、macOS 0.1.4、Android v0.1.3/code4。源码同步不创建标签或 Releases。此前版本的说明与测试记录如下，不能当成本轮全部平台的验证结果。
+## 自动语言
 
----
+新配置为 Auto；手动选择优先。桌面使用 CultureInfo.CurrentUICulture，安卓使用系统语言列表第一项。先精确匹配，再按文字系统、地区及语言族回退。中文 Hans/Hant 优先于地区；未指定文字系统时 TW/HK/MO 用繁体。完全不支持的系统语言回退英语。
 
+例：de-AT → de-DE，fr-CA → fr-FR，pt-PT → pt-BR，zh-Hans-HK → zh-CN，zh-Hant-CN → zh-TW。不支持的保存选项回到 Auto；桌面初始化或重新应用偏好时解析系统语言。
+
+## 检查与维护
+
+20 种语言各有 2470 个非空值。本轮修正 1225 个语言字段，补齐原有 16 处空白。更新提醒、产品名、变量和格式占位符、平台别名均纳入检查。
+
+Windows 20 语言界面检查通过，安卓相关核心和应用测试通过；Linux/macOS 托管构建通过。本机没有本轮原生 Linux/macOS GUI 或安卓真机实测。
+
+langtool.py verify 校验结构、平台映射和哈希；audit 检查实际 .lang 字段及占位符。sync_platform_resources.py 同步核心、值文件和平台元数据，并保护目标独有译文。core 维护保留已发布索引，不重复加入已归类的旧英文键。
+
+产品版本不因翻译、归类或构建自动递增。本轮没有发布 Release 或导出新成品。

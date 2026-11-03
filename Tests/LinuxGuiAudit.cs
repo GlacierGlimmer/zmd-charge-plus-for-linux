@@ -84,7 +84,7 @@ internal static class LinuxGuiAudit
                 await Task.Delay(120);
                 var languagePage=window.OwnedWindows.Single();
                 var languages=languagePage.GetVisualDescendants().OfType<ListBox>().Single(l=>l.Name=="LanguageList");
-                Assert(languages.ItemCount==147,"The native language page contains Auto and all 146 languages.");
+                Assert(languages.ItemCount==21,"The native language page contains Auto and the 20 basic languages.");
                 languages.SelectedItem=languages.Items.Cast<object>().Single(l=>l.GetType().GetProperty("Code")!.GetValue(l)?.ToString()=="en-US");
                 await Task.Delay(120);languagePage.Close();
                 await Task.Delay(100);

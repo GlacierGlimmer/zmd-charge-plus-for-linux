@@ -158,14 +158,16 @@ public static class SettingsManager
         {
             HudOpacity = Math.Clamp(settings.HudOpacity, 0.10, 1.0),
             GlobalScale=double.IsFinite(settings.GlobalScale) ? Math.Clamp(settings.GlobalScale,0.4,1.4) : AppSettings.DefaultGlobalScale,
-            GlobalFontScale=GlobalAppearance.NormalizeScale(settings.GlobalFontScale),
-            GlobalUiScale=GlobalAppearance.NormalizeScale(settings.GlobalUiScale),
+            GlobalFontScale=GlobalAppearance.NormalizeFontScale(settings.GlobalFontScale),
+            GlobalUiScale=GlobalAppearance.NormalizeUiScale(settings.GlobalUiScale),
+            Workspace = WorkspacePreferences.Normalize(settings.Workspace),
             SamplingIntervalSeconds = double.IsFinite(settings.SamplingIntervalSeconds) ? Math.Clamp(settings.SamplingIntervalSeconds, 0.1, 60) : 1,
             HudInstances = (settings.HudInstances ?? new()).Where(i => i is not null).Take(15)
                 .GroupBy(i => i.Id).Select(g => g.First()).Select(i => i with {
                     Id=string.IsNullOrWhiteSpace(i.Id) ? Guid.NewGuid().ToString("N") : i.Id,
                     Name=string.IsNullOrWhiteSpace(i.Name) ? "HUD" : i.Name.Trim(),
                     Settings=Normalize((i.Settings ?? new()) with { MultiHudEnabled=false, HudInstances=new() }) }).ToList(),
+            QuickHotkeys=EndfieldChargePlus.Interop.HudQuickHotkeys.Normalize(settings.QuickHotkeys),
             HudFontFamily = (settings.HudFontFamily ?? "").Trim(),
             HotZonePosition=(HudPosition)Math.Clamp((int)settings.HotZonePosition,0,8),
             HotZoneWidth=Math.Clamp(settings.HotZoneWidth,8,8192),HotZoneHeight=Math.Clamp(settings.HotZoneHeight,2,8192),

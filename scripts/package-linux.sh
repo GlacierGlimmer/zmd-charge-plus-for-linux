@@ -2,6 +2,8 @@
 set -euo pipefail
 
 root=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd)
+python3 "$root/scripts/localization/langtool.py" verify
+python3 "$root/scripts/localization/langtool.py" audit
 version=${VERSION:-$(sed -n 's:.*<Version>\([^<]*\)</Version>.*:\1:p' "$root/EndfieldChargePlus.csproj" | tr -d '\r')}
 [[ $version =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]] || { echo 'VERSION must be major.minor.patch' >&2; exit 1; }
 [[ $(uname -m) == x86_64 ]] || { echo 'This packaging script currently targets Linux x64.' >&2; exit 1; }
@@ -24,7 +26,7 @@ else
 fi
 [[ -f "$publish/EndfieldChargePlus" && -f "$publish/libcoreclr.so" ]] || { echo 'Expected a self-contained Linux publish.' >&2; exit 1; }
 chmod 755 "$publish/EndfieldChargePlus"
-cp "$root/LICENSE" "$root/NOTICE.md" "$root/PRIVACY.md" "$root/README.linux.md" "$publish/"
+cp "$root/LICENSE" "$root/NOTICE.md" "$root/PRIVACY.md" "$root/README.md" "$root/README.en.md" "$root/README.linux.md" "$publish/"
 find "$publish" -name '*.pdb' -delete
 base="EndfieldChargePlusForLinux-v$version-linux-x64"
 mkdir -p "$work/$base"
@@ -51,7 +53,7 @@ Version: $version
 Section: utils
 Priority: optional
 Architecture: amd64
-Maintainer: GlacierGlimmer <glacierglimmer@users.noreply.github.com>
+Maintainer: GlacierGlimmer冰川雪貓 <glacierglimmer@users.noreply.github.com>
 Homepage: https://github.com/GlacierGlimmer/zmd-charge-plus-for-linux
 Installed-Size: $(du -sk "$stage/opt" | cut -f1)
 Depends: libc6 (>= 2.35), libgcc-s1, libstdc++6, zlib1g, libssl3, libicu70 | libicu72 | libicu74 | libicu76 | libicu78, libx11-6, libxpresent1, libice6, libsm6, libfontconfig1, libxext6, libxrender1, libxcb1, libxrandr2, libxi6, libxcursor1, iputils-ping
@@ -110,7 +112,12 @@ echo "ed4ce84f0d9caff66f50bcca6ff6f35aae54ce8135408b3fa33abfc3cb384eb0  $tool" |
 chmod +x "$tool"
 # Extracting the build tool avoids requiring FUSE in CI/WSL containers.
 (cd "$work" && "$tool" --appimage-extract >/dev/null)
-ARCH=x86_64 "$work/squashfs-root/AppRun" --no-appstream "$appdir" "$out/$base.AppImage"
+runtime_args=()
+if [[ -n ${APPIMAGE_RUNTIME_FILE:-} ]]; then
+    [[ -f "$APPIMAGE_RUNTIME_FILE" ]] || { echo 'APPIMAGE_RUNTIME_FILE is missing' >&2; exit 1; }
+    runtime_args=(--runtime-file "$APPIMAGE_RUNTIME_FILE")
+fi
+ARCH=x86_64 "$work/squashfs-root/AppRun" "${runtime_args[@]}" --no-appstream "$appdir" "$out/$base.AppImage"
 chmod +x "$out/$base.AppImage"
 (cd "$out" && sha256sum "$base.tar.gz" "$base.AppImage" "$base.deb" "$base.rpm" > SHA256SUMS)
 printf 'Linux packages written to %s\n' "$out"

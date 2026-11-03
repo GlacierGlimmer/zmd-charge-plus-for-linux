@@ -1,0 +1,3 @@
+<Project Sdk="Microsoft.NET.Sdk"><PropertyGroup>
+<OutputType>Exe</OutputType><TargetFramework>net8.0</TargetFramework><Nullable>enable</Nullable><ImplicitUsings>enable</ImplicitUsings><EnableDefaultCompileItems>false</EnableDefaultCompileItems><AssemblyName>EndfieldChargePlus.LayoutTests</AssemblyName>
+</PropertyGroup><ItemGroup><Compile Include="ProfileScrollChecks.cs"/><Compile Include="ProfileScrollEntry.cs"/><ProjectReference Include="../EndfieldChargePlus.csproj"/></ItemGroup></Project>

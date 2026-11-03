@@ -5,10 +5,23 @@ if [[ ${1:-} != --inside ]]; then
     exec xvfb-run -a -s '-screen 0 1600x900x24' bash "$0" --inside "$executable"
 fi
 executable=$2
+# Use a separate process group within this session. A new session (setsid)
+# would give .NET's session-scoped single-instance mutex a different scope.
+set -m
 testdir=$(mktemp -d -t ecp-smoke-XXXXXXXX)
 pid=
 cleanup() {
-    if [[ -n $pid ]]; then kill "$pid" 2>/dev/null || true; wait "$pid" 2>/dev/null || true; fi
+    if [[ -n $pid ]]; then
+        # AppImage extraction may fork the real app. Stop the private test
+        # process group before deleting its data directory and log files.
+        kill -TERM -- "-$pid" 2>/dev/null || true
+        wait "$pid" 2>/dev/null || true
+        for ((attempt=0; attempt<40; attempt++)); do
+            kill -0 -- "-$pid" 2>/dev/null || break
+            sleep 0.05
+        done
+        kill -KILL -- "-$pid" 2>/dev/null || true
+    fi
     rm -rf -- "$testdir"
 }
 trap cleanup EXIT

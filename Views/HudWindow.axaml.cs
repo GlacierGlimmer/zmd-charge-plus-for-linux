@@ -29,6 +29,16 @@ public partial class HudWindow : Window
     private IntPtr _linuxInputHandle;
     private readonly DispatcherTimer _inputRegionTimer=new() { Interval=TimeSpan.FromMilliseconds(16) };
     public event Action? HudClicked;
+    public event Action<int>? HudScrolled;
+    private double _profileWheel;
+    private void HandleProfileWheel(double amount)
+    {
+        if(!CanCycleOnClick || IsRadialOpen)return;
+        _profileWheel+=amount;
+        int steps=Math.Clamp((int)_profileWheel,-24,24);
+        if(steps==0)return;
+        _profileWheel-=steps;HudScrolled?.Invoke(-steps);
+    }
     private bool CanCycleOnClick => !_closed && IsVisible && _settings.AlwaysVisible && _settings.ClickToCycle ;
 
     private HudRenderData? _lastRenderData;
@@ -91,6 +101,7 @@ public partial class HudWindow : Window
         Closed += (_, _) =>
         {
             _closed=true;
+            DisposeRadialInput();
             CancelPresentation();
             _progressTimer.Stop();
             _inputRegionTimer.Stop();
@@ -107,6 +118,7 @@ public partial class HudWindow : Window
                 && IsPointInsideVisibleHud(this.PointToScreen(e.GetPosition(this)));
             if(_pointerPressedInside) e.Pointer.Capture(this);
         };
+        PointerWheelChanged+=(_,e)=>{if(CanCycleOnClick && !IsRadialOpen && IsPointInsideVisibleHud(this.PointToScreen(e.GetPosition(this)))){HandleProfileWheel(e.Delta.Y);e.Handled=true;}};
         PointerReleased += (_,e) =>
         {
             if (OperatingSystem.IsWindows()) return;
@@ -119,11 +131,14 @@ public partial class HudWindow : Window
         _inputRegionTimer.Tick+=(_,_)=>EnsureInputHitTest();
         Root.IsHitTestVisible=true;
         ResetToInitial();
+        InitializeRadialInput();
     }
 
     public void ApplySettings(AppSettings settings)
     {
-        _settings = settings;
+        CancelRadial();
+        _settings = settings with {Workspace=WorkspacePreferences.Normalize(settings.Workspace)};
+        EnsureRadialRegistration();
         if (_closed) return;
         // Named controls exist immediately after XAML loads; the visual tree does not.
         FontFamily numeric=new("avares://Avalonia.Fonts.Inter/Assets#Inter, Microsoft YaHei UI, PingFang SC, sans-serif");
@@ -134,9 +149,9 @@ public partial class HudWindow : Window
             text.FontFamily=numeric;
         TitleText.FontFamily=title;
         _animOptions = AnimationOptions.FromSettings(settings);
-        double scale=settings.GlobalScale*GlobalAppearance.NormalizeScale(settings.GlobalUiScale);
+        double scale=settings.GlobalScale*GlobalAppearance.NormalizeUiScale(settings.GlobalUiScale);
         GlobalScale.RenderTransform = new ScaleTransform(scale,scale);
-        double fontScale=GlobalAppearance.NormalizeScale(settings.GlobalFontScale);
+        double fontScale=GlobalAppearance.NormalizeFontScale(settings.GlobalFontScale);
         TagLineText.FontSize=9*fontScale;TitleText.FontSize=26*fontScale;
         PrimaryText.FontSize=26*fontScale;SecondaryText.FontSize=14*fontScale;
         RightText.FontSize=22*fontScale;RightSuffixText.FontSize=13*fontScale;
@@ -201,7 +216,7 @@ public partial class HudWindow : Window
                     HudAnimations.SimplePillAppear(_animOptions).RunAsync(Pill, ct),
                     HudAnimations.SimpleFadeIn(_animOptions).RunAsync(BoltIcon, ct),
                     HudAnimations.SimpleFadeIn(_animOptions).RunAsync(NumHost, ct),
-                    HudAnimations.SimpleScaleOut(_animOptions).RunAsync(ScaleHost, ct));
+                    _settings.TransientHoverHold?Task.CompletedTask:HudAnimations.SimpleScaleOut(_animOptions).RunAsync(ScaleHost, ct));
             }
             else
             {
@@ -210,7 +225,7 @@ public partial class HudWindow : Window
                     HudAnimations.PillAppear(_animOptions).RunAsync(Pill, ct),
                     HudAnimations.PillHeight(_animOptions).RunAsync(Pill, ct),
                     HudAnimations.PillHeight(_animOptions).RunAsync(RippleHost, ct),
-                    HudAnimations.ScaleOut(_animOptions).RunAsync(ScaleHost, ct),
+                    _settings.TransientHoverHold?Task.CompletedTask:HudAnimations.ScaleOut(_animOptions).RunAsync(ScaleHost, ct),
                     HudAnimations.BoltIcon(_animOptions).RunAsync(BoltIcon, ct),
                     HudAnimations.RippleHost(_animOptions).RunAsync(RippleHost, ct),
                     HudAnimations.CircleForm(_animOptions).RunAsync(CircleForm, ct),
@@ -223,6 +238,12 @@ public partial class HudWindow : Window
                     HudAnimations.RippleRise(_animOptions).RunAsync(RippleInnerHost, ct),
                     HudAnimations.RippleRise(_animOptions).RunAsync(RippleMidHost, ct),
                     HudAnimations.RippleRise(_animOptions).RunAsync(RippleOuterHost, ct));
+            }
+            if(_settings.TransientHoverHold)
+            {
+                SetPersistentFinalState();
+                await WaitForTransientHoverAsync(ct);
+                await HideAnimatedAsync();
             }
         }
         catch (OperationCanceledException)
@@ -660,7 +681,7 @@ public partial class HudWindow : Window
 
         var area = screen.WorkingArea;
         double scaling = screen.Scaling > 0 ? screen.Scaling : 1d;
-        double desiredScale=_settings.GlobalScale*GlobalAppearance.NormalizeScale(_settings.GlobalUiScale);
+        double desiredScale=_settings.GlobalScale*GlobalAppearance.NormalizeUiScale(_settings.GlobalUiScale);
         double fitWidth=Math.Max(1,area.Width/scaling-32)/(_contentWidth+24);
         double fitHeight=Math.Max(1,area.Height/scaling-32)/(90*_animOptions.FontHeightFactor+24);
         double actualScale=Math.Max(.05,Math.Min(desiredScale,Math.Min(fitWidth,fitHeight)));
@@ -784,9 +805,9 @@ public partial class HudWindow : Window
         _interaction.SetEnabled(_persistent && _settings.ClickToCycle);
     }
 
-    private bool IsPointInsideVisibleHud(PixelPoint screenPoint)
+    internal bool IsPointInsideVisibleHud(PixelPoint screenPoint)
     {
-        if (_closed || !IsVisible || !Pill.IsVisible) return false;
+        if (_closed || !IsVisible || !Pill.IsVisible || Pill.GetVisualRoot() is null) return false;
         var local=Pill.PointToClient(screenPoint);
         var bounds=new Rect(Pill.Bounds.Size);
         if (!bounds.Contains(local)) return false;

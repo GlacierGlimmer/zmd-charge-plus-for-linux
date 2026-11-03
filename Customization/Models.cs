@@ -89,6 +89,7 @@ public sealed record CustomHttpSource
 public sealed record CustomHudSettings
 {
     public bool AutoCycle { get; init; } = false;
+    public List<string>? RadialProfileIds { get; init; } = null;
     public int CycleSeconds { get; init; } = 10;
     // Ordered profile IDs used by automatic cycling. Null means a legacy settings file
     // that predates the explicit cycle queue; the normalizer migrates that case once.

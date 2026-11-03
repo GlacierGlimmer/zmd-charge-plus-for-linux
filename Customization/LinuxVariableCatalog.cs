@@ -135,6 +135,40 @@ internal static class LinuxVariableCatalog
         return $"{d.Name}。数据来源：{source}。仅在当前设备和权限下检测到采集能力时列出。";
     }
 
+    internal static string LocalizedName(VariableDefinition item,string fallback)=>item.Key switch {
+        "memory.swap_total_bytes"=>LocalizationManager.Text("交换空间总量","Total Swap Space"),
+        "memory.swap_available_bytes"=>LocalizationManager.Text("可用交换空间","Available Swap Space"),
+        "memory.swap_used_bytes"=>LocalizationManager.Text("已用交换空间","Used Swap Space"),
+        "memory.swap_usage"=>LocalizationManager.Text("交换空间使用率","Swap Usage"),
+        "process.count"=>LocalizationManager.Text("进程总数","Process Count"),
+        "system.kernel_version"=>LocalizationManager.Text("Linux 内核版本","Linux Kernel Version"),
+        "system.reboot_required"=>LocalizationManager.Text("系统需要重启","System Restart Required"),
+        _=>fallback};
+
+    // Translate the native collector's explanation instead of borrowing the
+    // generic Windows definition associated with the same humanized name.
+    internal static string LocalizedDescription(VariableDefinition item,string name,string fallback)
+    {
+        if(item.Key.StartsWith("sensor.") || item.Key.StartsWith("hardware.") || item.Key.StartsWith("custom."))return fallback;
+        if(item.Key.StartsWith("time.") || item.Key.StartsWith("deepseek.period."))return fallback.Replace("Windows","Linux");
+        if(item.Key.StartsWith("display."))return LocalizationManager.Text("从当前 X11/XWayland 会话的 Avalonia 屏幕信息读取。","Read from Avalonia screen information in the current X11/XWayland session.");
+        if(item.Key.StartsWith("clipboard."))return LocalizationManager.Text("读取当前图形会话的真实剪贴板；更新时间为本程序首次观察到内容变化的时刻。","Read from the real clipboard of the current graphical session. The update time is when ECP first observes a change.");
+        if(item.Key.StartsWith("deepseek."))return LocalizationManager.Text("需配置有效 API Key；未配置或请求失败时显示明确状态，不返回伪造余额。","Requires a valid API key. Missing configuration or failed requests produce an explicit status, never an invented balance.");
+        if(item.Key.StartsWith("probe.") || item.Key.StartsWith("ping."))return fallback+" "+LocalizationManager.Text("来自当前方案的实际 ICMP/TCP/UDP 探测；失败或协议不适用时显示状态文字。","Uses real ICMP/TCP/UDP probes from the current profile. Failed or inapplicable probes show a status message.");
+        string source=item.Key.Split('.')[0] switch {
+            "cpu"=>LocalizationManager.Text("/proc/stat、/proc/cpuinfo、cpufreq 或 hwmon","/proc/stat, /proc/cpuinfo, cpufreq or hwmon"),
+            "memory"=>LocalizationManager.Text("/proc/meminfo；可用内存使用 MemAvailable","/proc/meminfo; available memory uses MemAvailable"),
+            "battery"=>LocalizationManager.Text("/sys/class/power_supply；容量统一换算为 mWh / Wh","/sys/class/power_supply; capacity is normalized to mWh / Wh"),
+            "gpu"=>LocalizationManager.Text("DRM/hwmon 或 NVIDIA nvidia-smi","DRM/hwmon or NVIDIA nvidia-smi"),
+            "disk"=>LocalizationManager.Text("当前挂载点的文件系统统计或 /sys/dev/block/*/stat","File system statistics for the current mount or /sys/dev/block/*/stat"),
+            "process"=>LocalizationManager.Text("/proc 中当前用户有权限读取的进程；CPU 使用率按逻辑处理器数归一化","Processes readable by the current user in /proc; CPU usage is normalized by the logical processor count"),
+            "dev"=>LocalizationManager.Text("Linux 进程或本机已安装工具的实际查询结果","Actual queries of Linux processes or locally installed tools"),
+            "usb" or "peripheral"=>LocalizationManager.Text("Linux sysfs 或 /proc/bus/input/devices","Linux sysfs or /proc/bus/input/devices"),
+            "security"=>LocalizationManager.Text("Linux sysfs 或 EFI 变量","Linux sysfs or EFI variables"),
+            _=>LocalizationManager.Text("Linux procfs、sysfs 或当前运行状态","Linux procfs, sysfs or the current runtime state")};
+        return LocalizationManager.Formatted($"{name}。数据来源：{source}。仅在当前设备和权限下检测到采集能力时列出。",$"{name}. Data source: {source}. Listed only when collection is supported by this device and current permissions.");
+    }
+
     internal static List<HudProfile> AdaptProfiles(IEnumerable<HudProfile> source)
     {
         var result = new List<HudProfile>();

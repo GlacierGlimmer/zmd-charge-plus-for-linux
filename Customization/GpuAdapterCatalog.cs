@@ -62,7 +62,7 @@ public static class GpuAdapterCatalog
         if (OperatingSystem.IsLinux()) return LinuxVariableProvider.GetGpuAdapters();
         lock (Gate)
         {
-            if (!forceRefresh && DateTime.UtcNow < _expiresAt && _cache.Count > 0)
+            if (!forceRefresh && DateTime.UtcNow < _expiresAt)
                 return _cache;
 
             var dxgi = EnumerateDxgiCandidates();
@@ -84,7 +84,7 @@ public static class GpuAdapterCatalog
         // Several DXGI logical entries can refer to the same physical adapter. Collapse them
         // before exposing them to the UI, while retaining all LUIDs for performance sampling.
         var groups = dxgi
-            .GroupBy(x => x.HardwareKey, StringComparer.OrdinalIgnoreCase)
+            .GroupBy(x => x.Id, StringComparer.OrdinalIgnoreCase)
             .Select(g => new DxgiGroup(g.ToList()))
             .ToList();
 
@@ -95,6 +95,12 @@ public static class GpuAdapterCatalog
         {
             var matches = FindMatchingGroups(controller, groups, usedGroups);
             if (matches.Count == 0) continue;
+            // Two installed cards may have identical model/PCI IDs and capacity.
+            // Reserve a distinct LUID group for every remaining PNP controller;
+            // only merge aliases when WMI reports a single physical controller.
+            int remainingPeers=wmi.SkipWhile(c=>!ReferenceEquals(c,controller)).Count(c=>
+                NormalizeName(c.Name)==NormalizeName(controller.Name) && c.VendorId==controller.VendorId && c.DeviceId==controller.DeviceId);
+            if(remainingPeers>1)matches=matches.Take(Math.Max(1,matches.Count/remainingPeers)).ToArray();
 
             foreach (var match in matches)
                 usedGroups.Add(match);
@@ -125,7 +131,7 @@ public static class GpuAdapterCatalog
         // dedicated VRAM size. The latter intentionally collapses duplicate DXGI logical views.
         if (x.Id.StartsWith("pnp:", StringComparison.OrdinalIgnoreCase)) return x.Id;
         long mib = (long)Math.Round(x.DedicatedMemoryBytes / 1024d / 1024d);
-        return $"gpu:{NormalizeName(x.Name)}:{mib}";
+        return x.Id;
     }
 
     private static GpuAdapterInfo MergeAdapters(IGrouping<string, GpuAdapterInfo> group)

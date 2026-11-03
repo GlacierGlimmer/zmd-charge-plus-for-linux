@@ -19,6 +19,8 @@ public partial class TrayMenuWindow : Window
     {
         InitializeComponent();
         LocalizationManager.ApplyStaticText(this);
+        FlowDirection=LocalizationManager.IsRightToLeft ? FlowDirection.RightToLeft : FlowDirection.LeftToRight;
+        ApplyMenuAppearance();
 
         try
         {
@@ -33,12 +35,23 @@ public partial class TrayMenuWindow : Window
         SetupMenuItem(MenuExit, MenuExitText, () => ExitClicked?.Invoke());
     }
 
+    private void ApplyMenuAppearance()
+    {
+        var (font,ui)=Settings.GlobalAppearance.CurrentScales;
+        double captionWidth=new[]{MenuPreviewText,MenuSettingsText,MenuExitText}.Max(text=>
+            new FormattedText(text.Text ?? "",System.Globalization.CultureInfo.CurrentCulture,text.FlowDirection,
+                new Typeface(text.FontFamily,text.FontStyle,text.FontWeight,text.FontStretch),13*font,Brushes.White).Width);
+        Width=Math.Max(220,Math.Ceiling(captionWidth)+40)*ui;
+        Height=139*ui;
+        Settings.GlobalAppearance.Apply(this,font,ui);
+    }
+
     private static void SetupMenuItem(Border border, TextBlock text, Action onClick)
     {
         var normalBg = Brushes.Transparent;
-        var hoverBg = new SolidColorBrush(Color.Parse("#2A2A2D"));
+        var hoverBg = new SolidColorBrush(Color.Parse("#444300"));
         var normalFg = new SolidColorBrush(Color.Parse("#E8E8E8"));
-        var hoverFg = new SolidColorBrush(Color.Parse("#FFFFFF"));
+        var hoverFg = new SolidColorBrush(Color.Parse("#FFFA00"));
 
         border.PointerEntered += (_, _) =>
         {
