@@ -1,3 +1,5 @@
+> v0.2.0 · 2026.11.07。当前功能、20 种离线语言及本平台发行说明见 [README](README.md)。下文保留 Linux 的详细安装与排错说明。
+
 # Endfield Charge Plus
 
 Linux 使用说明 / Linux quick start

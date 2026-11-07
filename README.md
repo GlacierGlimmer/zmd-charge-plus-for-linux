@@ -1,127 +1,68 @@
 # Endfield Charge Plus For Linux
 
-下载与每版更新说明请查看本仓库 [Releases](https://github.com/GlacierGlimmer/zmd-charge-plus-for-linux/releases)。README 保留通用安装和使用说明。
+**v0.2.0 · 2026.11.07** · Linux x64 · X11 / XWayland
 
-多实例 HUD、自定义字体与采样间隔、常驻点击轮播、实际 FPS、世界时钟及按类别排列的内置方案；详见软件设置与 [更新说明](docs/release-notes.md)。
+**简体中文** · [English](README.en.md)
 
-**简体中文** · [English](README.en.md)　｜　**Linux x64**
+终末地风格的灵动状态 HUD。把系统、网络、时间和自定义数据放在视线之内。
 
-基于 [zmd-charge](https://github.com/QinAnze/zmd-charge) 和 [Endfield Charge Plus](https://github.com/GlacierGlimmer/zmd-charge-plus) 开发的终末地风格 Linux 桌面悬浮 HUD。支持常驻显示、鼠标顶部唤出、动画切换、自定义方案和多数据轮播。
+## v0.2.0 功能
 
-## 其他平台下载
+- 重新设计的深色设置界面：左侧导航、荧光黄强调色和黄/绿/粉三色细节，区分当前系统与软件整体占用。
+- 方案管理、自定义模板、变量库、HTTP / JSON 数据源与按章节定位的使用手册。
+- 20 种随软件打包的离线语言，默认跟随系统语言；可手动选择并设置全局字体及 UI 缩放。
+- 统一的异常与数据提示，保留具体原因、复制详情、日志入口及逐变量“不再提示”。
+- 在 HUD 上长按鼠标中键，指向环形栏中的方案，松开切换；长按时间、拖动距离和圆盘大小可配置。
+- 自动轮播与手动切换共用队列：点击向下切换；滚轮向上/向下切换上一/下一方案，配合对应方向动画。
+- 轮播可选简洁、完整、向上翻滚、向下翻滚四种动画；快捷键可控制显示/隐藏、前后方案、暂停/继续、预览和设置。
+- 多实例 HUD 保留各自的方案、队列、位置、字体、显示器与层级；共享的全局设置统一管理。
 
-各平台由独立仓库维护和发布。请前往对应的 Releases 页面查看可用版本、安装包和校验文件。
+保留 Linux 原生 /proc、sysfs 等采集方式，不使用 Windows WMI 占位实现。全局键鼠、热区和增强置顶在 X11 / XWayland 下按环境能力工作；Wayland 合成器可能限制全局输入和窗口层级。
 
-| 平台 | 仓库 | 发布页面 |
-| --- | --- | --- |
-| Windows | [项目仓库](https://github.com/GlacierGlimmer/zmd-charge-plus) | [Releases](https://github.com/GlacierGlimmer/zmd-charge-plus/releases) |
-| macOS | [项目仓库](https://github.com/GlacierGlimmer/zmd-charge-plus-for-macos) | [Releases](https://github.com/GlacierGlimmer/zmd-charge-plus-for-macos/releases) |
-| Android | [项目仓库](https://github.com/GlacierGlimmer/zmd-charge-plus-for-android) | [Releases](https://github.com/GlacierGlimmer/zmd-charge-plus-for-android/releases) |
+## 下载与更新
 
-Android 仓库已建立；可下载版本以其 Releases 页面为准。
+[v0.2.0 Releases](https://github.com/GlacierGlimmer/zmd-charge-plus-for-linux/releases/tag/v0.2.0) 提供 `tar.gz`、`AppImage`、`deb`、`rpm`，均包含 .NET 运行时。DEB / RPM 提供应用菜单入口与 `endfield-charge-plus-for-linux` 命令；再次启动会打开现有实例的设置。
 
-## 下载
+AppImage 无 FUSE 时可使用 `--appimage-extract-and-run`。其他系统图形库与安装说明见 [Linux 详细说明](README.linux.md)。
 
-### APT 软件源（推荐：Debian / Ubuntu / Kali 等）
-
-已提供官方 APT 软件源：**https://apt.x-neko.com**
-
-首次安装只需要两条命令：
+APT 软件源：https://apt.x-neko.com
 
 ```bash
 curl -fsSL https://apt.x-neko.com/install.sh | sudo bash
 sudo apt-get install endfield-charge-plus-for-linux
 ```
 
-添加软件源后，后续可直接通过系统包管理器更新：
+APT 索引与 GitHub Releases 分别更新，以软件源实际版本为准。需要指定 v0.2.0 时可直接安装本次 Releases 的 DEB。
 
-```bash
-sudo apt update
-sudo apt upgrade
-```
+Releases 内提供 SHA-256 校验文件。软件在“关于”中按本平台独立仓库检查更新；商店安装版本由商店管理更新。
 
-APT 软件源使用独立 GPG 密钥签名，目前提供 **amd64 / x86_64** 软件包。卸载可使用：
+## 支持语言
 
-```bash
-sudo apt-get remove endfield-charge-plus-for-linux
-```
+共 **20 种**：简体中文、English、繁體中文、日本語、한국어、Deutsch、Français、Español、Português、Русский、العربية、हिंदी、বাংলা、اردو、Bahasa Indonesia、Tiếng Việt、ไทย、Türkçe、Italiano、فارسی。
 
-### 直接下载
+语言包采用离线 `.lang` 格式。首次启动跟随系统界面语言；手动选择会持久保存；未支持的语言回退 English。语言名称不限制使用地区。产品名称 **Endfield Charge Plus** 不翻译。
 
-也可以前往 [Releases](https://github.com/GlacierGlimmer/zmd-charge-plus-for-linux/releases) 手动下载。四种格式都包含 .NET 运行时，无需另装 .NET。
+## 使用起步
 
-[SHA-256 校验文件](https://github.com/GlacierGlimmer/zmd-charge-plus-for-linux/releases) · [Linux 详细说明](README.linux.md) · [验证范围](docs/linux-validation.md)
+1. 打开设置，选择内置方案并预览。
+2. 按需调整显示位置、内容、动画与数据来源。
+3. 点击“保存并应用”；遇到不可用数据时查看提示中的原因和硬件/权限说明。
+4. 完整的配置、变量、规则、权限与排错说明见软件内“使用手册”。
 
-## 安装与启动
+## 各平台仓库
 
-Debian / Ubuntu / Kali 等发行版推荐优先使用上面的 APT 软件源；如果使用 Releases 中的安装包，则在下载目录执行对应命令：
+| 平台 | 源码 | 发行包 |
+| --- | --- | --- |
+| Windows | [GitHub](https://github.com/GlacierGlimmer/zmd-charge-plus) | [Releases](https://github.com/GlacierGlimmer/zmd-charge-plus/releases) |
+| Linux | [GitHub](https://github.com/GlacierGlimmer/zmd-charge-plus-for-linux) | [Releases](https://github.com/GlacierGlimmer/zmd-charge-plus-for-linux/releases) |
+| macOS | [GitHub](https://github.com/GlacierGlimmer/zmd-charge-plus-for-macos) | [Releases](https://github.com/GlacierGlimmer/zmd-charge-plus-for-macos/releases) |
+| Android | [GitHub](https://github.com/GlacierGlimmer/zmd-charge-plus-for-android) | [Releases](https://github.com/GlacierGlimmer/zmd-charge-plus-for-android/releases) |
 
+## 项目与反馈
 
+- 作者：**GlacierGlimmer冰川雪貓**
+- [官网](https://zmd-bar.x-neko.com/) · [问题追踪](https://ecp-bugs.x-neko.com/) · [本次更新说明](docs/release-notes.md)
+- [作者 BiliBili](https://space.bilibili.com/354548348) · [作者 YouTube](https://www.youtube.com/@glacierglimmer925)
+- MIT 许可；基于 [QinAnze/zmd-charge](https://github.com/QinAnze/zmd-charge)，第三方许可见仓库与发行包。
 
-DEB/RPM 安装后可从应用菜单或 `endfield-charge-plus-for-linux` 命令启动。再次启动会唤回已有进程的设置窗口，设置页提供退出按钮。
-
-AppImage 环境没有 FUSE 时，可使用 `./文件名.AppImage --appimage-extract-and-run`。便携包仍需要系统图形库，完整依赖见 [Linux 说明](README.linux.md#安装)。
-
-## 功能
-
-- 终末地风格 HUD 动画、简洁/完整动画模式、自定义位置、缩放、透明度及显示层级。
-- 常驻显示或按需唤出；支持方案切换、自动轮播和电源状态提示。
-- 自定义模板、表达式、进度条和条件变色；20 种语言界面。
-- Linux CPU、内存、swap、电池、磁盘容量与 I/O、网络、进程、显示器、剪贴板及设备数据。
-- GPU 使用 DRM/hwmon 或 NVIDIA `nvidia-smi`；按所选显卡的实际能力显示变量。
-- ICMP/TCP/UDP 网络探测、DeepSeek 余额与时段、自定义 HTTP/JSON 数据源。
-- 单实例、XDG 登录自启动、配置导入/导出/备份、Linux 本地 API Key 加密。
-
-## Linux 变量
-
-变量库只列出已实现、且在当前设备与权限下检测到采集能力的项目。Windows 专属和未实现的变量已移除，导入旧方案时会清理无效引用；不会用假零值填充不存在的传感器。
-
-| 数据 | Linux 来源 |
-| --- | --- |
-| CPU / 内存 / swap / 进程 | `/proc`、cpufreq、hwmon |
-| 电池 / 交流电 / USB / 输入设备 | `/sys`、`/proc/bus/input/devices` |
-| 磁盘容量 / I/O | 实际挂载点、`/sys/dev/block/*/stat` |
-| GPU | DRM/hwmon、`nvidia-smi` |
-| 网络 | 系统接口、sysfs 计数器、实际网络探测 |
-| 显示器 / 剪贴板 | 当前 X11/XWayland 图形会话 |
-| 开发者工具 | 实际进程、已安装命令的输出 |
-
-不同硬件的可用数量不同。Ubuntu 验证环境中有 **339 项可用变量**通过逐项显示审计，这不是所有设备都保证具备的固定数量。更换硬件、安装工具或调整权限后，可在变量库点击“重新检测 Linux 变量”。
-
-没有电池时不提供电池内置方案；GPU 缺少负载或显存指标时调整为可读取的信息。API 未配置、请求失败、探测超时会显示明确状态，不伪造余额或延迟。DeepSeek 需要自行配置有效 API Key。
-
-## 运行要求
-
-- Linux **x86_64**，glibc **2.35+**、OpenSSL 3；面向 Ubuntu 22.04/24.04、Debian 12+、较新的 Fedora 等桌面环境。
-- 需要 **X11**；Wayland 会话通过 **XWayland** 运行。全局鼠标、置顶和顶部唤出行为受桌面合成器限制。
-- GNOME 等桌面的托盘显示取决于 AppIndicator/StatusNotifier 支持；即使托盘不可见，也可再次启动程序打开设置。
-- 当前未提供 ARM64、32 位、Alpine/musl 或纯原生 Wayland 版本。
-
-已在 Ubuntu 24.04（WSL2 / Xvfb）完成采集、GUI 和四种包的启动验证。RPM 已验证解包内容，尚未在所有发行版、物理硬件或桌面合成器中完成实机测试。详细测试边界见 [验证说明](docs/linux-validation.md)。
-
-## 配置与隐私
-
-配置和日志默认位于 `~/.local/share/EndfieldChargePlus`，遵循 `XDG_DATA_HOME`。登录启动项位于 `~/.config/autostart/endfield-charge-plus-for-linux.desktop`，遵循 `XDG_CONFIG_HOME`。
-
-Linux API Key 使用 AES-256-GCM 与本地 `0600` 权限密钥保存。跨设备导入配置后需重新填写 API Key；本地密钥不等同于系统钥匙串。详见 [隐私说明](PRIVACY.md)。
-
-## 从源码构建
-
-需要 Linux x64、.NET 8 SDK 及打包工具，完整依赖见 [README.linux.md](README.linux.md#构建与测试)。
-
-```bash
-git clone https://github.com/GlacierGlimmer/zmd-charge-plus-for-linux.git
-cd zmd-charge-plus-for-linux
-dotnet run --project Tests/EndfieldChargePlus.PlatformTests.csproj -c Release
-bash scripts/audit-linux-variables.sh
-bash scripts/package-linux.sh
-bash scripts/verify-linux-packages.sh dist/linux-x64
-```
-
-输出目录为 `dist/linux-x64/`，包含四种发行包和 `SHA256SUMS`。图形测试需要 Xvfb、xdotool 等工具；仓库中的 Linux GitHub Actions 工作流也会执行测试与打包。
-
-## 致谢与协议
-
-原项目：[QinAnze/zmd-charge](https://github.com/QinAnze/zmd-charge)。Windows 扩展版：[GlacierGlimmer/zmd-charge-plus](https://github.com/GlacierGlimmer/zmd-charge-plus)。
-
-本项目采用 [MIT License](LICENSE)，来源说明见 [NOTICE.md](NOTICE.md)。本项目是非官方衍生软件，与《明日方舟：终末地》官方无隶属关系。
+本项目为非官方社区作品，与《明日方舟：终末地》开发方及发行方无隶属或背书关系。

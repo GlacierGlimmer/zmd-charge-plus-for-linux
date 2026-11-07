@@ -1,63 +1,63 @@
-# Endfield Charge Plus v0.2.0
+# ECP For Linux v0.2.0
 
-## v0.2.0 · 2026-11-07
+**v0.1.1 → v0.2.0 · 构建日期 2026.11.07**
 
-- 重新设计设置界面，保留深色风格与荧光黄强调色；提供方案管理、环形切换、自动轮播、触发规则、快捷操作和章节式使用手册。
-- 提供 20 种常用语言的离线 .lang 语言资源，默认跟随系统语言；产品名称保持不翻译。
-- 改善方案切换、错误详情、数据不可用提示、语言选择和窗口交互；按活动状态减少后台采样、重复布局和缓存分配，关闭设置时释放预览资源。
-- 更新检查使用各平台自己的 GitHub Releases 仓库。
+## 主要更新
 
-Linux：提供 x64 tar.gz、AppImage、deb、rpm；保留 Linux 原生采集器、桌面集成与独立更新仓库。
+- 重新设计的深色设置界面：左侧导航、荧光黄强调色和黄/绿/粉三色细节，区分当前系统与软件整体占用。
+- 方案管理、自定义模板、变量库、HTTP / JSON 数据源与按章节定位的使用手册。
+- 20 种随软件打包的离线语言，默认跟随系统语言；可手动选择并设置全局字体及 UI 缩放。
+- 统一的异常与数据提示，保留具体原因、复制详情、日志入口及逐变量“不再提示”。
+- 在 HUD 上长按鼠标中键，指向环形栏中的方案，松开切换；长按时间、拖动距离和圆盘大小可配置。
+- 自动轮播与手动切换共用队列：点击向下切换；滚轮向上/向下切换上一/下一方案，配合对应方向动画。
+- 轮播可选简洁、完整、向上翻滚、向下翻滚四种动画；快捷键可控制显示/隐藏、前后方案、暂停/继续、预览和设置。
+- 多实例 HUD 保留各自的方案、队列、位置、字体、显示器与层级；共享的全局设置统一管理。
 
-## English
+保留 Linux 原生 /proc、sysfs 等采集方式，不使用 Windows WMI 占位实现。全局键鼠、热区和增强置顶在 X11 / XWayland 下按环境能力工作；Wayland 合成器可能限制全局输入和窗口层级。
 
-v0.2.0, built on 2026-11-07. Redesigned settings, offline language packs, profile switching, configurable cycling and shortcuts, clearer error reports, and reduced idle work. Updates are checked against this platform’s own repository. Preserve the complete package contents and existing user data.
+## 主要修复
 
----
+- 修复 X11 扩展按键、鼠标中键/侧键、滚轮切换和事件转发中的问题。
+- 加入 X11 错误处理递归保护，保留键鼠事件向原应用转发的语义。
+- 改善设置保存失败提示、语言和提示窗口交互、多 HUD 方案状态同步及后台资源释放。
 
-# 历史发布说明 / Earlier release notes
+## 安装与升级
 
-以下为历史记录；当前版本与交付方式以上方 v0.2.0 说明为准。
+[v0.2.0 Releases](https://github.com/GlacierGlimmer/zmd-charge-plus-for-linux/releases/tag/v0.2.0) 提供 `tar.gz`、`AppImage`、`deb`、`rpm`，均包含 .NET 运行时。DEB / RPM 提供应用菜单入口与 `endfield-charge-plus-for-linux` 命令；再次启动会打开现有实例的设置。
 
-# ECP For Linux v0.1.1
+AppImage 无 FUSE 时可使用 `--appimage-extract-and-run`。其他系统图形库与安装说明见 [Linux 详细说明](README.linux.md)。
 
-正式版 · v0.1.0 → v0.1.1 · 2026-10-13
+APT 软件源：https://apt.x-neko.com
 
-## 简体中文：本次变化
+```bash
+curl -fsSL https://apt.x-neko.com/install.sh | sudo bash
+sudo apt-get install endfield-charge-plus-for-linux
+```
 
-- 新增可自定义数据采样间隔，多个 HUD 共用采样服务，避免重复采集；调整设置时保留各实例自己的配置。
-- 新增「实验性功能 → 多实例 HUD」：每个 HUD 可独立选择显示器、方案、位置、字体、缩放与显示层。设置窗口存在且有多个 HUD 时，正在编辑的实例持续显示边框和「当前正在设置」提示。
-- 修复多实例切换、关闭设置、删除实例时的状态与生命周期；各实例的常驻置顶／桌面层独立恢复。修复点击遮罩干扰、刷新闪烁及透明背景变黑。
-- 新增并修正常驻点击 HUD 切换方案：只响应 HUD 本体点击，对所有实例有效；按被点击实例的轮播队列及动画切换，点击后重新计时。无需开启自动轮播。
-- 修复字体选择不生效；增加工作区与屏幕绝对位置预设，切换锚点清除残留微调，避免 Y 意外保留 80。
-- 新增实际显示器／窗口 FPS 变量与方案、有效目标选择及满量程 FPS 设置；清除已失效的目标。无法获取的数据汇总到一个提示框，不以刷新率或虚假零值代替。
-- 设置窗口标题显示当前版本；实际提升权限后追加「（Endministrator Mode）」；中英文界面保持一致。
-- 新增「时间 - 世界时钟」，39 个中英文固定 UTC 偏移选项，保留原有目标时间模式；内置方案按系统、时间、探测、DeepSeek 等类别排序，保留用户轮播顺序。
-- DeepSeek 时段按官方通知与北京时间判断，周末和中国法定节假日为低谷；内置日历至 2030 年并支持后台更新。未公布年份只使用已确定的法定日期，不假定调休安排。
-- 修复托盘／菜单栏入口、配置目录与启动项处理，并按本平台实际能力筛选变量；不保留无真实读取实现的占位值。
+APT 索引与 GitHub Releases 分别更新，以软件源实际版本为准。需要指定 v0.2.0 时可直接安装本次 Releases 的 DEB。
 
-## English: changes since v0.1.0
+**支持语言（20）：** 简体中文、English、繁體中文、日本語、한국어、Deutsch、Français、Español、Português、Русский、العربية、हिंदी、বাংলা、اردو、Bahasa Indonesia、Tiếng Việt、ไทย、Türkçe、Italiano、فارسی。
 
-- Add configurable sampling intervals shared by all HUDs, with independent instance settings.
-- Add Experimental features / Multiple HUDs with per-instance monitor, profile, position, font, scale and layer. The selected HUD stays outlined and labelled while Settings is open.
-- Fix instance lifecycle, layer restoration, click masks, refresh flicker and black transparency backgrounds.
-- Enable persistent-HUD click cycling for every instance. Only the visible capsule accepts clicks; each instance uses its own rotation order and transition, and resets its timer after a click. Automatic rotation can remain off.
-- Fix font application and stale position offsets; add work-area and absolute-screen anchors.
-- Add real display/window FPS profiles, current target lists and configurable full-scale FPS. Aggregate unavailable variables into one dialog; never substitute refresh rate or fabricated zeroes.
-- Show the version in Settings titles and append “（Endministrator Mode）” only for elevated sessions in both languages.
-- Add World clock with 39 bilingual fixed UTC offsets and the existing target-time modes. Group built-ins by category without rewriting saved rotation queues.
-- Use DeepSeek’s official Beijing-time schedule, excluding weekends and Chinese statutory holidays. Include calendars through 2030 plus validated background updates; unannounced years do not invent compensating-workday arrangements.
+## English — changes since v0.1.1
 
-## 运行与兼容性 / Requirements and compatibility
+- Redesigned dark settings with a vertical navigation rail, a fluorescent-yellow accent and three-colour details. System usage and the application’s overall usage are shown separately.
+- Profile management, template variables, HTTP / JSON sources and a chapter-based offline manual.
+- Twenty bundled offline languages, system-language selection and adjustable global font/UI scale.
+- Consistent error and data prompts with concrete reasons, copyable details, log access and per-variable dismissal.
+- Hold the middle mouse button on the HUD, point to a profile and release to switch. Hold delay, drag distance and ring size are configurable.
+- Manual and automatic cycling share a queue. Clicking moves forward; scrolling up/down selects the previous/next profile with the corresponding transition direction.
+- Four cycle animations: Simple, Full, Roll Up and Roll Down. Bind show/hide, previous/next, pause/resume, preview and Settings actions.
+- Multiple desktop HUDs retain independent profiles, queues, placement, fonts, displays and layers while sharing global settings.
+- Fix extended X11 keys, middle/side mouse buttons, scroll switching and event forwarding.
+- Guard against recursive X11 error handling while preserving forwarding to the original application.
+- Improve save-error reports, language/prompt windows, multi-HUD profile synchronization and idle resource release.
 
-提供 Linux x64（glibc 2.35+）四种包及签名 APT 源；实际 FPS 使用 X11 Present，原生 Wayland 不支持该采集。窗口定位／桌面层依赖窗口管理器。UTC 选项为固定偏移。
+[v0.2.0 Releases](https://github.com/GlacierGlimmer/zmd-charge-plus-for-linux/releases/tag/v0.2.0) provides self-contained x64 tar.gz, AppImage, DEB and RPM packages. DEB/RPM installs include an application-menu entry and the `endfield-charge-plus-for-linux` command. Starting the app again opens the running instance’s settings.
 
-Linux x64/glibc 2.35+; four package formats and the signed APT repository. Real FPS uses X11 Present; native Wayland collection is unsupported. Window positioning/layers depend on the window manager. UTC offsets are fixed.
+Without FUSE, use the AppImage’s `--appimage-extract-and-run` option. See [the Linux guide](README.linux.md) for system graphics dependencies.
 
-## 验证 / Validation
+The APT repository is https://apt.x-neko.com. Its index is updated separately from Releases; for an exact v0.2.0 install, use this release’s DEB.
 
-原生 Linux 采集、变量、GUI 和包完整性检查通过；在 Ubuntu/WSL/Xvfb 验证，不等于所有桌面发行版和 GPU 机型实机认证。DeepSeek 日历 201 项检查通过。
+**Languages:** Simplified Chinese, English, Traditional Chinese, Japanese, Korean, German, French, Spanish, Portuguese, Russian, Arabic, Hindi, Bengali, Urdu, Indonesian, Vietnamese, Thai, Turkish, Italian, Persian.
 
-每个平台单独提供 SHA-256 校验文件。Use the platform-specific SHA256SUMS file to verify downloaded assets.
-
-[完整源码变化 / Source comparison](https://github.com/GlacierGlimmer/zmd-charge-plus-for-linux/compare/v0.1.0...v0.1.1)
+Hardware metrics depend on the platform, drivers and permissions. Check the SHA-256 file before installing. [Website](https://zmd-bar.x-neko.com/) · [Issues](https://ecp-bugs.x-neko.com/).
