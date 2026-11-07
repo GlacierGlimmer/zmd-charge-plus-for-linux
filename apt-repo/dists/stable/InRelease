@@ -4,40 +4,40 @@ Hash: SHA512
 Architectures: amd64
 Codename: stable
 Components: main
-Date: Tue, 13 Oct 2026 10:32:46 +0000
+Date: Sat, 07 Nov 2026 11:04:59 +0000
 Description: Official APT repository for Endfield Charge Plus for Linux
 Label: Endfield Charge Plus
 Origin: Endfield Charge Plus
 Suite: stable
 MD5Sum:
- 9e58348a0d5873d13073b1b86b9456e2              236 Release
- 2f676a922faf11d24c14900a62276cfb             1046 main/binary-amd64/Packages
- 0331f0558c897ea4f7695fed93dedf20              651 main/binary-amd64/Packages.gz
+ 1d0ca9e941b3f4f64bc074a6db244308              236 Release
+ 0e936312b0837a782f1234eb850e1bc4             1059 main/binary-amd64/Packages
+ ed3bf152fbe51bb6a12e6358276a4757              683 main/binary-amd64/Packages.gz
 SHA1:
- 760e50df759250202b3d7c1eb9707b5a4c769372              236 Release
- c49c46355a56500f9a31529b96bc8a7cde6e3a1a             1046 main/binary-amd64/Packages
- e75a3f279e998e67dc27b8cd259dda347c0224e6              651 main/binary-amd64/Packages.gz
+ d3200fce0f361b1b910cf3b39dfc8b815def144c              236 Release
+ f528b616814716ca9e24a447c0b39e5719caac09             1059 main/binary-amd64/Packages
+ 29efa7f7a0aa1b541e3ea34fb9c0d28f67cad8aa              683 main/binary-amd64/Packages.gz
 SHA256:
- d82be2b943ebfbbc3c5c09b6780e8ca2b890934c1928fb5f49783894ae9f2b25              236 Release
- 6abef1acb6b03caed4a694bdd5bab1fc8aa4755dcc1e6df260896db1a54e8aaa             1046 main/binary-amd64/Packages
- 64a81a3c1a628f3ab7287f84b59a3835fb541a798f4c3d01bebdf2666ebc3809              651 main/binary-amd64/Packages.gz
+ 443e15b733fa48e802e30af7e25c3e054c8298d394c3d97ccaff8d9e24a66eb8              236 Release
+ d6077504c106cb99ae19da6e389a4f62b8a4419e22235703a5bd8807a111cb11             1059 main/binary-amd64/Packages
+ a25befdd02a4cc431df24aa2d1e0b05040d7a07a2ef5f269085131955d7dc0e4              683 main/binary-amd64/Packages.gz
 SHA512:
- 6c50b6a8278db75b2545384218e068bba752d2b4fdfc5539085df252c1c237f16b14c96082ce9e461798be4b71755c99e780d18cd572d3162b259faf1cf0a527              236 Release
- 82ec5422393092f5c030265b4ba665648531123f102d2b05324998d68c35129b6b6681b829c9c4064751cd1b469b126a4d82feeba0143ab432ac7668543f4f8f             1046 main/binary-amd64/Packages
- bcb16599c461872eef370fe278bdec0cbfd0a10a6966fe41be9cbfc2b44d005ff887e09e4961e8331d940c17cf0d9c7f4de93ecedfa536e885bc522bce8a3708              651 main/binary-amd64/Packages.gz
+ 723aa87f69dfbae0f64fab5d6a31aafe98ee324b9556314bc78134a9cfdfa54e988cddf8c69de12deecf7d51578776c583e786e40dd9c17123ea7f25944cf43b              236 Release
+ aa9a5600a03f16006f1a0ee7c9c6796dc3a472153e22a364e1f58758bd8f6e0d7f79c4c3a5bffe58836654bc02138cf5be1bce0ad92e4c3bace3baa450975273             1059 main/binary-amd64/Packages
+ b2c9c83a2c1b1df89e98008832e6318a9ef294c0ca4de90c494e7f221e606dbaff20ac94c27ffacd9e324777e8832a5a35b2be874c21a4e5ab393ee02246f519              683 main/binary-amd64/Packages.gz
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAEBCgAdFiEEkHBQbB0H2Ex/z0XJWLk1DZ7QpPgFAmrOCM4ACgkQWLk1DZ7Q
-pPjK1A//S0j6tbtvtaXAFBtaHLHZAoOPEGyi6bf4BLvJKU9KXGfNI6O200ueK4ZP
-611y/sukGyyWmfO4I7z4DFghMLbWjl2KAzIWbJHALYStgdjCfOsl3xhIBBBSmj4C
-D08gHb8hFIxf78vtvRSEpvC+xdXUMc3DNotFogTZdFbdKacITK7M6JqvPmkmyauC
-YIY/X+NOiJmU6KHArYM+MfdZ4258/oprLTW0nXY6TvmblUoIbh7PXfdDFGzFNkua
-7BgXVnuLv3nfLAbMqWNUduAtdsMw0vxqVEVXvZWWm4RjpxwIxZhg7dYdpOkEkI/Z
-OGR6Go9FyqUBLLtc/lwWA7SExCx7k6eU0gaBs+SbnPBnaJ+wjME/O6uz/0FHfEAS
-yLDN5INDpJF27hv172lPb4vML+KyRjRiRb4PYgSPY5c66RAsh5psGeBnIok1iNK3
-3iZOhtsO11O3X45UAOSZqyW6gdYoL11bAk+T7jZ9FDPEfxieaDcAVa99IwROprwt
-nEU5CxgJGw1vWF2allW6L7gjBqaicujfahQEc/duRccRIVT/OVqnqrbtKEEC1npc
-RLTFdUVQ6IV78OkFWD3iqrunWdAzy0/WEuIbaGxistL03DjgfF+0U1eJ49tSugLD
-u+gP2zUUI6Rkv6pFE3RsNhUP4XPQSBawbp/0roXoytNm/aNzKRc=
-=DO4G
+iQIzBAEBCgAdFiEEkHBQbB0H2Ex/z0XJWLk1DZ7QpPgFAmrvBdsACgkQWLk1DZ7Q
+pPh5WQ/9F7eAO/nXi2CBPiyyziEtYQM+7I/Qp7WqVq6YC/BvBWTQY55i1nfCM9JA
+1sjY5HelHrzEowJk6QPUtmwXcECJc2r7f/fSrJR2zO1cVSr02xqbTEgEGMhmc8Sl
+qlZigFBnuGhvWT93JzUX3PF2ZMP6ldYm7tzoHKamk2oTho0cDQ5GDh1umJLhbZxw
+h/nI3476urHL7rlFq6Re3teyamQ076/relc2RWjwKogXzRbgzJkjVqZIiV5nzvK5
+4btZLCGGbiRcgjpPjCIvMMkbOgqMFoRjlFBNdbvKI5lqiUo3gloUgepOvbD71w5H
+LpwpDPbwQZd4nJk90M0x7vgLz0Xkj7AHZ0Ttg9VXy5Xd56zmcEhw7SLm26cXtcFD
+tGQvUqpWZTM7D4jUVLaqLjM3H3OMDIzIfrFg9Cq3rYOXXedxrdr9PGzmlk/ghCsJ
+Dy5xuxQ/7YRmaORgR5FnAyBgAtUSurAw6SJsNdQ7xF6lgGeVLLCb0xV1T8VdnXsx
+LUUIemaTmf0sQLQfwOlqVnVSTo3aCHY0OsbEmFO3uDmD+zMsRM0UIud1LtBK/LKH
+Vp/YJ8roP82iijxMEf+0S9KwN1J/YT/0xizHdLZy582LFPI6N9pynZqO1r3N+F0g
+nXYh6SCaLb9rQJryDh2fsHAbBSj/YsedX+cLDz0wwy2stJqkRls=
+=38ua
 -----END PGP SIGNATURE-----

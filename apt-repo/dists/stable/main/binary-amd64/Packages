@@ -1,15 +1,15 @@
 Package: endfield-charge-plus-for-linux
-Version: 0.1.1
+Version: 0.2.0
 Architecture: amd64
-Maintainer: GlacierGlimmer <glacierglimmer@users.noreply.github.com>
-Installed-Size: 97032
+Maintainer: GlacierGlimmer冰川雪貓 <glacierglimmer@users.noreply.github.com>
+Installed-Size: 105752
 Depends: libc6 (>= 2.35), libgcc-s1, libstdc++6, zlib1g, libssl3, libicu70 | libicu72 | libicu74 | libicu76 | libicu78, libx11-6, libxpresent1, libice6, libsm6, libfontconfig1, libxext6, libxrender1, libxcb1, libxrandr2, libxi6, libxcursor1, iputils-ping
 Recommends: fonts-noto-cjk, xdg-utils
-Filename: pool/main/e/endfield-charge-plus/EndfieldChargePlusForLinux-v0.1.1-linux-x64.deb
-Size: 34366734
-MD5sum: 305954a4b4728e200f11599d793ccd5a
-SHA1: a8f2c59f5e9bad54e8210568f8059ff78a73a8e7
-SHA256: cac2236d1a1ddc527267c4535062055cbdd90f607e1a266cb28ff69f50428865
+Filename: pool/main/e/endfield-charge-plus/EndfieldChargePlusForLinux-v0.2.0-linux-x64.deb
+Size: 36875798
+MD5sum: fe8861889c7eca8a3525ee59696eff45
+SHA1: 2e3d5d752151a975309be1b0b782aa677067bb61
+SHA256: 42c334d3ee3205134a0a0a910c6fc52021ff6992c358191617db4b0776c7c8ac
 Section: utils
 Priority: optional
 Homepage: https://github.com/GlacierGlimmer/zmd-charge-plus-for-linux
