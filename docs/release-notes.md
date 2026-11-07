@@ -1,3 +1,24 @@
+# Endfield Charge Plus v0.2.0
+
+## v0.2.0 · 2026-11-07
+
+- 重新设计设置界面，保留深色风格与荧光黄强调色；提供方案管理、环形切换、自动轮播、触发规则、快捷操作和章节式使用手册。
+- 提供 20 种常用语言的离线 .lang 语言资源，默认跟随系统语言；产品名称保持不翻译。
+- 改善方案切换、错误详情、数据不可用提示、语言选择和窗口交互；按活动状态减少后台采样、重复布局和缓存分配，关闭设置时释放预览资源。
+- 更新检查使用各平台自己的 GitHub Releases 仓库。
+
+Linux：提供 x64 tar.gz、AppImage、deb、rpm；保留 Linux 原生采集器、桌面集成与独立更新仓库。
+
+## English
+
+v0.2.0, built on 2026-11-07. Redesigned settings, offline language packs, profile switching, configurable cycling and shortcuts, clearer error reports, and reduced idle work. Updates are checked against this platform’s own repository. Preserve the complete package contents and existing user data.
+
+---
+
+# 历史发布说明 / Earlier release notes
+
+以下为历史记录；当前版本与交付方式以上方 v0.2.0 说明为准。
+
 # ECP For Linux v0.1.1
 
 正式版 · v0.1.0 → v0.1.1 · 2026-10-13
