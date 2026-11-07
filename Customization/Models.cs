@@ -94,9 +94,9 @@ public sealed record CustomHudSettings
     // Ordered profile IDs used by automatic cycling. Null means a legacy settings file
     // that predates the explicit cycle queue; the normalizer migrates that case once.
     public List<string>? CycleProfileIds { get; init; } = null;
-    // Simple | Full | Roll. When AutoCycle is enabled this overrides each profile's own
+    // Simple | Full | Roll (up, legacy compatible) | RollDown. When AutoCycle is enabled this overrides each profile's own
     // AnimationMode for transitions between queue entries.
-    public string CycleAnimationMode { get; init; } = "Roll";
+    public string CycleAnimationMode { get; init; } = "Simple";
     public string ActiveProfileId { get; init; } = "";
 
     public string DeepSeekApiKeyProtected { get; init; } = "";
@@ -121,7 +121,7 @@ public sealed record CustomHudSettings
                 .Where(p => !p.BuiltInKey.EndsWith("-fps",StringComparison.OrdinalIgnoreCase))
                 .Select(p => p.Id)
                 .ToList(),
-            CycleAnimationMode = "Roll"
+            CycleAnimationMode = "Simple"
         };
     }
 

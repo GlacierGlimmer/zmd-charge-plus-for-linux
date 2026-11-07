@@ -2,7 +2,7 @@ namespace EndfieldChargePlus;
 
 internal static class ProductInfo
 {
-    internal const string BuildDate = "2026.11.03";
+    internal const string BuildDate = "2026.11.07";
     internal const string LinuxName = "Endfield Charge Plus For Linux";
     internal const string WindowsName = "Endfield Charge Plus";
     internal static string Name

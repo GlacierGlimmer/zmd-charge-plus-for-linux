@@ -251,7 +251,9 @@ public sealed class VariableHub : IDisposable
                 });
         }
         if(NativeHardware.Requested(requested))NativeHardware.Publish(vars);
-        if (_samples.Count>64) _samples.Clear();
+        long expiresBefore=Environment.TickCount64-(long)Math.Max(10000,interval*2000);
+        foreach(var key in _samples.Where(p=>p.Value.At<expiresBefore).Select(p=>p.Key).ToArray())_samples.Remove(key);
+        if (_samples.Count>=32) _samples.Remove(_samples.MinBy(p=>p.Value.At).Key);
         _samples[sampleKey]=(Environment.TickCount64,new Dictionary<string,object?>(vars,StringComparer.OrdinalIgnoreCase));
         return vars;
         }

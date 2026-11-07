@@ -4,14 +4,14 @@ using EndfieldChargePlus.Diagnostics;
 
 namespace EndfieldChargePlus.Settings;
 
-public sealed record StartupApplyResult(bool Succeeded,bool IsEnabled,bool IsPackaged=false,string State="Native");
+public sealed record StartupApplyResult(bool Succeeded,bool IsEnabled,bool IsPackaged=false,string State="Native",Exception? Error=null);
 public static class StartupManager
 {
     public static bool IsPackaged=>false;
     public static Task<StartupApplyResult> ReadStatusAsync()=>Task.FromResult(new StartupApplyResult(true,File.Exists(AutostartPath)));
     public static Task<StartupApplyResult> ApplyAsync(bool enabled)
     {
-        Apply(enabled);
+        if(OperatingSystem.IsLinux())ApplyLinux(enabled);else Apply(enabled);
         return Task.FromResult(new StartupApplyResult(File.Exists(AutostartPath)==enabled,File.Exists(AutostartPath)));
     }
 

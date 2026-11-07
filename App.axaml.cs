@@ -27,13 +27,15 @@ public partial class App : Application
     private IClassicDesktopStyleApplicationLifetime? _desktop;
     private CancellationTokenSource? _activationListenerCts;
 
-    public override void Initialize() => AvaloniaXamlLoader.Load(this);
+    public override void Initialize(){PerformanceMaintenance.Configure();AvaloniaXamlLoader.Load(this);}
 
     public override void OnFrameworkInitializationCompleted()
     {
         if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
         {
             _desktop = desktop;
+            ApplicationErrors.Attach(desktop);
+            desktop.Exit+=(_,_)=>PerformanceMaintenance.Stop();
             desktop.ShutdownMode = Avalonia.Controls.ShutdownMode.OnExplicitShutdown;
 
             AppLog.Info("Avalonia framework initialization completed; loading settings.");
@@ -44,6 +46,7 @@ public partial class App : Application
             StartupManager.Apply(settings.StartWithWindows);
 
             _hud = new HudWindow();
+            _hud.Closing += OnApplicationWindowClosing;
             _hud.ApplySettings(settings);
 
             _runtime = new CustomHudRuntime(_hud);
@@ -69,6 +72,7 @@ public partial class App : Application
             LocalizationManager.LanguageChanged += RefreshLinuxTray;
             StartSecondInstanceActivationListener();
             _ = RunStartupUpdateCheckAsync();
+            desktop.ShutdownRequested += OnShutdownRequested;
             desktop.Exit += OnDesktopExit;
         }
 
@@ -79,6 +83,7 @@ public partial class App : Application
     {
         var window = new SettingsWindow(settings, _hud!, _runtime!);
         window.AttachQuickHotkeys(_quickHotkeys);
+        window.Closing += OnApplicationWindowClosing;
         window.Closed += (_, _) =>
         {
             if (ReferenceEquals(_settingsWindow, window))
@@ -89,7 +94,7 @@ public partial class App : Application
 
     private void OpenSettingsWindow()
     {
-        if (_desktop is null || _hud is null || _runtime is null)
+        if (_exiting || _desktop is null || _hud is null || _runtime is null)
             return;
 
         if (_settingsWindow is { IsVisible: true })
@@ -299,22 +304,9 @@ public partial class App : Application
 
     private void OnDesktopExit(object? sender, ControlledApplicationLifetimeExitEventArgs e)
     {
-        _exiting = true;
-        _updateReminder.Close();
-        LocalizationManager.LanguageChanged -= RefreshLinuxTray;
-        AppLog.Info("Desktop lifetime is exiting.");
-        _activationListenerCts?.Cancel();
-        _activationListenerCts?.Dispose();
-        _activationListenerCts = null;
-        CloseTrayMenu();
-        _tray?.Dispose();
-        _tray = null;
-        _linuxTray?.Dispose();
-        _linuxTray = null;
-        _quickHotkeys?.Dispose();_runtime?.Dispose();
-        _runtime = null;
-        _hud?.Close();
-        _hud = null;
-        LinuxDesktop.Close();
+        PrepareForExit();
+        ExitStep("HUD window",()=>{if(_hud is {IsClosed:false})_hud.Close();});
+        _hud=null;
+        ExitStep("X11 connection",LinuxDesktop.Close);
     }
 }

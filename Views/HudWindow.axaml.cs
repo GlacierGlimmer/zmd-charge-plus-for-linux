@@ -42,6 +42,7 @@ public partial class HudWindow : Window
     private bool CanCycleOnClick => !_closed && IsVisible && _settings.AlwaysVisible && _settings.ClickToCycle ;
 
     private HudRenderData? _lastRenderData;
+    private SuperTopmostController? _superTopmost;
     private bool _closed;
     private bool _pointerPressedInside;
     public bool IsClosed => _closed;
@@ -100,6 +101,7 @@ public partial class HudWindow : Window
 
         Closed += (_, _) =>
         {
+            _superTopmost?.Dispose();_superTopmost=null;
             _closed=true;
             DisposeRadialInput();
             CancelPresentation();
@@ -128,7 +130,7 @@ public partial class HudWindow : Window
             e.Pointer.Capture(null);
             if (clicked) { HudClicked?.Invoke(); e.Handled=true; }
         };
-        _inputRegionTimer.Tick+=(_,_)=>EnsureInputHitTest();
+        _inputRegionTimer.Tick+=(_,_)=>{if(!IsVisible){_inputRegionTimer.Stop();return;}_inputRegionTimer.Interval=TimeSpan.FromMilliseconds(IsHudBusy || IsRolling?16:100);EnsureInputHitTest();};
         Root.IsHitTestVisible=true;
         ResetToInitial();
         InitializeRadialInput();
@@ -170,7 +172,9 @@ public partial class HudWindow : Window
     {
         // 临时 HUD 保持原行为：始终置顶。
         // 常驻 HUD 可以选择置顶，或作为普通非置顶窗口留在桌面层。
-        Topmost = !persistent || _settings.PersistentLayer == PersistentHudLayer.Topmost;
+        Topmost = !persistent || _settings.PersistentLayer != PersistentHudLayer.Desktop;
+        _superTopmost ??= new SuperTopmostController(this,()=>{var a=Pill.PointToScreen(default);var b=Pill.PointToScreen(new Point(Pill.Bounds.Width,Pill.Bounds.Height));return new PixelRect(Math.Min(a.X,b.X),Math.Min(a.Y,b.Y),Math.Abs(b.X-a.X),Math.Abs(b.Y-a.Y));},()=>Pill.Opacity>.02);
+        _superTopmost.SetEnabled(persistent && _settings.PersistentLayer==PersistentHudLayer.SuperTopmost);
         // Avalonia can update HWND styles after a layer change. Keep the HUD
         // mouse-through in both persistent (topmost/normal) and transient modes.
         if (IsVisible)
@@ -763,6 +767,7 @@ public partial class HudWindow : Window
 
     private void EnsureInputHitTest()
     {
+        _superTopmost?.Repair();
         if (OperatingSystem.IsLinux())
         {
             var native = this.TryGetPlatformHandle();

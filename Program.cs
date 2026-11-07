@@ -26,6 +26,8 @@ internal static class Program
     [STAThread]
     public static void Main(string[] args)
     {
+        if(ApplicationErrors.TryShowRecovery(args))return;
+        ApplicationErrors.Initialize();
         IsAutoStart = args.Any(a => string.Equals(a, "--autostart", StringComparison.OrdinalIgnoreCase));
 
         bool isPrimaryInstance;
@@ -102,7 +104,7 @@ internal static class Program
         catch (Exception ex)
         {
             AppLog.Fatal("Application terminated by an unhandled startup/runtime exception.", ex);
-            throw;
+            Environment.ExitCode=1;
         }
         finally
         {
@@ -122,7 +124,7 @@ internal static class Program
         Interop.LinuxDesktop.PrepareClipboard();
         return AppBuilder.Configure<App>()
             .UsePlatformDetect()
-            .With(LocalizationManager.FontOptions).WithInterFont()
+            .With(new SkiaOptions {MaxGpuResourceSizeBytes=24L*1024*1024}).With(LocalizationManager.FontOptions).WithInterFont()
             .LogToTrace();
     }
 }

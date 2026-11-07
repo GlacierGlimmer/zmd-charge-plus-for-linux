@@ -781,10 +781,11 @@ public static class VariableCatalog
             .Select(x => x.Item)
             .ToList());
 
-    public static IReadOnlyList<VariableDefinition> AllBuiltIns=>PlatformBuiltIns.Concat(HardwareTelemetryCatalog.Definitions).Concat(HardwareStatusVariables.All).GroupBy(d=>d.Key,StringComparer.OrdinalIgnoreCase).Select(g=>g.First()).ToArray();
+    public static IReadOnlyList<VariableDefinition> AllBuiltIns => VariableCatalogSnapshot.Read(typeof(VariableCatalog),HardwareTelemetryCatalog.Definitions,(OperatingSystem.IsLinux()?LinuxVariableCatalog.Detected:null),static()=>BuildAllBuiltIns);
+    private static IReadOnlyList<VariableDefinition> BuildAllBuiltIns=>PlatformBuiltIns.Concat(HardwareTelemetryCatalog.Definitions).Concat(HardwareStatusVariables.All).GroupBy(d=>d.Key,StringComparer.OrdinalIgnoreCase).Select(g=>g.First()).ToArray();
     internal static IReadOnlyList<VariableDefinition> VisibleBuiltIns=>AllBuiltIns.Where(d=>!HardwareVariableCompatibility.IsDuplicate(d.Key)).ToArray();
     public static VariableDefinition? Find(string key) =>
-        AllBuiltIns.FirstOrDefault(x => string.Equals(x.Key, key, StringComparison.OrdinalIgnoreCase));
+        VariableCatalogSnapshot.Find(AllBuiltIns,key);
 
     public static VariableDefinition CreateCustom(string key) => new(
         key,
